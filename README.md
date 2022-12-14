@@ -1,6 +1,6 @@
 # RuneBurst / Project RUNA
 
-  ![Badge for GitHub repo top language](https://img.shields.io/github/languages/top/soulwax/RuneBurst?style=flat&logo=appveyor) ![Badge for GitHub last commit](https://img.shields.io/github/last-commit/soulwax/RuneBurst?style=flat&logo=appveyor)
+  ![Badge for GitHub repo top language](https://img.shields.io/github/languages/top/soulwax/Runa?style=flat&logo=appveyor) ![Badge for GitHub last commit](https://img.shields.io/github/last-commit/soulwax/Runa?style=flat&logo=appveyor)
 
   ## Description
 
@@ -23,7 +23,7 @@
 
   *Steps required to install project and how to get the development environment running:*
 
-  - Step 1: Clone this repository
+  - Step 1: Clone this repository with `git clone --recursive https://github.com/soulwax/Runa.git` (or download the zip and extract it, but you will have to manually clone the submodules)
   - Step 2: Generate solution files with calling Win-GenProjects-2022.bat (or modify to use a different ide, anything premake5 supports)
   - Step 3: Build the solution with your IDE of choice
 ---
@@ -55,7 +55,7 @@
 
   ## Questions?
 
-  <img src="https://avatars.githubusercontent.com/u/4641493?v=4" alt="soulwax" width="40%" />
+  <img src="https://avatars.githubusercontent.com/u/4641493?v=4" alt="soulwax" width="20%" />
 
   For any questions, please contact me with the information below:
 
