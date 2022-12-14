@@ -1,6 +1,7 @@
 #include "runapch.h"
 #include "Game.h"
 #include <iostream>
+#include "Game/Core/Log.h"
 
 SDL_Renderer* Game::Renderer = nullptr;
 
@@ -10,6 +11,7 @@ Game::Game()
 	Window = nullptr;
 	IsRunning = true;
 }
+
 Game::~Game() = default;
 
 void Game::Init(const char* title, int windowWidth, int windowHeight, bool isFullscreen)
@@ -26,19 +28,20 @@ void Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) == 0)
 	{
-		std::cout << "Subsystems Initialized!..." << std::endl;
+		RUNA_INFO("Subsystems Initialized!...");
 
 		Window = SDL_CreateWindow(title, xpos, ypos, width, height, window_flags);
 		if (Window)
 		{
-			std::cout << "Window created!" << std::endl;
+			RUNA_INFO("Window created successfully!");
 		}
 
 		// RENDERER CREATION
 		Game::Renderer = SDL_CreateRenderer(Window, -1, renderer_flags);
 		if (Game::Renderer)
 		{
-			std::cout << "Renderer created!" << std::endl;
+			SDL_SetRenderDrawColor(Game::Renderer, 0, 0, 0, 255);
+			RUNA_INFO("Renderer created!");
 		}
 
 		IsRunning = true;
@@ -95,7 +98,7 @@ void Game::Clean() const
 	SDL_DestroyRenderer(Game::Renderer);
 	SDL_Quit();
 
-	std::cout << "Game Cleaned" << std::endl;
+	RUNA_INFO("Game cleaned!");
 }
 
 bool Game::IsGameRunning()
