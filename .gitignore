@@ -1,0 +1,17 @@
+# Binaries
+**/bin/
+bin-int/
+
+# Volition files
+*.log
+
+# Visual Studio files and folder
+.vs/
+**.sln
+**.vcxproj
+**.vcxproj.filters
+**.vcxproj.user
+
+# Directories
+Sandbox/assets/cache
+scripts/__pycache__
