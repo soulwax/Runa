@@ -10,21 +10,21 @@
 
   ## Table of Contents
 - [RuneBurst / Project RUNA](#runeburst--project-runa)
-	- [Description](#description)
-	- [Table of Contents](#table-of-contents)
-	- [Installation](#installation)
-	- [Usage](#usage)
-	- [Contributing](#contributing)
-	- [Tests](#tests)
-	- [License](#license)
-	- [Questions?](#questions)
+  - [Description](#description)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Contributing](#contributing)
+  - [Tests](#tests)
+  - [License](#license)
+  - [Questions?](#questions)
 ---
   ## Installation
 
   *Steps required to install project and how to get the development environment running:*
 
   - Step 1: Clone this repository with `git clone --recursive https://github.com/soulwax/Runa.git` (or download the zip and extract it, but you will have to manually clone the submodules)
-  - Step 2: Generate solution files with calling Win-GenProjects-2022.bat (or modify to use a different ide, anything premake5 supports)
+  - Step 2: Generate solution files by calling Scripts/Setup.bat on Windows or execute the Setup.py with python on other OSes. Modify it to fit your specific IDE. See batch files. The ones I have produce for Visual Studio 2019 and 2022)
   - Step 3: Build the solution with your IDE of choice
 ---
 
