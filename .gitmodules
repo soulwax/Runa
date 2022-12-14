@@ -1,3 +1,0 @@
-[submodule "Sandbox/vendor/spdlog"]
-	path = Sandbox/vendor/spdlog
-	url = https://github.com/gabime/spdlog
