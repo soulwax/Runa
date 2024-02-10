@@ -1,9 +1,9 @@
 include "./vendor/premake/premake_customization/solution_items.lua"
 include "Dependencies.lua"
 
-workspace "RuneBurst"
+workspace "Runa-SDL"
 	architecture "x86_64"
-	startproject "Sandbox"
+	startproject "Runa"
 
 	configurations
 	{
@@ -28,4 +28,4 @@ group "Dependencies"
 	include "vendor/premake"
 group ""
 
-include "Sandbox"
+include "Runa"

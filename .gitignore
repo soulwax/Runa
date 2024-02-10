@@ -13,5 +13,5 @@ bin-int/
 **.vcxproj.user
 
 # Directories
-Sandbox/assets/cache
+Runa/assets/cache
 scripts/__pycache__

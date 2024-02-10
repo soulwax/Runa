@@ -23,5 +23,5 @@ if (premakeInstalled):
 
     print("\nSetup completed!")
 else:
-    print("RuneBurst requires Premake to generate project files.")
+    print("Runa requires Premake to generate project files.")
 

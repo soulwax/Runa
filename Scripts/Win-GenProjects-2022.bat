@@ -1,7 +1,7 @@
 @echo off
 ECHO Welcome to my world, insect. Do not dawdle. I lust for my revenge.
 ECHO ###########################################################################################################
-ECHO Welcome to the RuneBurst project. Assuming you are allowed to this place, 
+ECHO Welcome to the Runa project. Assuming you are allowed to this place, 
 ECHO we commence building the project files...
 ECHO Generating project environment for Visual Studio 2022...
 pushd %~dp0\..\
