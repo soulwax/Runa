@@ -15,3 +15,7 @@ bin-int/
 # Directories
 Runa/assets/cache
 scripts/__pycache__
+.gitignore
+.gitignore
+.gitignore
+
