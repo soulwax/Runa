@@ -15,7 +15,6 @@ constexpr int MAX_SCREEN_FPS = 240;
 bool isFullscreen = false;
 bool isVsync = true;
 int screenFps = 60;
-unsigned int screenTicksPerFrame = 1000 / screenFps;
 
 //debugging
 bool verbose = true;
@@ -39,6 +38,8 @@ void ProcessArgs(const int argc, const char* argv[])
 
 int main(const int argc, const char* argv[])
 {
+	unsigned int screenTicksPerFrame = 1000 / screenFps;
+
 	Runa::Log::Init();
 	//look at args first and discern whether they make sense
 	ProcessArgs(argc, argv);
