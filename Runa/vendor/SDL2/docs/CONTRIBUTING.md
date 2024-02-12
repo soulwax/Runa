@@ -5,17 +5,17 @@ We appreciate your interest in contributing to SDL, this document will describe 
 **Table Of Contents**
 
 - [Contributing to SDL](#contributing-to-sdl)
-  - [Filing a GitHub issue](#filing-a-github-issue)
-    - [Reporting a bug](#reporting-a-bug)
-    - [Suggesting enhancements](#suggesting-enhancements)
-  - [Contributing code](#contributing-code)
-    - [Forking the project](#forking-the-project)
-    - [Following the style guide](#following-the-style-guide)
-    - [Running the tests](#running-the-tests)
-    - [Opening a pull request](#opening-a-pull-request)
-  - [Contributing to the documentation](#contributing-to-the-documentation)
-    - [Editing a function documentation](#editing-a-function-documentation)
-    - [Editing the wiki](#editing-the-wiki)
+  	- [Filing a GitHub issue](#filing-a-github-issue)
+    		- [Reporting a bug](#reporting-a-bug)
+    		- [Suggesting enhancements](#suggesting-enhancements)
+  	- [Contributing code](#contributing-code)
+    		- [Forking the project](#forking-the-project)
+    		- [Following the style guide](#following-the-style-guide)
+    		- [Running the tests](#running-the-tests)
+    		- [Opening a pull request](#opening-a-pull-request)
+  	- [Contributing to the documentation](#contributing-to-the-documentation)
+    		- [Editing a function documentation](#editing-a-function-documentation)
+    		- [Editing the wiki](#editing-the-wiki)
 
 ## Filing a GitHub issue
 
