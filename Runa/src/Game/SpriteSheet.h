@@ -16,5 +16,6 @@ public:
 private:
     SDL_Texture* SpritesheetTexture;
     SDL_Rect Clip;
-    int spriteWidth, spriteHeight;
+    int spriteWidth;
+    int spriteHeight;
 };
