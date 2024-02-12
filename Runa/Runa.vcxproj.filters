@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Game">
+      <UniqueIdentifier>{7FA9857C-6BE0-860D-14CD-6C1000E3020F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Game\Core">
+      <UniqueIdentifier>{37952F7B-A3FF-E3F1-EC3D-959758E7C146}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\Game\Core\Assert.h">
+      <Filter>Game\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Core\Base.h">
+      <Filter>Game\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Core\Log.h">
+      <Filter>Game\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Core\PlatformDetection.h">
+      <Filter>Game\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Game.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\Runa.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\SpriteSheet.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Game\utilities.h">
+      <Filter>Game</Filter>
+    </ClInclude>
+    <ClInclude Include="src\runapch.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\Game\Core\EntryPoint.cpp">
+      <Filter>Game\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Core\Log.cpp">
+      <Filter>Game\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\Game.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\SpriteSheet.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game\utilities.cpp">
+      <Filter>Game</Filter>
+    </ClCompile>
+    <ClCompile Include="src\runapch.cpp" />
+  </ItemGroup>
+</Project>
