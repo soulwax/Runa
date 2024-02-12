@@ -1,7 +1,7 @@
 Simple DirectMedia Layer 2 for OS/2 & eComStation
 ================================================================================
-SDL port for OS/2, authored by Andrey Vasilkin <digi@os2.snc.ru>, 2016
 
+SDL port for OS/2, authored by Andrey Vasilkin <digi@os2.snc.ru>, 2016
 
 OpenGL and audio capture not supported by this port.
 
@@ -21,23 +21,21 @@ files vman.dll and dive.dll or with latest versions of ACPI support and video
 driver Panorama.
 
 Latest versions of OS/4 kernel:
-  http://gus.biysk.ru/os4/
- (Info: https://www.os2world.com/wiki/index.php/Phoenix_OS/4)
+  <http://gus.biysk.ru/os4/>
+ (Info: <https://www.os2world.com/wiki/index.php/Phoenix_OS/4>)
 
 Patched files vman.dll and dive.dll:
-  http://gus.biysk.ru/os4/test/pached_dll/PATCHED_DLL.RAR
+  <http://gus.biysk.ru/os4/test/pached_dll/PATCHED_DLL.RAR>
 
-
-Compiling:
+Compiling
 ----------
 
 Open Watcom 1.9 or newer is tested. For the new Open Watcom V2 fork, see:
-https://github.com/open-watcom/ and https://open-watcom.github.io
+<https://github.com/open-watcom/> and <https://open-watcom.github.io>
 WATCOM environment variable must to be set to the Open Watcom install
 directory. To compile, run: wmake -f Makefile.os2
 
-
-Installing:
+Installing
 -----------
 
 - eComStation:
@@ -53,8 +51,7 @@ Installing:
   copy.  Also make sure that any other older versions of DLLs are removed
   from your system.
 
-
-Joysticks in SDL2:
+Joysticks in SDL2
 ------------------
 
 The joystick code in SDL2 is a direct forward-port from the SDL-1.2 version.

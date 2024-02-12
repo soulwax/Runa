@@ -9,21 +9,19 @@ In the past, SDL has supported Windows RT 8.x, Windows Phone, etc, but in
 modern times this port is focused on UWP apps, which run on Windows 10,
 and modern Xbox consoles.
 
-
 Requirements
 ------------
 
 * Microsoft Visual C++ (aka Visual Studio) 2019.
-  - Free, "Community" or "Express" editions may be used, so long as they
+  * Free, "Community" or "Express" editions may be used, so long as they
     include support for either "Windows Store" or "Windows Phone" apps.
     "Express" versions marked as supporting "Windows Desktop" development
     typically do not include support for creating WinRT apps, to note.
     (The "Community" editions of Visual C++ do, however, support both
     desktop/Win32 and WinRT development).
 * A valid Microsoft account - This requirement is not imposed by SDL, but
-  rather by Microsoft's Visual C++ toolchain.  This is required to launch or 
+  rather by Microsoft's Visual C++ toolchain.  This is required to launch or
   debug apps.
-
 
 Status
 ------
@@ -44,8 +42,8 @@ Here is a rough list of what works, and what doesn't:
     SDL_GetPerformanceFrequency(), etc.)
   * file I/O via SDL_RWops
   * mouse input  (unsupported on Windows Phone)
-  * audio, via SDL's WASAPI backend (if you want to record, your app must 
-    have "Microphone" capabilities enabled in its manifest, and the user must 
+  * audio, via SDL's WASAPI backend (if you want to record, your app must
+    have "Microphone" capabilities enabled in its manifest, and the user must
     not have blocked access. Otherwise, capture devices will fail to work,
     presenting as a device disconnect shortly after opening it.)
   * .DLL file loading.  Libraries *MUST* be packaged inside applications.  Loading
@@ -55,9 +53,9 @@ Here is a rough list of what works, and what doesn't:
     SDL_GameController APIs, and is backed by Microsoft's XInput API.  Please
     note, however, that Windows limits game-controller support in UWP apps to,
     "Xbox compatible controllers" (many controllers that work in Win32 apps,
-    do not work in UWP, due to restrictions in UWP itself.) 
+    do not work in UWP, due to restrictions in UWP itself.)
   * multi-touch input
-  * app events.  SDL_APP_WILLENTER* and SDL_APP_DIDENTER* events get sent out as
+  * app events.  SDL_APP_WILLENTER*and SDL_APP_DIDENTER* events get sent out as
     appropriate.
   * window events
   * using Direct3D 11.x APIs outside of SDL.  Non-XAML / Direct3D-only apps can
@@ -94,8 +92,6 @@ Here is a rough list of what works, and what doesn't:
     WinRT (such as Windows 8.x), where turning off VSync appears to work.
   * probably anything else that's not listed as supported
 
-
-
 Upgrade Notes
 -------------
 
@@ -119,7 +115,6 @@ any other platform.
    written with SDL 2.0.3 did not utilize a Roaming folder, due to API
    restrictions in Windows Phone 8.0).
 
-
 SDL_GetPrefPath(), starting with SDL 2.0.4, addresses these by:
 
 1. making sure that SDL_GetPrefPath() returns a directory in which data
@@ -133,8 +128,6 @@ Apps that wish to get their Roaming folder's path can do so either by using
 SDL_WinRTGetFSPathUTF8(), SDL_WinRTGetFSPathUNICODE() (which returns a
 UCS-2/wide-char string), or directly through the WinRT class,
 Windows.Storage.ApplicationData.
-
-
 
 Setup, High-Level Steps
 -----------------------
@@ -156,7 +149,6 @@ following, at a high-level:
 6. add SDL-specific app code.
 7. build and run your app.
 
-
 Setup, Detailed Steps
 ---------------------
 
@@ -167,24 +159,22 @@ Create a new project using one of Visual C++'s templates for a plain, non-XAML,
 don't see one of these templates, in Visual C++'s 'New Project' dialog, try
 using the textbox titled, 'Search Installed Templates' to look for one.
 
-
 ### 2. Remove unneeded files from the project ###
 
 In the new project, delete any file that has one of the following extensions:
 
-- .cpp
-- .h
-- .hlsl
+* .cpp
+* .h
+* .hlsl
 
 When you are done, you should be left with a few files, each of which will be a
 necessary part of your app's project.  These files will consist of:
 
-- an .appxmanifest file, which contains metadata on your WinRT app.  This is
+* an .appxmanifest file, which contains metadata on your WinRT app.  This is
   similar to an Info.plist file on iOS, or an AndroidManifest.xml on Android.
-- a few .png files, one of which is a splash screen (displayed when your app
+* a few .png files, one of which is a splash screen (displayed when your app
   launches), others are app icons.
-- a .pfx file, used for code signing purposes.
-
+* a .pfx file, used for code signing purposes.
 
 ### 3. Add references to SDL's project files ###
 
@@ -199,7 +189,7 @@ libraries such that, when the app is built:
 
 1. each library gets built for the appropriate CPU architecture(s) and WinRT
    platform(s).
-2. each library's output, such as .dll files, get copied to the app's build 
+2. each library's output, such as .dll files, get copied to the app's build
    output.
 
 To set this up for SDL/WinRT, you'll need to run through the following steps:
@@ -222,16 +212,15 @@ Your project is now linked to SDL's project, insofar that when the app is
 built, SDL will be built as well, with its build output getting included with
 your app.
 
-
 ### 4. Adjust Your App's Build Settings ###
 
 Some build settings need to be changed in your app's project.  This guide will
 outline the following:
 
-- making sure that the compiler knows where to find SDL's header files
-- **Optional for C++, but NECESSARY for compiling C code:** telling the
+* making sure that the compiler knows where to find SDL's header files
+* **Optional for C++, but NECESSARY for compiling C code:** telling the
   compiler not to use Microsoft's C++ extensions for WinRT development.
-- **Optional:** telling the compiler not generate errors due to missing
+* **Optional:** telling the compiler not generate errors due to missing
   precompiled header files.
 
 To change these settings:
@@ -245,19 +234,19 @@ To change these settings:
 7. edit the "Additional Include Directories" setting, and add a path to SDL's
    "include" directory
 8. **Optional: to enable compilation of C code:** change the setting for
-   "Consume Windows Runtime Extension" from "Yes (/ZW)" to "No".  If you're 
-   working with a completely C++ based project, this step can usually be 
+   "Consume Windows Runtime Extension" from "Yes (/ZW)" to "No".  If you're
+   working with a completely C++ based project, this step can usually be
    omitted.
-9. **Optional: to disable precompiled headers (which can produce 
-   'stdafx.h'-related build errors, if setup incorrectly:** in the left-hand 
-   list, select "Precompiled Headers", then change the setting for "Precompiled 
+9. **Optional: to disable precompiled headers (which can produce
+   'stdafx.h'-related build errors, if setup incorrectly:** in the left-hand
+   list, select "Precompiled Headers", then change the setting for "Precompiled
    Header" from "Use (/Yu)" to "Not Using Precompiled Headers".
 10. close the dialog, saving settings, by clicking the "OK" button
 
-
-### 5. Add a WinRT-appropriate main function, and a blank-cursor image, to the app. ###
+### 5. Add a WinRT-appropriate main function, and a blank-cursor image, to the app ###
 
 A few files should be included directly in your app's MSVC project, specifically:
+
 1. a WinRT-appropriate main function (which is different than main() functions on
    other platforms)
 2. a Win32-style cursor resource, used by SDL_ShowCursor() to hide the mouse cursor
@@ -267,13 +256,13 @@ A few files should be included directly in your app's MSVC project, specifically
 
 To include these files for C/C++ projects:
 
-1. right-click on your project (again, in Visual C++'s Solution Explorer), 
+1. right-click on your project (again, in Visual C++'s Solution Explorer),
    navigate to "Add", then choose "Existing Item...".
 2. navigate to the directory containing SDL's source code, then into its
    subdirectory, 'src/main/winrt/'.  Select, then add, the following files:
-   - `SDL_winrt_main_NonXAML.cpp`
-   - `SDL2-WinRTResources.rc`
-   - `SDL2-WinRTResource_BlankCursor.cur`
+   * `SDL_winrt_main_NonXAML.cpp`
+   * `SDL2-WinRTResources.rc`
+   * `SDL2-WinRTResource_BlankCursor.cur`
 3. right-click on the file `SDL_winrt_main_NonXAML.cpp` (as listed in your
    project), then click on "Properties...".
 4. in the drop-down box next to "Configuration", choose, "All Configurations"
@@ -282,8 +271,8 @@ To include these files for C/C++ projects:
 7. change the setting for "Consume Windows Runtime Extension" to "Yes (/ZW)".
 8. click the OK button.  This will close the dialog.
 
-**NOTE: C++/CX compilation is currently required in at least one file of your 
-app's project.  This is to make sure that Visual C++'s linker builds a 'Windows 
+**NOTE: C++/CX compilation is currently required in at least one file of your
+app's project.  This is to make sure that Visual C++'s linker builds a 'Windows
 Metadata' file (.winmd) for your app.  Not doing so can lead to build errors.**
 
 For non-C++ projects, you will need to call SDL_WinRTRunApp from your language's
@@ -293,31 +282,30 @@ first <PropertyGroup> block in your Visual Studio project file.
 
 ### 6. Add app code and assets ###
 
-At this point, you can add in SDL-specific source code.  Be sure to include a 
-C-style main function (ie: `int main(int argc, char *argv[])`).  From there you 
-should be able to create a single `SDL_Window` (WinRT apps can only have one 
-window, at present), as well as an `SDL_Renderer`.  Direct3D will be used to 
-draw content.  Events are received via SDL's usual event functions 
-(`SDL_PollEvent`, etc.)  If you have a set of existing source files and assets, 
-you can start adding them to the project now.  If not, or if you would like to 
-make sure that you're setup correctly, some short and simple sample code is 
+At this point, you can add in SDL-specific source code.  Be sure to include a
+C-style main function (ie: `int main(int argc, char *argv[])`).  From there you
+should be able to create a single `SDL_Window` (WinRT apps can only have one
+window, at present), as well as an `SDL_Renderer`.  Direct3D will be used to
+draw content.  Events are received via SDL's usual event functions
+(`SDL_PollEvent`, etc.)  If you have a set of existing source files and assets,
+you can start adding them to the project now.  If not, or if you would like to
+make sure that you're setup correctly, some short and simple sample code is
 provided below.
-
 
 #### 6.A. ... when creating a new app ####
 
-If you are creating a new app (rather than porting an existing SDL-based app), 
-or if you would just like a simple app to test SDL/WinRT with before trying to 
-get existing code working, some working SDL/WinRT code is provided below.  To 
+If you are creating a new app (rather than porting an existing SDL-based app),
+or if you would just like a simple app to test SDL/WinRT with before trying to
+get existing code working, some working SDL/WinRT code is provided below.  To
 set this up:
 
 1. right click on your app's project
 2. select Add, then New Item.  An "Add New Item" dialog will show up.
 3. from the left-hand list, choose "Visual C++"
 4. from the middle/main list, choose "C++ File (.cpp)"
-5. near the bottom of the dialog, next to "Name:", type in a name for your 
+5. near the bottom of the dialog, next to "Name:", type in a name for your
 source file, such as, "main.cpp".
-6. click on the Add button.  This will close the dialog, add the new file to 
+6. click on the Add button.  This will close the dialog, add the new file to
 your project, and open the file in Visual C++'s text editor.
 7. Copy and paste the following code into the new file, then save it.
 
@@ -359,43 +347,41 @@ int main(int argc, char **argv)
 
 #### 6.B. Adding code and assets ####
 
-If you have existing code and assets that you'd like to add, you should be able 
+If you have existing code and assets that you'd like to add, you should be able
 to add them now.  The process for adding a set of files is as such.
 
 1. right click on the app's project
 2. select Add, then click on "New Item..."
-3. open any source, header, or asset files as appropriate.  Support for C and 
+3. open any source, header, or asset files as appropriate.  Support for C and
 C++ is available.
 
-Do note that WinRT only supports a subset of the APIs that are available to 
-Win32-based apps.  Many portions of the Win32 API and the C runtime are not 
+Do note that WinRT only supports a subset of the APIs that are available to
+Win32-based apps.  Many portions of the Win32 API and the C runtime are not
 available.
 
-A list of unsupported C APIs can be found at 
+A list of unsupported C APIs can be found at
 <http://msdn.microsoft.com/en-us/library/windows/apps/jj606124.aspx>
 
-General information on using the C runtime in WinRT can be found at 
+General information on using the C runtime in WinRT can be found at
 <https://msdn.microsoft.com/en-us/library/hh972425.aspx>
 
-A list of supported Win32 APIs for WinRT apps can be found at 
-<http://msdn.microsoft.com/en-us/library/windows/apps/br205757.aspx>.  To note, 
+A list of supported Win32 APIs for WinRT apps can be found at
+<http://msdn.microsoft.com/en-us/library/windows/apps/br205757.aspx>.  To note,
 the list of supported Win32 APIs for Windows Phone 8.0 is different.  
-That list can be found at 
+That list can be found at
 <http://msdn.microsoft.com/en-us/library/windowsphone/develop/jj662956(v=vs.105).aspx>
-
 
 ### 7. Build and run your app ###
 
 Your app project should now be setup, and you should be ready to build your app.  
-To run it on the local machine, open the Debug menu and choose "Start 
-Debugging".  This will build your app, then run your app full-screen.  To switch 
-out of your app, press the Windows key.  Alternatively, you can choose to run 
-your app in a window.  To do this, before building and running your app, find 
-the drop-down menu in Visual C++'s toolbar that says, "Local Machine".  Expand 
-this by clicking on the arrow on the right side of the list, then click on 
-Simulator.  Once you do that, any time you build and run the app, the app will 
+To run it on the local machine, open the Debug menu and choose "Start
+Debugging".  This will build your app, then run your app full-screen.  To switch
+out of your app, press the Windows key.  Alternatively, you can choose to run
+your app in a window.  To do this, before building and running your app, find
+the drop-down menu in Visual C++'s toolbar that says, "Local Machine".  Expand
+this by clicking on the arrow on the right side of the list, then click on
+Simulator.  Once you do that, any time you build and run the app, the app will
 launch in window, rather than full-screen.
-
 
 #### 7.A. Running apps on older, ARM-based, "Windows RT" devices ####
 
@@ -406,39 +392,38 @@ Windows 8.x that ran primarily on ARM-based tablet computers.
 
 To build and run the app on ARM-based, "Windows RT" devices, you'll need to:
 
-- install Microsoft's "Remote Debugger" on the device.  Visual C++ installs and 
+* install Microsoft's "Remote Debugger" on the device.  Visual C++ installs and
   debugs ARM-based apps via IP networks.
-- change a few options on the development machine, both to make sure it builds 
-  for ARM (rather than x86 or x64), and to make sure it knows how to find the 
+* change a few options on the development machine, both to make sure it builds
+  for ARM (rather than x86 or x64), and to make sure it knows how to find the
   Windows RT device (on the network).
 
-Microsoft's Remote Debugger can be found at 
-<https://msdn.microsoft.com/en-us/library/hh441469.aspx>.  Please note 
-that separate versions of this debugger exist for different versions of Visual 
+Microsoft's Remote Debugger can be found at
+<https://msdn.microsoft.com/en-us/library/hh441469.aspx>.  Please note
+that separate versions of this debugger exist for different versions of Visual
 C++, one each for MSVC 2015, 2013, and 2012.
 
 To setup Visual C++ to launch your app on an ARM device:
 
-1. make sure the Remote Debugger is running on your ARM device, and that it's on 
+1. make sure the Remote Debugger is running on your ARM device, and that it's on
    the same IP network as your development machine.
-2. from Visual C++'s toolbar, find a drop-down menu that says, "Win32".  Click 
+2. from Visual C++'s toolbar, find a drop-down menu that says, "Win32".  Click
    it, then change the value to "ARM".
-3. make sure Visual C++ knows the hostname or IP address of the ARM device.  To 
+3. make sure Visual C++ knows the hostname or IP address of the ARM device.  To
    do this:
     1. open the app project's properties
     2. select "Debugging"
-    3. next to "Machine Name", enter the hostname or IP address of the ARM 
+    3. next to "Machine Name", enter the hostname or IP address of the ARM
        device
     4. if, and only if, you've turned off authentication in the Remote Debugger,
        then change the setting for "Require Authentication" to No
     5. click "OK"
-4. build and run the app (from Visual C++).  The first time you do this, a 
-   prompt will show up on the ARM device, asking for a Microsoft Account.  You 
-   do, unfortunately, need to log in here, and will need to follow the 
-   subsequent registration steps in order to launch the app.  After you do so, 
-   if the app didn't already launch, try relaunching it again from within Visual 
+4. build and run the app (from Visual C++).  The first time you do this, a
+   prompt will show up on the ARM device, asking for a Microsoft Account.  You
+   do, unfortunately, need to log in here, and will need to follow the
+   subsequent registration steps in order to launch the app.  After you do so,
+   if the app didn't already launch, try relaunching it again from within Visual
    C++.
-
 
 Troubleshooting
 ---------------
@@ -458,7 +443,6 @@ section.
 
     /nodefaultlib:vccorlibd /nodefaultlib:msvcrtd vccorlibd.lib msvcrtd.lib
 
-
 #### Mouse-motion events fail to get sent, or SDL_GetMouseState() fails to return updated values
 
 This may be caused by a bug in Windows itself, whereby hiding the mouse
@@ -468,7 +452,6 @@ SDL provides a workaround for this, but it requires that an app links to a
 set of Win32-style cursor image-resource files.  A copy of suitable resource
 files can be found in `src/main/winrt/`.  Adding them to an app's Visual C++
 project file should be sufficient to get the app to use them.
-
 
 #### SDL's Visual Studio project file fails to open, with message, "The system can't find the file specified."
 
@@ -504,8 +487,7 @@ Once you install these components, try re-launching Visual Studio, and re-openin
 the SDL project file.  If you still get the error dialog, try using the Output
 window, again, seeing what Visual Studio says about it.
 
-
-#### Game controllers / joysticks aren't working!
+#### Game controllers / joysticks aren't working
 
 Windows only permits certain game controllers and joysticks to work within
 WinRT / UWP apps.  Even if a game controller or joystick works in a Win32
@@ -514,6 +496,4 @@ app, that device is not guaranteed to work inside a WinRT / UWP app.
 According to Microsoft, "Xbox compatible controllers" should work inside
 UWP apps, potentially with more working in the future.  This includes, but
 may not be limited to, Microsoft-made Xbox controllers and USB adapters.
-(Source: https://social.msdn.microsoft.com/Forums/en-US/9064838b-e8c3-4c18-8a83-19bf0dfe150d/xinput-fails-to-detect-game-controllers?forum=wpdevelop)
-
-
+(Source: <https://social.msdn.microsoft.com/Forums/en-US/9064838b-e8c3-4c18-8a83-19bf0dfe150d/xinput-fails-to-detect-game-controllers?forum=wpdevelop>)

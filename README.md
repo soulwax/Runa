@@ -11,14 +11,14 @@
 ## Table of Contents
 
 - [Project RUNA](#project-runa)
-	- [Description](#description)
-	- [Table of Contents](#table-of-contents)
-	- [Installation](#installation)
-	- [Usage](#usage)
-	- [Contributing](#contributing)
-	- [Tests](#tests)
-	- [License](#license)
-	- [Questions?](#questions)
+  - [Description](#description)
+  - [Table of Contents](#table-of-contents)
+  - [Installation](#installation)
+  - [Usage](#usage)
+  - [Contributing](#contributing)
+  - [Tests](#tests)
+  - [License](#license)
+  - [Questions?](#questions)
 
 ---
 

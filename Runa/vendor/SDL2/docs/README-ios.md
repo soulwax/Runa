@@ -11,7 +11,6 @@ Instructions:
 1. Open SDL.xcodeproj (located in Xcode/SDL) in Xcode.
 2. Select your desired target, and hit build.
 
-
 Using the Simple DirectMedia Layer for iOS
 ==============================================================================
 
@@ -27,9 +26,7 @@ Using the Simple DirectMedia Layer for iOS
 10. Add any assets that your application needs.
 11. Enjoy!
 
-
 TODO: Add information regarding App Store requirements such as icons, etc.
-
 
 Notes -- Retina / High-DPI and window sizes
 ==============================================================================
@@ -58,7 +55,6 @@ sizes in screen coordinates. When doing 2D rendering with OpenGL ES, an
 orthographic projection matrix using the size in screen coordinates
 (SDL_GetWindowSize()) can be used in order to display content at the same scale
 no matter whether a Retina device is used or not.
-
 
 Notes -- Application events
 ==============================================================================
@@ -121,14 +117,12 @@ e.g.
         return 0;
     }
 
-    
 Notes -- Accelerometer as Joystick
 ==============================================================================
 
 SDL for iPhone supports polling the built in accelerometer as a joystick device.  For an example on how to do this, see the accelerometer.c in the demos directory.
 
 The main thing to note when using the accelerometer with SDL is that while the iPhone natively reports accelerometer as floating point values in units of g-force, SDL_JoystickGetAxis() reports joystick values as signed integers.  Hence, in order to convert between the two, some clamping and scaling is necessary on the part of the iPhone SDL joystick driver.  To convert SDL_JoystickGetAxis() reported values BACK to units of g-force, simply multiply the values by SDL_IPHONE_MAX_GFORCE / 0x7FFF.
-
 
 Notes -- OpenGL ES
 ==============================================================================
@@ -149,27 +143,24 @@ OpenGL ES on iOS doesn't use the traditional system-framebuffer setup provided i
 
 The above objects can be obtained via SDL_GetWindowWMInfo() (in SDL_syswm.h).
 
-
 Notes -- Keyboard
 ==============================================================================
 
 The SDL keyboard API has been extended to support on-screen keyboards:
 
 void SDL_StartTextInput()
-	-- enables text events and reveals the onscreen keyboard.
+ -- enables text events and reveals the onscreen keyboard.
 
 void SDL_StopTextInput()
-	-- disables text events and hides the onscreen keyboard.
+ -- disables text events and hides the onscreen keyboard.
 
 SDL_bool SDL_IsTextInputActive()
-	-- returns whether or not text events are enabled (and the onscreen keyboard is visible)
-
+ -- returns whether or not text events are enabled (and the onscreen keyboard is visible)
 
 Notes -- Mouse
 ==============================================================================
 
 iOS now supports Bluetooth mice on iPad, but by default will provide the mouse input as touch. In order for SDL to see the real mouse events, you should set the key UIApplicationSupportsIndirectInputEvents to true in your Info.plist
-
 
 Notes -- Reading and Writing files
 ==============================================================================
@@ -188,13 +179,12 @@ Once your application is installed its directory tree looks like:
 When your SDL based iPhone application starts up, it sets the working directory to the main bundle (MySDLApp Home/MySDLApp.app), where your application resources are stored.  You cannot write to this directory.  Instead, I advise you to write document files to "../Documents/" and preferences to "../Library/Preferences".  
 
 More information on this subject is available here:
-http://developer.apple.com/library/ios/#documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/Introduction/Introduction.html
-
+<http://developer.apple.com/library/ios/#documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/Introduction/Introduction.html>
 
 Notes -- xcFramework
 ==============================================================================
 
-The SDL.xcodeproj file now includes a target to build SDL2.xcframework. An xcframework is a new (Xcode 11) uber-framework which can handle any combination of processor type and target OS platform. 
+The SDL.xcodeproj file now includes a target to build SDL2.xcframework. An xcframework is a new (Xcode 11) uber-framework which can handle any combination of processor type and target OS platform.
 
 In the past, iOS devices were always an ARM variant processor, and the simulator was always i386 or x86_64, and thus libraries could be combined into a single framework for both simulator and device. With the introduction of the Apple Silicon ARM-based machines, regular frameworks would collide as CPU type was no longer sufficient to differentiate the platform. So Apple created the new xcframework library package.
 
@@ -204,37 +194,35 @@ This target requires Xcode 11 or later. The target will simply fail to build if 
 
 In addition, on Apple platforms, main() cannot be in a dynamically loaded library. This means that iOS apps which used the statically-linked libSDL2.lib and now link with the xcframwork will need to define their own main() to call SDL_UIKitRunApp(), like this:
 
-#ifndef SDL_MAIN_HANDLED
-#ifdef main
-#undef main
-#endif
+# ifndef SDL_MAIN_HANDLED
+# ifdef main
+# undef main
+# endif
 
 int
 main(int argc, char *argv[])
 {
-	return SDL_UIKitRunApp(argc, argv, SDL_main);
+ return SDL_UIKitRunApp(argc, argv, SDL_main);
 }
-#endif /* !SDL_MAIN_HANDLED */
+# endif /* !SDL_MAIN_HANDLED */
 
-Using an xcFramework is similar to using a regular framework. However, issues have been seen with the build system not seeing the headers in the xcFramework. To remedy this, add the path to the xcFramework in your app's target ==> Build Settings ==> Framework Search Paths and mark it recursive (this is critical). Also critical is to remove "*.framework" from Build Settings ==> Sub-Directories to Exclude in Recursive Searches. Clean the build folder, and on your next build the build system should be able to see any of these in your code, as expected: 
+Using an xcFramework is similar to using a regular framework. However, issues have been seen with the build system not seeing the headers in the xcFramework. To remedy this, add the path to the xcFramework in your app's target ==> Build Settings ==> Framework Search Paths and mark it recursive (this is critical). Also critical is to remove "*.framework" from Build Settings ==> Sub-Directories to Exclude in Recursive Searches. Clean the build folder, and on your next build the build system should be able to see any of these in your code, as expected:
 
-#include "SDL_main.h"
-#include <SDL.h>
-#include <SDL_main.h>
-
+# include "SDL_main.h"
+# include <SDL.h>
+# include <SDL_main.h>
 
 Notes -- iPhone SDL limitations
 ==============================================================================
 
 Windows:
-	Full-size, single window applications only.  You cannot create multi-window SDL applications for iPhone OS.  The application window will fill the display, though you have the option of turning on or off the menu-bar (pass SDL_CreateWindow() the flag SDL_WINDOW_BORDERLESS).
+ Full-size, single window applications only.  You cannot create multi-window SDL applications for iPhone OS.  The application window will fill the display, though you have the option of turning on or off the menu-bar (pass SDL_CreateWindow() the flag SDL_WINDOW_BORDERLESS).
 
 Textures:
-	The optimal texture formats on iOS are SDL_PIXELFORMAT_ABGR8888, SDL_PIXELFORMAT_ABGR8888, SDL_PIXELFORMAT_BGR888, and SDL_PIXELFORMAT_RGB24 pixel formats.
+ The optimal texture formats on iOS are SDL_PIXELFORMAT_ABGR8888, SDL_PIXELFORMAT_ABGR8888, SDL_PIXELFORMAT_BGR888, and SDL_PIXELFORMAT_RGB24 pixel formats.
 
 Loading Shared Objects:
-	This is disabled by default since it seems to break the terms of the iOS SDK agreement for iOS versions prior to iOS 8. It can be re-enabled in SDL_config_iphoneos.h.
-
+ This is disabled by default since it seems to break the terms of the iOS SDK agreement for iOS versions prior to iOS 8. It can be re-enabled in SDL_config_iphoneos.h.
 
 Notes -- CoreBluetooth.framework
 ==============================================================================
@@ -251,8 +239,7 @@ to your Info.plist:
 <key>NSBluetoothPeripheralUsageDescription</key>
 <string>MyApp would like to remain connected to nearby bluetooth Game Controllers and Game Pads even when you're not using the app.</string>
 
-
-Game Center 
+Game Center
 ==============================================================================
 
 Game Center integration might require that you break up your main loop in order to yield control back to the system. In other words, instead of running an endless main loop, you run each frame in a callback function, using:
@@ -289,14 +276,13 @@ e.g.
         return 0;
     }
 
-
 Deploying to older versions of iOS
 ==============================================================================
 
 SDL supports deploying to older versions of iOS than are supported by the latest version of Xcode, all the way back to iOS 8.0
 
 In order to do that you need to download an older version of Xcode:
-https://developer.apple.com/download/more/?name=Xcode
+<https://developer.apple.com/download/more/?name=Xcode>
 
 Open the package contents of the older Xcode and your newer version of Xcode and copy over the folders in Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/DeviceSupport
 

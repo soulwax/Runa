@@ -3,28 +3,30 @@
 #include <iostream>
 #include "Game/Core/Log.h"
 
-SDL_Renderer* Game::Renderer = nullptr;
+SDL_Renderer *Game::Renderer = nullptr;
 
 Game::Game()
 {
-	//nullptr init
+	// nullptr init
 	Window = nullptr;
 	IsRunning = true;
 }
 
 Game::~Game() = default;
 
-void Game::Init(const char* title, int windowWidth, int windowHeight, bool isFullscreen)
+void Game::Init(const char *title, int windowWidth, int windowHeight, bool isFullscreen)
 {
 	this->Init(title, 0, 0, windowWidth, windowHeight, isFullscreen, false);
 }
 
-void Game::Init(const char* title, int xpos, int ypos, int width, int height, bool fullscreen, bool vsync)
+void Game::Init(const char *title, int xpos, int ypos, int width, int height, bool fullscreen, bool vsync)
 {
 	int window_flags = 0;
 	int renderer_flags = SDL_RENDERER_ACCELERATED;
-	if (fullscreen) window_flags |= SDL_WINDOW_FULLSCREEN;
-	if (vsync) renderer_flags |= SDL_RENDERER_PRESENTVSYNC;
+	if (fullscreen)
+		window_flags |= SDL_WINDOW_FULLSCREEN;
+	if (vsync)
+		renderer_flags |= SDL_RENDERER_PRESENTVSYNC;
 
 	if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) == 0)
 	{
@@ -51,7 +53,7 @@ void Game::Init(const char* title, int xpos, int ypos, int width, int height, bo
 		IsRunning = false;
 	}
 
-	//TODO: Init Assets, Audio, Controllers, Game State (Menu, Level X etc.) etc.
+	// TODO: Init Assets, Audio, Controllers, Game State (Menu, Level X etc.) etc.
 }
 
 void Game::HandleEventsGlobally()
@@ -63,7 +65,7 @@ void Game::HandleEventsGlobally()
 	case SDL_QUIT:
 		IsRunning = false;
 		break;
-		//TODO: Integrate Input Handler here
+		// TODO: Integrate Input Handler here
 	case SDL_KEYUP:
 		switch (event.key.keysym.sym)
 		{

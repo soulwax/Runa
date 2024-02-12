@@ -11,9 +11,9 @@ Supports:
 
 What you need:
 
-* DirectFB 1.0.1, 1.2.x, 1.3.0
-* Kernel-Framebuffer support: required: vesafb, radeonfb .... 
-* Mesa 7.0.x	   - optional for OpenGL
+- DirectFB 1.0.1, 1.2.x, 1.3.0
+- Kernel-Framebuffer support: required: vesafb, radeonfb ....
+- Mesa 7.0.x    - optional for OpenGL
 
 The `/etc/directfbrc` file should contain the following lines to make
 your joystick work and avoid crashes:
@@ -44,7 +44,7 @@ To use hardware accelerated YUV-overlays for YUV-textures, use:
 export SDL_DIRECTFB_YUV_DIRECT=1
 ```
 
-This is disabled by default. It will only support one 
+This is disabled by default. It will only support one
 YUV texture, namely the first. Every other YUV texture will be
 rendered in software.
 

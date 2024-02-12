@@ -5,85 +5,96 @@
 #include "Game/Core/Base.h"
 #include "Game/Game.h"
 
-//Screen constants
+// Screen constants
 constexpr int SCREEN_WIDTH = 800;
 constexpr int SCREEN_HEIGHT = 640;
 constexpr int MIN_SCREEN_FPS = 60;
 constexpr int MAX_SCREEN_FPS = 240;
 
-//screen init variables (with default values)
+// screen init variables (with default values)
 bool isFullscreen = false;
 bool isVsync = true;
 int screenFps = 60;
 
-//debugging
+// debugging
 bool verbose = true;
 
-void ProcessArgs(const int argc, const char* argv[])
+void ProcessArgs(const int argc, const char *argv[])
 {
 	const std::vector<std::string> arguments(argv, argv + argc);
-	for (const std::string& s : arguments) {
-		if (s == "-verbose=true") verbose = true;
-		else if (s == "-verbose=false") verbose = false;
-		if (s == "-vsync=true") isVsync = true;
-		else if (s == "-vsync=false") isVsync = false;
-		if (s == "-fullscreen=true") isFullscreen = true;
-		else if (s == "-fullscreen=false") isFullscreen = false;
+	for (const std::string &s : arguments)
+	{
+		if (s == "-verbose=true")
+			verbose = true;
+		else if (s == "-verbose=false")
+			verbose = false;
+		if (s == "-vsync=true")
+			isVsync = true;
+		else if (s == "-vsync=false")
+			isVsync = false;
+		if (s == "-fullscreen=true")
+			isFullscreen = true;
+		else if (s == "-fullscreen=false")
+			isFullscreen = false;
 		//...
 
-		if (verbose) RUNA_INFO("Argument: {0}", s);
+		if (verbose)
+			RUNA_INFO("Argument: {0}", s);
 	}
-	if (verbose) RUNA_INFO("Finished processing arguments. Amount: " + std::to_string(arguments.size()));
+	if (verbose)
+		RUNA_INFO("Finished processing arguments. Amount: " + std::to_string(arguments.size()));
 }
 
-int main(const int argc, const char* argv[])
+int main(const int argc, const char *argv[])
 {
 	unsigned int screenTicksPerFrame = 1000 / screenFps;
 
 	Runa::Log::Init();
-	//look at args first and discern whether they make sense
+	// look at args first and discern whether they make sense
 	ProcessArgs(argc, argv);
 
-	//process screen vars
-	if (isVsync) screenFps = MAX_SCREEN_FPS;
-	else screenFps = MIN_SCREEN_FPS;
+	// process screen vars
+	if (isVsync)
+		screenFps = MAX_SCREEN_FPS;
+	else
+		screenFps = MIN_SCREEN_FPS;
 	screenTicksPerFrame = 1000 / screenFps;
 
-	//init engine backend
+	// init engine backend
 	const auto game = std::make_unique<Game>();
 	game->Init("Runa", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, isFullscreen, isVsync);
 
 	int ticks = 0;
 	unsigned int lastFrameTime = SDL_GetTicks();
 
-	//BEGIN GAME LOOP
+	// BEGIN GAME LOOP
 	while (game->IsGameRunning())
 	{
 		const Uint32 now = SDL_GetTicks();
 
-		//### MAIN GAME LOOP COMMENCE ###
+		// ### MAIN GAME LOOP COMMENCE ###
 		game->HandleEventsGlobally();
 		Game::Update();
 		Game::Render();
-		//### GAME LOOP END ###
+		// ### GAME LOOP END ###
 
-		//tick counter
+		// tick counter
 		ticks++;
 
 		const unsigned int frameTime = SDL_GetTicks() - now;
 
-		//this makes my eyes bleed but it is
-		//needed for now to make the GPU go less APESHIT when
-		//no VSYNC is activated
-		//tl;dr simple frame limiter using MIN_SCREEN_FPS for reference
+		// this makes my eyes bleed but it is
+		// needed for now to make the GPU go less APESHIT when
+		// no VSYNC is activated
+		// tl;dr simple frame limiter using MIN_SCREEN_FPS for reference
 		if (!isVsync && screenTicksPerFrame > frameTime)
 		{
 			SDL_Delay(screenTicksPerFrame - frameTime);
 		}
 
-		//Reset counted ticks every second and display in console
-		//At the moment this is a horrible idea as this is equivalent
-		//to frames per second.
+		// Reset counted ticks every second and display in console
+		// At the moment this is a horrible idea as this is equivalent
+		// to frames per second.
 		if (SDL_GetTicks() - lastFrameTime >= 1000)
 		{
 			RUNA_INFO("FPS: {0}", ticks);
@@ -92,7 +103,7 @@ int main(const int argc, const char* argv[])
 		}
 	}
 
-	//keeping it explicit, could integrate into destructor
+	// keeping it explicit, could integrate into destructor
 	game->Clean();
 	return 0;
 }

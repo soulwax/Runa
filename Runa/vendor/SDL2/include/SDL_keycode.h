@@ -44,8 +44,8 @@
  */
 typedef Sint32 SDL_Keycode;
 
-#define SDLK_SCANCODE_MASK (1<<30)
-#define SDL_SCANCODE_TO_KEYCODE(X)  (X | SDLK_SCANCODE_MASK)
+#define SDLK_SCANCODE_MASK (1 << 30)
+#define SDL_SCANCODE_TO_KEYCODE(X) (X | SDLK_SCANCODE_MASK)
 
 typedef enum
 {

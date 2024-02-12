@@ -18,7 +18,7 @@ project "Runa"
 	defines {"_CRT_SECURE_NO_WARNINGS", "GLFW_INCLUDE_NONE"}
 
 	includedirs {
-		"%{wks.location}/Runa/vendor/spdlog/include",
+		"%{wks.location}/Runa/vendor/spdlog/include", 
 		"%{wks.location}/Runa/src",
 		"%{wks.location}/Runa/vendor",
 		"%{IncludeDir.SDL2}",

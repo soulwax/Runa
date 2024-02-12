@@ -1,4 +1,4 @@
-# Mac OS X (aka macOS).
+# Mac OS X (aka macOS)
 
 These instructions are for people using Apple's Mac OS X (pronounced
 "ten"), which in newer versions is just referred to as "macOS".
@@ -30,7 +30,6 @@ make
 sudo make install
 ```
 
-
 You can also build SDL as a Universal library (a single binary for both
 64-bit Intel and ARM architectures), by using the build-scripts/clang-fat.sh
 script.
@@ -55,7 +54,6 @@ of SDL 2.24.0.
 To use the library once it's built, you essential have two possibilities:
 use the traditional autoconf/automake/make method, or use Xcode.
 
-
 # Caveats for using SDL with Mac OS X
 
 If you register your own NSApplicationDelegate (using [NSApp setDelegate:]),
@@ -64,7 +62,6 @@ SDL_Quit if it receives a termination request, it will terminate like a
 normal app, and it will not send a SDL_DROPFILE when you request to open a
 file with the app. To solve these issues, put the following code in your
 NSApplicationDelegate implementation:
-
 
 ```objc
 - (NSApplicationTerminateReply)applicationShouldTerminate:(NSApplication *)sender
@@ -105,10 +102,10 @@ your Makefile.am:
 ```make
 bundle_contents = APP_NAME.app/Contents
 APP_NAME_bundle: EXE_NAME
-	mkdir -p $(bundle_contents)/MacOS
-	mkdir -p $(bundle_contents)/Resources
-	echo "APPL????" > $(bundle_contents)/PkgInfo
-	$(INSTALL_PROGRAM) $< $(bundle_contents)/MacOS/
+ mkdir -p $(bundle_contents)/MacOS
+ mkdir -p $(bundle_contents)/Resources
+ echo "APPL????" > $(bundle_contents)/PkgInfo
+ $(INSTALL_PROGRAM) $< $(bundle_contents)/MacOS/
 ```
 
 You should replace `EXE_NAME` with the name of the executable. `APP_NAME` is
@@ -125,9 +122,9 @@ rule to your Makefile.am:
 
 ```make
 install-exec-hook: APP_NAME_bundle
-	rm -rf $(DESTDIR)$(prefix)/Applications/APP_NAME.app
-	mkdir -p $(DESTDIR)$(prefix)/Applications/
-	cp -r $< /$(DESTDIR)$(prefix)Applications/
+ rm -rf $(DESTDIR)$(prefix)/Applications/APP_NAME.app
+ mkdir -p $(DESTDIR)$(prefix)/Applications/
+ cp -r $< /$(DESTDIR)$(prefix)Applications/
 ```
 
 This rule takes the Bundle created by the rule from step 3 and installs them
@@ -166,12 +163,10 @@ there are some more things you should do before shipping your product...
    when you click on the .app, or if you look at the "Get Info" window.
    More information about Info.plist files can be found on Apple's homepage.
 
-
 As a final remark, let me add that I use some of the techniques (and some
 variations of them) in [Exult](https://github.com/exult/exult) and
 [ScummVM](https://github.com/scummvm/scummvm); both are available in source on
 the net, so feel free to take a peek at them for inspiration!
-
 
 # Using the Simple DirectMedia Layer with Xcode
 
@@ -196,12 +191,12 @@ normally from the Finder.
 
 The SDL Library is packaged as a framework bundle, an organized
 relocatable folder hierarchy of executable code, interface headers,
-and additional resources. For practical purposes, you can think of a 
+and additional resources. For practical purposes, you can think of a
 framework as a more user and system-friendly shared library, whose library
 file behaves more or less like a standard UNIX shared library.
 
-To build the framework, simply open the framework project and build it. 
-By default, the framework bundle "SDL.framework" is installed in 
+To build the framework, simply open the framework project and build it.
+By default, the framework bundle "SDL.framework" is installed in
 /Library/Frameworks. Therefore, the testers and project stationary expect
 it to be located there. However, it will function the same in any of the
 following locations:
@@ -253,7 +248,7 @@ Use `xcode-build` in the same directory as your .pbxproj file
 You can send command line args to your app by either invoking it from
 the command line (in *.app/Contents/MacOS) or by entering them in the
 Executables" panel of the target settings.
-    
+
 # Implementation Notes
 
 Some things that may be of interest about how it all works...
@@ -264,12 +259,11 @@ In SDL 1.2, the working directory of your SDL app is by default set to its
 parent, but this is no longer the case in SDL 2.0. SDL2 does change the
 working directory, which means it'll be whatever the command line prompt
 that launched the program was using, or if launched by double-clicking in
-the finger, it will be "/", the _root of the filesystem_. Plan accordingly!
+the finger, it will be "/", the *root of the filesystem*. Plan accordingly!
 You can use SDL_GetBasePath() to find where the program is running from and
 chdir() there directly.
 
-
-## You have a Cocoa App!
+## You have a Cocoa App
 
 Your SDL app is essentially a Cocoa application. When your app
 starts up and the libraries finish loading, a Cocoa procedure is called,
@@ -282,4 +276,3 @@ Functionality may be added in the future to help this.
 
 Bugs are tracked at [the GitHub issue tracker](https://github.com/libsdl-org/SDL/issues/).
 Please feel free to report bugs there!
-

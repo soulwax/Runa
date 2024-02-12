@@ -2,4 +2,4 @@
 
 #include <SDL.h>
 
-SDL_Surface* LoadBmp(char const* path);
+SDL_Surface *LoadBmp(char const *path);

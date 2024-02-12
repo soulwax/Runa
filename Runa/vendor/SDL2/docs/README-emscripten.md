@@ -32,45 +32,43 @@ available to be opened as soon as the program started, and since this magic
 happens in a little Javascript, you don't have to change your C/C++ code at
 all to make it happen.
 
-Please see the discussion at https://github.com/libsdl-org/SDL/issues/6385
+Please see the discussion at <https://github.com/libsdl-org/SDL/issues/6385>
 for some Javascript code to steal for this approach.
-
 
 ## Building SDL/emscripten
 
 SDL currently requires at least Emscripten 2.0.32 to build. Newer versions
 are likely to work, as well.
 
-
 Build:
 
-    $ mkdir build
-    $ cd build
-    $ emconfigure ../configure --host=asmjs-unknown-emscripten --disable-assembly --disable-threads --disable-cpuinfo CFLAGS="-O2"
-    $ emmake make
+    mkdir build
+    cd build
+    emconfigure ../configure --host=asmjs-unknown-emscripten --disable-assembly --disable-threads --disable-cpuinfo CFLAGS="-O2"
+    emmake make
 
 Or with cmake:
 
-    $ mkdir build
-    $ cd build
-    $ emcmake cmake ..
-    $ emmake make
+    mkdir build
+    cd build
+    emcmake cmake ..
+    emmake make
 
 To build one of the tests:
 
-    $ cd test/
-    $ emcc -O2 --js-opts 0 -g4 testdraw2.c -I../include ../build/.libs/libSDL2.a ../build/libSDL2_test.a -o a.html
+    cd test/
+    emcc -O2 --js-opts 0 -g4 testdraw2.c -I../include ../build/.libs/libSDL2.a ../build/libSDL2_test.a -o a.html
 
 Uses GLES2 renderer or software
 
 Some other SDL2 libraries can be easily built (assuming SDL2 is installed somewhere):
 
-SDL_mixer (http://www.libsdl.org/projects/SDL_mixer/):
+SDL_mixer (<http://www.libsdl.org/projects/SDL_mixer/>):
 
     $ EMCONFIGURE_JS=1 emconfigure ../configure
     build as usual...
 
-SDL_gfx (http://cms.ferzkopp.net/index.php/software/13-sdl-gfx):
+SDL_gfx (<http://cms.ferzkopp.net/index.php/software/13-sdl-gfx>):
 
     $ EMCONFIGURE_JS=1 emconfigure ../configure --disable-mmx
     build as usual...

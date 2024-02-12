@@ -24,7 +24,7 @@
 
 // Currently accepts at least the condition and one additional parameter (the message) being optional
 #define RUNA_ASSERT(...) RUNA_EXPAND_MACRO(RUNA_INTERNAL_ASSERT_GET_MACRO(__VA_ARGS__)(_, __VA_ARGS__))
-//#define RUNA_CORE_ASSERT(...) RUNA_EXPAND_MACRO(RUNA_INTERNAL_ASSERT_GET_MACRO(__VA_ARGS__)(_CORE_, __VA_ARGS__))
+// #define RUNA_CORE_ASSERT(...) RUNA_EXPAND_MACRO(RUNA_INTERNAL_ASSERT_GET_MACRO(__VA_ARGS__)(_CORE_, __VA_ARGS__))
 #else
 #define RUNA_ASSERT(...)
 #define RUNA_CORE_ASSERT(...)

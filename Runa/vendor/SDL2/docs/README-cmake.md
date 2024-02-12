@@ -1,12 +1,12 @@
 # CMake
 
-(www.cmake.org)
+(<www.cmake.org>)
 
 SDL's build system was traditionally based on autotools. Over time, this
-approach has suffered from several issues across the different supported 
+approach has suffered from several issues across the different supported
 platforms.
 To solve these problems, a new build system based on CMake was introduced.
-It is developed in parallel to the legacy autotools build system, so users 
+It is developed in parallel to the legacy autotools build system, so users
 can experiment with it without complication.
 
 The CMake build system is supported on the following platforms:
@@ -24,6 +24,7 @@ The CMake build system is supported on the following platforms:
 ## Building SDL
 
 Assuming the source for SDL is located at `~/sdl`
+
 ```sh
 cd ~
 mkdir build
@@ -42,8 +43,8 @@ cmake --install .        # '--install' requires CMake 3.15, or newer
 ## Including SDL in your project
 
 SDL can be included in your project in 2 major ways:
-- using a system SDL library, provided by your (*nix) distribution or a package manager
-- using a vendored SDL library: this is SDL copied or symlinked in a subfolder.
+* using a system SDL library, provided by your (*nix) distribution or a package manager
+* using a vendored SDL library: this is SDL copied or symlinked in a subfolder.
 
 The following CMake script supports both, depending on the value of `MYGAME_VENDORED`.
 
@@ -103,61 +104,59 @@ using Xcode or Make, possibly among other build-systems.
 
 When using a recent version of CMake (3.14+), it should be possible to:
 
-- build SDL for iOS, both static and dynamic
-- build SDL test apps (as iOS/tvOS .app bundles)
-- generate a working SDL_config.h for iOS (using SDL_config.h.cmake as a basis)
+* build SDL for iOS, both static and dynamic
+* build SDL test apps (as iOS/tvOS .app bundles)
+* generate a working SDL_config.h for iOS (using SDL_config.h.cmake as a basis)
 
 To use, set the following CMake variables when running CMake's configuration stage:
 
-- `CMAKE_SYSTEM_NAME=<OS>`   (either `iOS` or `tvOS`)
-- `CMAKE_OSX_SYSROOT=<SDK>`  (examples: `iphoneos`, `iphonesimulator`, `iphoneos12.4`, `/full/path/to/iPhoneOS.sdk`,
+* `CMAKE_SYSTEM_NAME=<OS>`   (either `iOS` or `tvOS`)
+* `CMAKE_OSX_SYSROOT=<SDK>`  (examples: `iphoneos`, `iphonesimulator`, `iphoneos12.4`, `/full/path/to/iPhoneOS.sdk`,
                               `appletvos`, `appletvsimulator`, `appletvos12.4`, `/full/path/to/AppleTVOS.sdk`, etc.)
-- `CMAKE_OSX_ARCHITECTURES=<semicolon-separated list of CPU architectures>` (example: "arm64;armv7s;x86_64")
-
+* `CMAKE_OSX_ARCHITECTURES=<semicolon-separated list of CPU architectures>` (example: "arm64;armv7s;x86_64")
 
 #### Examples
 
-- for iOS-Simulator, using the latest, installed SDK:
+* for iOS-Simulator, using the latest, installed SDK:
 
     ```bash
     cmake ~/sdl -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphonesimulator -DCMAKE_OSX_ARCHITECTURES=x86_64
     ```
 
-- for iOS-Device, using the latest, installed SDK, 64-bit only
+* for iOS-Device, using the latest, installed SDK, 64-bit only
 
     ```bash
     cmake ~/sdl -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphoneos -DCMAKE_OSX_ARCHITECTURES=arm64
     ```
 
-- for iOS-Device, using the latest, installed SDK, mixed 32/64 bit
+* for iOS-Device, using the latest, installed SDK, mixed 32/64 bit
 
     ```cmake
     cmake ~/sdl -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphoneos -DCMAKE_OSX_ARCHITECTURES="arm64;armv7s"
     ```
 
-- for iOS-Device, using a specific SDK revision (iOS 12.4, in this example):
+* for iOS-Device, using a specific SDK revision (iOS 12.4, in this example):
 
     ```cmake
     cmake ~/sdl -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphoneos12.4 -DCMAKE_OSX_ARCHITECTURES=arm64
     ```
 
-- for iOS-Simulator, using the latest, installed SDK, and building SDL test apps (as .app bundles):
+* for iOS-Simulator, using the latest, installed SDK, and building SDL test apps (as .app bundles):
 
     ```cmake
     cmake ~/sdl -DSDL_TESTS=1 -DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT=iphonesimulator -DCMAKE_OSX_ARCHITECTURES=x86_64
     ```
 
-- for tvOS-Simulator, using the latest, installed SDK:
+* for tvOS-Simulator, using the latest, installed SDK:
 
     ```cmake
     cmake ~/sdl -DCMAKE_SYSTEM_NAME=tvOS -DCMAKE_OSX_SYSROOT=appletvsimulator -DCMAKE_OSX_ARCHITECTURES=x86_64
     ```
 
-- for tvOS-Device, using the latest, installed SDK:
+* for tvOS-Device, using the latest, installed SDK:
 
     ```cmake
     cmake ~/sdl -DCMAKE_SYSTEM_NAME=tvOS -DCMAKE_OSX_SYSROOT=appletvos -DCMAKE_OSX_ARCHITECTURES=arm64`
     ```
-
 
 [^SDL_TARGET_EXCEPTION]: `SDL2::SDL2` can be an ALIAS to a static `SDL2::SDL2-static` target for multiple reasons.

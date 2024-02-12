@@ -33,7 +33,7 @@
 
 /* Make sure that this isn't included by Visual C++ */
 #ifdef _MSC_VER
-#error You should run hg revert SDL_config.h 
+#error You should run hg revert SDL_config.h
 #endif
 
 /* C language features */
@@ -186,9 +186,9 @@
 #undef HAVE_POLL
 
 #else
-#define HAVE_STDARG_H   1
-#define HAVE_STDDEF_H   1
-#define HAVE_STDINT_H   1
+#define HAVE_STDARG_H 1
+#define HAVE_STDDEF_H 1
+#define HAVE_STDINT_H 1
 #endif /* HAVE_LIBC */
 
 /* SDL internal assertion support */

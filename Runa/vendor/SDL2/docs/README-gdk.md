@@ -5,14 +5,12 @@ This port allows SDL applications to run via Microsoft's Game Development Kit (G
 
 Windows (GDK) and  Xbox One/Xbox Series (GDKX) are supported. Although most of the Xbox code is included in the public SDL source code, NDA access is required for a small number of source files. If you have access to GDKX, these required Xbox files are posted on the GDK forums [here](https://forums.xboxlive.com/questions/130003/).
 
-
 Requirements
 ------------
 
 * Microsoft Visual Studio 2022 (in theory, it should also work in 2017 or 2019, but this has not been tested)
 * Microsoft GDK June 2022 or newer (public release [here](https://github.com/microsoft/GDK/releases/tag/June_2022))
 * To publish a package or successfully authenticate a user, you will need to create an app id/configure services in Partner Center. However, for local testing purposes (without authenticating on Xbox Live), the identifiers used by the GDK test programs in the included solution will work.
-
 
 Windows GDK Status
 ------
@@ -58,13 +56,13 @@ In your game's existing Visual Studio Solution, go to Build > Configuration Mana
 
 Open `VisualC-GDK/SDL.sln` in Visual Studio, you need to build the SDL2 and SDL2main targets for the Gaming.Desktop.x64 platform (Release is recommended). You will need to copy/keep track of the `SDL2.dll`, `XCurl.dll` (which is output by Gaming.Desktop.x64), `SDL2.lib`, and `SDL2main.lib` output files for your game project.
 
-*Alternatively*, you could setup your solution file to instead reference the SDL2/SDL2main project file targets from the SDL source, and add those projects as a dependency. This would mean that SDL2 and SDL2main would both be built when your game is built. 
+*Alternatively*, you could setup your solution file to instead reference the SDL2/SDL2main project file targets from the SDL source, and add those projects as a dependency. This would mean that SDL2 and SDL2main would both be built when your game is built.
 
 ### 3. Configuring Project Settings ###
 
 While the Gaming.Desktop.x64 configuration sets most of the required settings, there are some additional items to configure for your game project under the Gaming.Desktop.x64 Configuration:
 
-*  Under C/C++ > General > Additional Include Directories, make sure the `SDL/include` path is referenced
+* Under C/C++ > General > Additional Include Directories, make sure the `SDL/include` path is referenced
 * Under Linker > General > Additional Library Directories, make sure to reference the path where the newly-built SDL2.lib and SDL2main.lib are
 * Under Linker > Input > Additional Dependencies, you need the following:
   * `SDL2.lib`
@@ -93,7 +91,7 @@ You can copy `VisualC-GDK/tests/testgdk/MicrosoftGame.config` and use that as a 
 
 This file must be copied into the same directory as the game's .exe file. As with the DLLs, you can either use a post-build step or the "Copy file" item type.
 
-For basic testing, you do not need to change anything else in `MicrosoftGame.config`. However, if you want to test any Xbox Live services (such as logging in users) _or_ publish a package, you will need to setup a Game app on Partner Center.
+For basic testing, you do not need to change anything else in `MicrosoftGame.config`. However, if you want to test any Xbox Live services (such as logging in users) *or* publish a package, you will need to setup a Game app on Partner Center.
 
 Then, you need to set the following values to the values from Partner Center:
 
@@ -105,11 +103,9 @@ Then, you need to set the following values to the values from Partner Center:
 
 Several logo PNG files are required to be able to launch the game, even from the debugger. You can use the sample logos provided in `VisualC-GDK/logos`. As with the other files, they must be copied into the same directory as the game's .exe file.
 
-
 ### 8. Copying any Data Files ###
 
 When debugging GDK games, there is no way to specify a working directory. Therefore, any required game data must also be copied into the output directory, likely in a post-build step.
-
 
 ### 9. Build and Run from Visual Studio ###
 
@@ -139,7 +135,6 @@ To create the package:
 6. Once the package is installed, you can run it from the start menu.
 7. As with when running from Visual Studio, if you need to test any Xbox Live functionality you must switch to the correct sandbox.
 
-
 Troubleshooting
 ---------------
 
@@ -148,7 +143,6 @@ Troubleshooting
 As of June 2022 GDK, you must have a valid Title Id and MSAAppId in order to test Xbox Live functionality such as user login. Make sure these are set correctly in the `MicrosoftGame.config`. This means that even testgdk will not let you login without setting these properties to valid values.
 
 Furthermore, confirm that your PC is set to the correct sandbox.
-
 
 #### "The current user has already installed an unpackaged version of this app. A packaged version cannot replace this." error when installing
 

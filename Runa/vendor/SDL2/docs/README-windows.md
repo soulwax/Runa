@@ -8,8 +8,7 @@ to at least the SDL_audiocvt.c source file, and possibly others. This may
 not be necessary if you build SDL with CMake instead of the included Visual
 Studio solution.
 
-Details are here: https://github.com/libsdl-org/SDL/issues/5186
-
+Details are here: <https://github.com/libsdl-org/SDL/issues/5186>
 
 ## OpenGL ES 2.x support
 
@@ -27,14 +26,14 @@ context is requested and no WGL_EXT_create_context_es2_profile extension is
 found, SDL will try to load the libEGL.dll library provided by ANGLE.
 
 To obtain the ANGLE binaries, you can either compile from source from
-https://chromium.googlesource.com/angle/angle or copy the relevant binaries
+<https://chromium.googlesource.com/angle/angle> or copy the relevant binaries
 from a recent Chrome/Chromium install for Windows. The files you need are:
 
 - libEGL.dll
 - libGLESv2.dll
 - d3dcompiler_46.dll (supports Windows Vista or later, better shader
   compiler) *or* d3dcompiler_43.dll (supports Windows XP or later)
-    
+
 If you compile ANGLE from source, you can configure it so it does not need the
 d3dcompiler_* DLL at all (for details on this, see their documentation).
 However, by default SDL will try to preload the d3dcompiler_46.dll to
@@ -55,4 +54,3 @@ Support for creating Vulkan surfaces is configured on by default. To disable
 it change the value of `SDL_VIDEO_VULKAN` to 0 in `SDL_config_windows.h`. You
 must install the [Vulkan SDK](https://www.lunarg.com/vulkan-sdk/) in order to
 use Vulkan graphics in your application.
-

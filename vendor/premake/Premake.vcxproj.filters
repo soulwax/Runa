@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="..">
+      <UniqueIdentifier>{61705900-4DFC-870B-B6AA-880BA255880B}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Runa">
+      <UniqueIdentifier>{064C8547-722B-04E3-7B43-8FB9E7A16A44}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Runa\vendor">
+      <UniqueIdentifier>{A35F3651-8F2D-2A57-78C1-9A7D642E06BC}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Runa\vendor\SDL2_image">
+      <UniqueIdentifier>{696D40AC-D52F-7436-1EE0-02C38AE14C14}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Runa\vendor\SDL2_image\external">
+      <UniqueIdentifier>{DB417960-C77D-7CCA-3090-94C11CEB24E5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Runa\vendor\SDL2_image\external\libjxl">
+      <UniqueIdentifier>{AF2539F7-1B40-9C98-6462-AC2CD0BBC39F}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Runa\vendor\SDL2_image\external\libjxl\third_party">
+      <UniqueIdentifier>{2832E295-944E-D486-5D26-41F4C9013E48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="..\Runa\vendor\SDL2_image\external\libjxl\third_party\brotli">
+      <UniqueIdentifier>{83AD57B8-6F18-18C4-1834-7D29047EDBA6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Runa\premake5.lua">
+      <Filter>..\Runa</Filter>
+    </None>
+    <None Include="..\..\Runa\vendor\SDL2_image\external\libjxl\third_party\brotli\premake5.lua">
+      <Filter>..\Runa\vendor\SDL2_image\external\libjxl\third_party\brotli</Filter>
+    </None>
+    <None Include="..\..\premake5.lua">
+      <Filter>..</Filter>
+    </None>
+    <None Include="premake5.lua" />
+  </ItemGroup>
+</Project>
