@@ -3,18 +3,22 @@
 #include <SDL.h>
 #include "utilities.h"
 
-class SpriteSheet {
+/**
+ * \brief SpriteSheet class
+ * path: path to the sprite sheet
+ * row: number of rows in the sprite sheet
+ * column: number of columns in the sprite sheet
+ */
+class SpriteSheet
+{
 public:
-    SpriteSheet(const char* path, int row, int column);
-    ~SpriteSheet();
+	SpriteSheet(char const* path, int row, int column);
+	~SpriteSheet();
 
-    void SelectSprite(int x, int y);
-    void DrawSelectedSprite(SDL_Renderer* renderer, SDL_Rect* position);
-	void DrawSelectedSprite(SDL_Renderer* renderer, SDL_Rect* position, double angle, SDL_Point* center, SDL_RendererFlip flip);
+	void SelectSprite(int x, int y);
+	void DrawSelectedSprite(SDL_Surface* windowSurface, SDL_Rect* position);
 
 private:
-    SDL_Texture* SpritesheetTexture;
-    SDL_Rect Clip;
-    int spriteWidth;
-    int spriteHeight;
+	SDL_Rect Clip;
+	SDL_Surface* SpritesheetImage;
 };
