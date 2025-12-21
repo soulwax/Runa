@@ -41,18 +41,32 @@ void Renderer::beginFrame() {
 }
 
 void Renderer::endFrame() {
-    if (m_swapchainTexture) {
-        // Create command buffer
+    // If we have a swapchain but no sprites were rendered, we still need to submit
+    // a command buffer to present the cleared frame
+    if (m_swapchainTexture && m_needsClear) {
+        // SpriteBatch didn't submit, so we need to submit the clear ourselves
         SDL_GPUCommandBuffer* cmdBuffer = SDL_AcquireGPUCommandBuffer(m_device);
-        if (!cmdBuffer) {
-            LOG_ERROR("Failed to acquire command buffer: {}", SDL_GetError());
-            return;
+        if (cmdBuffer) {
+            SDL_GPUColorTargetInfo colorTarget{};
+            colorTarget.texture = m_swapchainTexture;
+            colorTarget.clear_color.r = m_clearColor.r;
+            colorTarget.clear_color.g = m_clearColor.g;
+            colorTarget.clear_color.b = m_clearColor.b;
+            colorTarget.clear_color.a = m_clearColor.a;
+            colorTarget.load_op = SDL_GPU_LOADOP_CLEAR;
+            colorTarget.store_op = SDL_GPU_STOREOP_STORE;
+            
+            SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(cmdBuffer, &colorTarget, 1, nullptr);
+            if (renderPass) {
+                SDL_EndGPURenderPass(renderPass);
+            }
+            SDL_SubmitGPUCommandBuffer(cmdBuffer);
         }
-
-        // Submit and present
-        SDL_SubmitGPUCommandBuffer(cmdBuffer);
-        m_swapchainTexture = nullptr;
     }
+    
+    // Reset swapchain texture - it will be acquired again next frame
+    m_swapchainTexture = nullptr;
+    m_needsClear = false;  // Reset clear flag for next frame
 }
 
 void Renderer::clear(float r, float g, float b, float a) {
