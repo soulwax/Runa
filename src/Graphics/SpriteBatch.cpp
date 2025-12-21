@@ -96,9 +96,17 @@ void SpriteBatch::end() {
         return;
     }
 
-    // Get the swapchain texture from renderer
-    SDL_GPUTexture* swapchainTexture = nullptr;
-    SDL_GPUCommandBuffer* cmdBuffer = SDL_AcquireGPUCommandBuffer(device);
+    // Use the swapchain texture already acquired by the renderer
+    SDL_GPUTexture* swapchainTexture = m_renderer.getSwapchainTexture();
+    if (!swapchainTexture) {
+        LOG_WARN("No swapchain texture available - renderer may not have begun frame");
+        m_drawCalls.clear();
+        m_inBatch = false;
+        return;
+    }
+
+    // Acquire command buffer for rendering
+    SDL_GPUCommandBuffer* cmdBuffer = m_renderer.acquireCommandBuffer();
     if (!cmdBuffer) {
         LOG_ERROR("Failed to acquire command buffer: {}", SDL_GetError());
         m_drawCalls.clear();
@@ -106,27 +114,10 @@ void SpriteBatch::end() {
         return;
     }
 
-    // Acquire swapchain texture
-    if (!SDL_AcquireGPUSwapchainTexture(cmdBuffer, m_renderer.getWindow().getHandle(), &swapchainTexture, nullptr, nullptr)) {
-        LOG_ERROR("Failed to acquire swapchain texture: {}", SDL_GetError());
-        SDL_CancelGPUCommandBuffer(cmdBuffer);
-        m_drawCalls.clear();
-        m_inBatch = false;
-        return;
-    }
-
-    if (!swapchainTexture) {
-        LOG_ERROR("Swapchain texture is null");
-        SDL_CancelGPUCommandBuffer(cmdBuffer);
-        m_drawCalls.clear();
-        m_inBatch = false;
-        return;
-    }
-
-    // Set up render pass
+    // Set up render pass - use LOAD to preserve existing content (from clear)
     SDL_GPUColorTargetInfo colorTarget{};
     colorTarget.texture = swapchainTexture;
-    colorTarget.load_op = SDL_GPU_LOADOP_LOAD;  // Load existing content
+    colorTarget.load_op = SDL_GPU_LOADOP_LOAD;  // Load existing content (from clear)
     colorTarget.store_op = SDL_GPU_STOREOP_STORE;
 
     SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(cmdBuffer, &colorTarget, 1, nullptr);
