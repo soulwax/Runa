@@ -2,13 +2,14 @@
 
 #pragma once
 
+#include "../RunaAPI.h"
 #include "../Graphics/Window.h"
 #include "../Graphics/Renderer.h"
 #include <memory>
 
 namespace Runa {
 
-class Application {
+class RUNA_API Application {
 public:
     Application(const std::string& title, int width, int height);
     virtual ~Application();

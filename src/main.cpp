@@ -1,13 +1,16 @@
 // File: src/main.cpp
 
+#include <iostream>
+#include <memory>
+#include <fstream>
+#include <sstream>
+#include <exception>
+
 #include "Core/Application.h"
 #include "Core/ResourceManager.h"
 #include "Core/Log.h"
 #include "Graphics/TileMap.h"
 #include "Graphics/SpriteBatch.h"
-#include <memory>
-#include <fstream>
-#include <sstream>
 
 class GameApp : public Runa::Application {
     std::unique_ptr<Runa::ResourceManager> m_resources;
@@ -98,12 +101,34 @@ protected:
 };
 
 int main(int argc, char* argv[]) {
+    // Initialize logging before anything else to ensure we can log errors
+    // This is a safety measure in case Application constructor fails
+    try {
+        Runa::Log::init();
+    } catch (...) {
+        // If logging init fails, we can't log, so use stderr
+        std::cerr << "CRITICAL: Failed to initialize logging system!" << std::endl;
+    }
+
     try {
         auto app = std::make_unique<GameApp>();
         app->run();
         return 0;
     } catch (const std::exception& e) {
-        LOG_CRITICAL("Fatal error: {}", e.what());
+        // Try to log, but if logging fails, fall back to stderr
+        try {
+            LOG_CRITICAL("Fatal error: {}", e.what());
+        } catch (...) {
+            std::cerr << "CRITICAL: Fatal error: " << e.what() << std::endl;
+        }
+        return 1;
+    } catch (...) {
+        // Catch-all for non-standard exceptions
+        try {
+            LOG_CRITICAL("Fatal error: Unknown exception occurred");
+        } catch (...) {
+            std::cerr << "CRITICAL: Unknown exception occurred" << std::endl;
+        }
         return 1;
     }
 }

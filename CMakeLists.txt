@@ -60,11 +60,15 @@ set(SPDLOG_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 
 FetchContent_MakeAvailable(SDL3 SDL3_image yaml-cpp spdlog)
 
-# Add executable
-add_executable(Runa2
+# ============================================================================
+# Engine Library (DLL)
+# ============================================================================
+
+# Add shared library for engine
+add_library(Runa2Engine SHARED
     src/runapch.cpp
     src/runapch.h
-    src/main.cpp
+    src/RunaAPI.h
 
     # Core
     src/Core/Application.cpp
@@ -91,15 +95,51 @@ add_executable(Runa2
     src/Graphics/TileMap.h
 )
 
-# Link libraries
-target_link_libraries(Runa2 PRIVATE
+# Define export macro for engine DLL
+target_compile_definitions(Runa2Engine PRIVATE RUNA2_ENGINE_EXPORTS)
+
+# Link libraries to engine
+target_link_libraries(Runa2Engine PRIVATE
     SDL3::SDL3
     SDL3_image::SDL3_image
     yaml-cpp::yaml-cpp
     spdlog::spdlog
 )
 
-# Include directories
+# Include directories for engine (PUBLIC so executables linking to it get these includes)
+target_include_directories(Runa2Engine PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}/src
+    $<TARGET_PROPERTY:SDL3::SDL3,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
+# Enable debug symbols for Debug builds
+target_compile_options(Runa2Engine PRIVATE
+    $<$<CONFIG:Debug>:-g -O0>
+    $<$<CONFIG:Release>:-O3>
+)
+
+# Set output directory for DLL (so executable can find it)
+set_target_properties(Runa2Engine PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}"
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}"
+)
+
+# ============================================================================
+# Game Executable
+# ============================================================================
+
+# Add executable (only game logic)
+add_executable(Runa2
+    src/main.cpp
+)
+
+# Link game executable to engine DLL
+target_link_libraries(Runa2 PRIVATE
+    Runa2Engine
+)
+
+# Include directories for game
 target_include_directories(Runa2 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Enable debug symbols for Debug builds

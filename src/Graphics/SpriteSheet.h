@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "../RunaAPI.h"
 #include "Texture.h"
 #include <string>
 #include <vector>
@@ -11,7 +12,7 @@
 namespace Runa {
 
 // Represents a single frame in a sprite animation
-struct SpriteFrame {
+struct RUNA_API SpriteFrame {
     int x = 0;          // X position in texture
     int y = 0;          // Y position in texture
     int width = 0;      // Frame width
@@ -20,7 +21,7 @@ struct SpriteFrame {
 };
 
 // Represents a sprite animation or single sprite
-struct Sprite {
+struct RUNA_API Sprite {
     std::string name;
     std::vector<SpriteFrame> frames;
     bool loop = true;
@@ -35,7 +36,7 @@ struct Sprite {
 };
 
 // Manages a spritesheet texture and its sprite definitions
-class SpriteSheet {
+class RUNA_API SpriteSheet {
 public:
     SpriteSheet(Renderer& renderer, const std::string& texturePath);
     ~SpriteSheet() = default;

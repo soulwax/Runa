@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "../RunaAPI.h"
 #include <SDL3/SDL.h>
 #include <string>
 #include <memory>
@@ -10,7 +11,7 @@ namespace Runa {
 
 class Renderer;
 
-class Texture {
+class RUNA_API Texture {
 public:
     Texture(Renderer& renderer, const std::string& path);
     Texture(Renderer& renderer, int width, int height, const void* pixelData);

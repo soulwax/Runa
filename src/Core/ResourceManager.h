@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "../RunaAPI.h"
 #include "../Graphics/SpriteSheet.h"
 #include "../Graphics/Renderer.h"
 #include <string>
@@ -10,7 +11,7 @@
 
 namespace Runa {
 
-class ResourceManager {
+class RUNA_API ResourceManager {
 public:
     explicit ResourceManager(Renderer& renderer);
     ~ResourceManager() = default;

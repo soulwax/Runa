@@ -2,13 +2,14 @@
 
 #pragma once
 
+#include "../RunaAPI.h"
 #include <SDL3/SDL.h>
 #include <string>
 #include <vector>
 
 namespace Runa {
 
-class Shader {
+class RUNA_API Shader {
 public:
     Shader(SDL_GPUDevice* device, const std::string& vertexPath, const std::string& fragmentPath);
     ~Shader();

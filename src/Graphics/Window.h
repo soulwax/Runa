@@ -2,12 +2,13 @@
 
 #pragma once
 
+#include "../RunaAPI.h"
 #include <SDL3/SDL.h>
 #include <string>
 
 namespace Runa {
 
-class Window {
+class RUNA_API Window {
 public:
     Window(const std::string& title, int width, int height);
     ~Window();

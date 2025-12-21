@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "../RunaAPI.h"
 #include "Window.h"
 #include "Shader.h"
 #include <SDL3/SDL.h>
@@ -9,7 +10,7 @@
 
 namespace Runa {
 
-class Renderer {
+class RUNA_API Renderer {
 public:
     explicit Renderer(Window& window);
     ~Renderer();

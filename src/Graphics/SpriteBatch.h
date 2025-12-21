@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "../RunaAPI.h"
 #include "Texture.h"
 #include "SpriteSheet.h"
 #include <SDL3/SDL.h>
@@ -14,7 +15,7 @@ class Renderer;
 class Shader;
 
 // Simple sprite batch renderer for 2D sprites
-class SpriteBatch {
+class RUNA_API SpriteBatch {
 public:
     struct Vertex {
         float x, y;       // Position

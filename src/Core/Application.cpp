@@ -7,8 +7,8 @@
 namespace Runa {
 
 Application::Application(const std::string& title, int width, int height) {
-    // Initialize logging first
-    Log::init();
+    // Note: Logging should be initialized in main() before creating Application
+    // This ensures we can log errors during Application construction
     
     // Initialize SDL
     if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS)) {

@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "../RunaAPI.h"
 #include "SpriteBatch.h"
 #include "SpriteSheet.h"
 #include <vector>
@@ -9,7 +10,7 @@
 
 namespace Runa {
 
-class TileMap {
+class RUNA_API TileMap {
 public:
     TileMap(int width, int height, int tileSize);
     ~TileMap() = default;
