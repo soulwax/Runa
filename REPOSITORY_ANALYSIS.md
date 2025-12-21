@@ -17,7 +17,29 @@
 - **SDL3** - Window management, events, GPU abstraction
 - **SDL3_image** - Image loading (PNG support)
 - **yaml-cpp** - YAML parsing for sprite manifests
-- **spdlog** - Fast logging library (integrated but not fully utilized)
+- **spdlog** - Fast logging library (fully integrated with console and file logging)
+
+## Build Architecture
+
+### DLL-Based Engine Design
+
+The project uses a **modular DLL architecture**:
+
+- **Runa2Engine** (DLL) - Core engine library containing all engine systems
+  - Exports via `RUNA_API` macro (`__declspec(dllexport)` on Windows)
+  - Contains: Core, Graphics, and all engine functionality
+  - Links: SDL3, SDL3_image, yaml-cpp, spdlog
+  
+- **Runa2** (Executable) - Game application
+  - Links to Runa2Engine DLL
+  - Contains only game-specific logic (`main.cpp`, `GameApp` class)
+  - DLLs automatically copied to output directory during build
+
+**Benefits:**
+- Separation of engine and game code
+- Faster iteration (only game code recompiles for game changes)
+- Potential for engine reuse across multiple games
+- Clean API boundaries via `RUNA_API` export macro
 
 ## Architecture
 
@@ -41,7 +63,7 @@ Application (Core)
 #### 1. **Core Module** (`src/Core/`)
 - **Application** - Main game loop, delta time calculation, FPS tracking
 - **ResourceManager** - Centralized resource loading and management
-- **Log** - spdlog wrapper (defined but minimal usage)
+- **Log** - spdlog wrapper with console (colored) and file logging (`logs/runa2.log`)
 
 #### 2. **Graphics Module** (`src/Graphics/`)
 - **Window** - SDL3 window creation, event processing, resize handling
@@ -81,6 +103,28 @@ spritesheet:
 2. **Clear**: `Renderer::clear()` - Sets background color
 3. **Sprite Batching**: `SpriteBatch::begin()` → `draw()` calls → `end()`
 4. **Frame End**: `Renderer::endFrame()` - Submits and presents
+
+### Shader System
+
+The engine uses **GLSL shaders compiled to SPIR-V** for GPU rendering:
+
+- **Shader Format**: GLSL 450 compiled to SPIR-V binary (`.spv`)
+- **Compilation**: Offline using `glslc` (Vulkan SDK)
+- **Shader Types**:
+  - `sprite.vert` - Vertex shader for 2D sprites (pixel-to-NDC conversion, texture coordinates)
+  - `sprite.frag` - Fragment shader for sprite rendering (texture sampling with color tinting)
+  - `basic.vert/frag` - Basic shaders (available but not currently used)
+
+**Shader Features:**
+- Push constants for screen size (uniform data)
+- Texture sampling with descriptor sets
+- Color tinting support (RGBA per-vertex)
+- Automatic Y-axis flipping for 2D coordinate system
+
+**Workflow:**
+1. Write/edit GLSL shaders (`.vert`, `.frag`)
+2. Compile to SPIR-V using `compile_shaders.bat` (Windows) or `compile_shaders.sh` (Linux/Mac)
+3. Load in engine via `Renderer::createShader(vertexPath, fragmentPath)`
 
 ### Current Demo
 
@@ -237,7 +281,12 @@ Runa2/
 ### spdlog
 - **Purpose**: Fast logging
 - **Usage**: Fully integrated with console (colored) and file logging (`logs/runa2.log`)
-- **Status**: Actively used throughout codebase via LOG_* macros (INFO, DEBUG, WARN, ERROR, TRACE, CRITICAL)
+- **Status**: Actively used throughout codebase (68+ LOG_* macro calls across 11 files)
+- **Features**: 
+  - Colored console output with pattern `[%^%l%$] %v`
+  - File logging with timestamps: `[%Y-%m-%d %H:%M:%S.%e] [%l] %v`
+  - Auto-flush on warnings and above
+  - Graceful fallback if file logging fails
 
 ## Development Workflow
 

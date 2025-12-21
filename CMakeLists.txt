@@ -174,9 +174,8 @@ function(copy_dlls_to_exe target)
         COMMENT "Copying SDL3_image.dll"
     )
     
-    # Copy spdlog DLL - use the actual target file if it's a DLL
-    # Note: copy_if_different will silently fail if file doesn't exist in some cases
-    # We'll use a script to handle this more gracefully
+    # Copy spdlog DLL - check if it exists as a shared library
+    # spdlog may be built as shared despite SPDLOG_BUILD_SHARED OFF in some cases
     if(TARGET spdlog::spdlog)
         get_target_property(spdlog_type spdlog::spdlog TYPE)
         if(spdlog_type STREQUAL "SHARED_LIBRARY")

@@ -1,14 +1,14 @@
 # SConstruct
 import os
 
-env = Environment(
+env = Environment(  # pyright: ignore[reportUndefinedVariable]
     CXX='g++',
     CXXFLAGS=['-std=c++20'],
     CPPPATH=['src'],
 )
 
 # debug=1 on CLI → debug build, otherwise release
-if ARGUMENTS.get('debug', '0') == '1':
+if ARGUMENTS.get('debug', '0') == '1':  # pyright: ignore[reportUndefinedVariable]
     env.Append(CXXFLAGS=['-g', '-O0'])
 else:
     env.Append(CXXFLAGS=['-O3'])
