@@ -1,4 +1,5 @@
-#version 450
+# File: shaders/sprite.frag
+# version 450
 
 layout(location = 0) in vec2 fragTexCoord;
 layout(location = 1) in vec4 fragColor;
@@ -11,4 +12,3 @@ void main() {
     vec4 texColor = texture(texSampler, fragTexCoord);
     outColor = texColor * fragColor;
 }
-

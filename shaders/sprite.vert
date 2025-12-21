@@ -1,4 +1,5 @@
-#version 450
+# File: shaders/sprite.vert
+# version 450
 
 layout(location = 0) in vec2 inPosition;
 layout(location = 1) in vec2 inTexCoord;
@@ -20,4 +21,3 @@ void main() {
     fragTexCoord = inTexCoord;
     fragColor = inColor;
 }
-

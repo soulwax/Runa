@@ -1,3 +1,4 @@
+# File: Resources/manifests/player.yaml
 # Sprite manifest for player character
 # Player sprite is 288x480 (6 columns x 10 rows of 48x48 frames)
 

@@ -123,5 +123,3 @@ std::shared_ptr<spdlog::logger> Log::getLogger() {
 }
 
 } // namespace Runa
-
-

@@ -32,5 +32,3 @@ public:
 #define LOG_WARN(...)     Runa::Log::getLogger()->warn(__VA_ARGS__)
 #define LOG_ERROR(...)    Runa::Log::getLogger()->error(__VA_ARGS__)
 #define LOG_CRITICAL(...) Runa::Log::getLogger()->critical(__VA_ARGS__)
-
-
