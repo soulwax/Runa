@@ -2,7 +2,7 @@
 
 #include "SpriteSheet.h"
 #include "Renderer.h"
-#include <iostream>
+#include "Core/Log.h"
 #include <stdexcept>
 
 namespace Runa {
@@ -12,7 +12,7 @@ SpriteSheet::SpriteSheet(Renderer& renderer, const std::string& texturePath) {
     if (!m_texture->isValid()) {
         throw std::runtime_error("Failed to load spritesheet texture: " + texturePath);
     }
-    std::cout << "SpriteSheet created from: " + texturePath << std::endl;
+    LOG_INFO("SpriteSheet created from: {}", texturePath);
 }
 
 void SpriteSheet::addSprite(const std::string& name, int x, int y, int width, int height) {
@@ -30,8 +30,7 @@ void SpriteSheet::addSprite(const std::string& name, int x, int y, int width, in
     sprite.frames.push_back(frame);
     m_sprites[name] = sprite;
 
-    std::cout << "Added sprite '" << name << "' at (" << x << "," << y << ") size "
-              << width << "x" << height << std::endl;
+    LOG_DEBUG("Added sprite '{}' at ({},{}) size {}x{}", name, x, y, width, height);
 }
 
 void SpriteSheet::addAnimation(const std::string& name, int x, int y, int frameWidth, int frameHeight,
@@ -69,7 +68,7 @@ void SpriteSheet::addAnimation(const std::string& name, int x, int y, int frameW
 
     m_sprites[name] = sprite;
 
-    std::cout << "Added animation '" << name << "' with " << frameCount << " frames" << std::endl;
+    LOG_DEBUG("Added animation '{}' with {} frames", name, frameCount);
 }
 
 void SpriteSheet::addSpriteFrames(const std::string& name, const std::vector<SpriteFrame>& frames, bool loop) {
@@ -80,7 +79,7 @@ void SpriteSheet::addSpriteFrames(const std::string& name, const std::vector<Spr
 
     m_sprites[name] = sprite;
 
-    std::cout << "Added sprite '" << name << "' with " << frames.size() << " frames" << std::endl;
+    LOG_DEBUG("Added sprite '{}' with {} frames", name, frames.size());
 }
 
 const Sprite* SpriteSheet::getSprite(const std::string& name) const {
@@ -112,8 +111,7 @@ void SpriteSheet::createGrid(const std::string& baseName, int tileWidth, int til
         rows = texHeight / tileHeight;
     }
 
-    std::cout << "Creating grid: " << columns << "x" << rows << " tiles of size "
-              << tileWidth << "x" << tileHeight << std::endl;
+    LOG_DEBUG("Creating grid: {}x{} tiles of size {}x{}", columns, rows, tileWidth, tileHeight);
 
     int index = 0;
     for (int row = 0; row < rows; ++row) {
@@ -130,7 +128,7 @@ void SpriteSheet::createGrid(const std::string& baseName, int tileWidth, int til
         }
     }
 
-    std::cout << "Created " << index << " tiles from grid" << std::endl;
+    LOG_DEBUG("Created {} tiles from grid", index);
 }
 
 } // namespace Runa

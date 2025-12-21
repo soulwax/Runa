@@ -2,9 +2,9 @@
 
 #include "Core/Application.h"
 #include "Core/ResourceManager.h"
+#include "Core/Log.h"
 #include "Graphics/TileMap.h"
 #include "Graphics/SpriteBatch.h"
-#include <iostream>
 #include <memory>
 #include <fstream>
 #include <sstream>
@@ -19,8 +19,8 @@ public:
 
 protected:
     void onInit() override {
-        std::cout << "=== Runa2 Tilemap Demo ===" << std::endl;
-        std::cout << "Loading resources..." << std::endl;
+        LOG_INFO("=== Runa2 Tilemap Demo ===");
+        LOG_INFO("Loading resources...");
 
         // Create resource manager
         m_resources = std::make_unique<Runa::ResourceManager>(getRenderer());
@@ -28,9 +28,9 @@ protected:
         // Load the plains tileset
         try {
             m_resources->loadSpriteSheetFromYAML("Resources/manifests/tilesets.yaml");
-            std::cout << "Tileset loaded successfully!" << std::endl;
+            LOG_INFO("Tileset loaded successfully!");
         } catch (const std::exception& e) {
-            std::cerr << "Failed to load tileset: " << e.what() << std::endl;
+            LOG_ERROR("Failed to load tileset: {}", e.what());
             return;
         }
 
@@ -44,9 +44,9 @@ protected:
                 std::stringstream buffer;
                 buffer << file.rdbuf();
                 m_tileMap->loadFromString(buffer.str());
-                std::cout << "Scene loaded successfully!" << std::endl;
+                LOG_INFO("Scene loaded successfully!");
             } else {
-                std::cout << "Scene file not found, creating simple pattern..." << std::endl;
+                LOG_INFO("Scene file not found, creating simple pattern...");
                 // Create a simple grass pattern as fallback
                 for (int y = 0; y < 30; ++y) {
                     for (int x = 0; x < 40; ++x) {
@@ -55,16 +55,16 @@ protected:
                 }
             }
         } catch (const std::exception& e) {
-            std::cerr << "Error loading scene: " << e.what() << std::endl;
+            LOG_ERROR("Error loading scene: {}", e.what());
         }
 
         // Create sprite batch
         m_spriteBatch = std::make_unique<Runa::SpriteBatch>(getRenderer());
 
-        std::cout << "\n=== Ready ===" << std::endl;
-        std::cout << "Displaying 40x30 tilemap from plains.png" << std::endl;
-        std::cout << "Map size: 640x480 pixels (16px tiles)" << std::endl;
-        std::cout << "Press ESC or close window to exit." << std::endl;
+        LOG_INFO("\n=== Ready ===");
+        LOG_INFO("Displaying 40x30 tilemap from plains.png");
+        LOG_INFO("Map size: 640x480 pixels (16px tiles)");
+        LOG_INFO("Press ESC or close window to exit.");
     }
 
     void onUpdate(float deltaTime) override {
@@ -93,7 +93,7 @@ protected:
     }
 
     void onShutdown() override {
-        std::cout << "Demo shutting down..." << std::endl;
+        LOG_INFO("Demo shutting down...");
     }
 };
 
@@ -103,7 +103,7 @@ int main(int argc, char* argv[]) {
         app->run();
         return 0;
     } catch (const std::exception& e) {
-        std::cerr << "Fatal error: " << e.what() << std::endl;
+        LOG_CRITICAL("Fatal error: {}", e.what());
         return 1;
     }
 }

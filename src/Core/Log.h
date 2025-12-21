@@ -8,6 +8,9 @@
 namespace Runa {
 
 class Log {
+private:
+    static std::shared_ptr<spdlog::logger> s_logger;
+
 public:
     // Initialize logging system
     static void init();

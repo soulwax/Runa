@@ -1,18 +1,21 @@
 // File: src/Core/Application.cpp
 
 #include "Application.h"
-#include <iostream>
+#include "Log.h"
 #include <chrono>
 
 namespace Runa {
 
 Application::Application(const std::string& title, int width, int height) {
+    // Initialize logging first
+    Log::init();
+    
     // Initialize SDL
     if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS)) {
         throw std::runtime_error(std::string("Failed to initialize SDL: ") + SDL_GetError());
     }
 
-    std::cout << "SDL3 initialized successfully" << std::endl;
+    LOG_INFO("SDL3 initialized successfully");
 
     // Create window and renderer
     m_window = std::make_unique<Window>(title, width, height);
@@ -26,7 +29,8 @@ Application::~Application() {
     m_window.reset();
 
     SDL_Quit();
-    std::cout << "Application shut down" << std::endl;
+    LOG_INFO("Application shut down");
+    Log::shutdown();
 }
 
 void Application::run() {
@@ -35,7 +39,7 @@ void Application::run() {
     // Initialize game-specific resources
     onInit();
 
-    std::cout << "Starting main loop..." << std::endl;
+    LOG_INFO("Starting main loop...");
     mainLoop();
 }
 
@@ -57,7 +61,7 @@ void Application::mainLoop() {
         accumulatedTime += deltaTime;
         frameCount++;
         if (accumulatedTime >= 1.0f) {
-            std::cout << "FPS: " << frameCount << std::endl;
+            LOG_DEBUG("FPS: {}", frameCount);
             frameCount = 0;
             accumulatedTime = 0.0f;
         }

@@ -1,8 +1,8 @@
 // File: src/Core/ResourceManager.cpp
 
 #include "ResourceManager.h"
+#include "Log.h"
 #include <yaml-cpp/yaml.h>
-#include <iostream>
 #include <fstream>
 #include <stdexcept>
 #include <filesystem>
@@ -11,11 +11,11 @@ namespace Runa {
 
 ResourceManager::ResourceManager(Renderer& renderer)
     : m_renderer(renderer) {
-    std::cout << "ResourceManager initialized" << std::endl;
+    LOG_INFO("ResourceManager initialized");
 }
 
 void ResourceManager::loadSpriteSheetFromYAML(const std::string& yamlPath) {
-    std::cout << "Loading spritesheet manifest: " << yamlPath << std::endl;
+    LOG_INFO("Loading spritesheet manifest: {}", yamlPath);
 
     try {
         YAML::Node config = YAML::LoadFile(yamlPath);
@@ -97,8 +97,8 @@ void ResourceManager::loadSpriteSheetFromYAML(const std::string& yamlPath) {
 
         // Store spritesheet
         m_spriteSheets[name] = std::move(spriteSheet);
-        std::cout << "Loaded spritesheet '" << name << "' with "
-                  << m_spriteSheets[name]->getSpriteNames().size() << " sprites/animations" << std::endl;
+        LOG_INFO("Loaded spritesheet '{}' with {} sprites/animations", 
+                 name, m_spriteSheets[name]->getSpriteNames().size());
 
     } catch (const YAML::Exception& e) {
         throw std::runtime_error("YAML parsing error in " + yamlPath + ": " + e.what());
@@ -133,7 +133,7 @@ std::vector<std::string> ResourceManager::getSpriteSheetNames() const {
 
 void ResourceManager::clear() {
     m_spriteSheets.clear();
-    std::cout << "ResourceManager cleared" << std::endl;
+    LOG_INFO("ResourceManager cleared");
 }
 
 } // namespace Runa

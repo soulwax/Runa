@@ -6,7 +6,7 @@
 
 namespace Runa {
 
-static std::shared_ptr<spdlog::logger> s_logger = nullptr;
+std::shared_ptr<spdlog::logger> Log::s_logger = nullptr;
 
 void Log::init() {
     try {

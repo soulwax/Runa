@@ -1,8 +1,8 @@
 // File: src/Graphics/Shader.cpp
 
 #include "Shader.h"
+#include "Core/Log.h"
 #include <fstream>
-#include <iostream>
 #include <stdexcept>
 
 namespace Runa {
@@ -26,7 +26,7 @@ Shader::Shader(SDL_GPUDevice* device, const std::string& vertexPath, const std::
         throw std::runtime_error("Failed to create shaders from: " + vertexPath + ", " + fragmentPath);
     }
 
-    std::cout << "Shaders created successfully from " << vertexPath << " and " << fragmentPath << std::endl;
+    LOG_INFO("Shaders created successfully from {} and {}", vertexPath, fragmentPath);
 }
 
 Shader::~Shader() {
@@ -83,7 +83,7 @@ std::vector<uint8_t> Shader::readFile(const std::string& path) {
     file.read(reinterpret_cast<char*>(buffer.data()), fileSize);
     file.close();
 
-    std::cout << "Read shader file: " << path << " (" << fileSize << " bytes)" << std::endl;
+    LOG_DEBUG("Read shader file: {} ({} bytes)", path, fileSize);
     return buffer;
 }
 
@@ -97,7 +97,7 @@ SDL_GPUShader* Shader::createShaderFromSPIRV(const std::vector<uint8_t>& spirvCo
 
     SDL_GPUShader* shader = SDL_CreateGPUShader(m_device, &shaderInfo);
     if (!shader) {
-        std::cerr << "Failed to create GPU shader: " << SDL_GetError() << std::endl;
+        LOG_ERROR("Failed to create GPU shader: {}", SDL_GetError());
     }
 
     return shader;

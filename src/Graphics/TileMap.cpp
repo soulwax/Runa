@@ -1,16 +1,15 @@
 // File: src/Graphics/TileMap.cpp
 
 #include "TileMap.h"
+#include "Core/Log.h"
 #include <sstream>
-#include <iostream>
 
 namespace Runa {
 
 TileMap::TileMap(int width, int height, int tileSize)
     : m_width(width), m_height(height), m_tileSize(tileSize) {
     m_tiles.resize(width * height, -1);
-    std::cout << "TileMap created: " << width << "x" << height
-              << " tiles (" << tileSize << "px each)" << std::endl;
+    LOG_DEBUG("TileMap created: {}x{} tiles ({}px each)", width, height, tileSize);
 }
 
 bool TileMap::setTile(int x, int y, int tileIndex) {
@@ -75,7 +74,7 @@ void TileMap::loadFromString(const std::string& data) {
         y++;
     }
 
-    std::cout << "TileMap loaded from string (" << y << " rows parsed)" << std::endl;
+    LOG_DEBUG("TileMap loaded from string ({} rows parsed)", y);
 }
 
 } // namespace Runa

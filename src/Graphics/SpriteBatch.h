@@ -6,10 +6,12 @@
 #include "SpriteSheet.h"
 #include <SDL3/SDL.h>
 #include <vector>
+#include <memory>
 
 namespace Runa {
 
 class Renderer;
+class Shader;
 
 // Simple sprite batch renderer for 2D sprites
 class SpriteBatch {
@@ -58,6 +60,12 @@ private:
     Renderer& m_renderer;
     std::vector<SpriteDrawCall> m_drawCalls;
     bool m_inBatch = false;
+    
+    // Shader for sprite rendering
+    std::shared_ptr<Shader> m_shader;
+    
+    void initializeShader();
+    void renderSprite(const SpriteDrawCall& call, SDL_GPUCommandBuffer* cmdBuffer, SDL_GPURenderPass* renderPass);
 };
 
 } // namespace Runa

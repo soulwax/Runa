@@ -1,7 +1,7 @@
 // File: src/Graphics/Renderer.cpp
 
 #include "Renderer.h"
-#include <iostream>
+#include "Core/Log.h"
 #include <stdexcept>
 
 namespace Runa {
@@ -24,15 +24,15 @@ Renderer::Renderer(Window& window) : m_window(window) {
         throw std::runtime_error(std::string("Failed to claim window for GPU: ") + SDL_GetError());
     }
 
-    std::cout << "Renderer initialized with SDL3 GPU backend" << std::endl;
-    std::cout << "GPU Driver: " << SDL_GetGPUDeviceDriver(m_device) << std::endl;
+    LOG_INFO("Renderer initialized with SDL3 GPU backend");
+    LOG_INFO("GPU Driver: {}", SDL_GetGPUDeviceDriver(m_device));
 }
 
 Renderer::~Renderer() {
     if (m_device) {
         SDL_ReleaseWindowFromGPUDevice(m_device, m_window.getHandle());
         SDL_DestroyGPUDevice(m_device);
-        std::cout << "Renderer destroyed" << std::endl;
+        LOG_INFO("Renderer destroyed");
     }
 }
 
@@ -45,7 +45,7 @@ void Renderer::endFrame() {
         // Create command buffer
         SDL_GPUCommandBuffer* cmdBuffer = SDL_AcquireGPUCommandBuffer(m_device);
         if (!cmdBuffer) {
-            std::cerr << "Failed to acquire command buffer: " << SDL_GetError() << std::endl;
+            LOG_ERROR("Failed to acquire command buffer: {}", SDL_GetError());
             return;
         }
 
@@ -57,13 +57,13 @@ void Renderer::endFrame() {
 
 void Renderer::clear(float r, float g, float b, float a) {
     if (!m_swapchainTexture) {
-        std::cerr << "Cannot clear: no swapchain texture acquired" << std::endl;
+        LOG_WARN("Cannot clear: no swapchain texture acquired");
         return;
     }
 
     SDL_GPUCommandBuffer* cmdBuffer = SDL_AcquireGPUCommandBuffer(m_device);
     if (!cmdBuffer) {
-        std::cerr << "Failed to acquire command buffer for clear: " << SDL_GetError() << std::endl;
+        LOG_ERROR("Failed to acquire command buffer for clear: {}", SDL_GetError());
         return;
     }
 
@@ -88,7 +88,7 @@ void Renderer::clear(float r, float g, float b, float a) {
     if (renderPass) {
         SDL_EndGPURenderPass(renderPass);
     } else {
-        std::cerr << "Failed to begin render pass: " << SDL_GetError() << std::endl;
+        LOG_ERROR("Failed to begin render pass: {}", SDL_GetError());
     }
 
     SDL_SubmitGPUCommandBuffer(cmdBuffer);
@@ -98,7 +98,7 @@ std::shared_ptr<Shader> Renderer::createShader(const std::string& vertexPath, co
     try {
         return std::make_shared<Shader>(m_device, vertexPath, fragmentPath);
     } catch (const std::exception& e) {
-        std::cerr << "Failed to create shader: " << e.what() << std::endl;
+        LOG_ERROR("Failed to create shader: {}", e.what());
         return nullptr;
     }
 }
@@ -107,18 +107,18 @@ void Renderer::acquireSwapchainTexture() {
     if (!m_swapchainTexture) {
         SDL_GPUCommandBuffer* cmdBuffer = SDL_AcquireGPUCommandBuffer(m_device);
         if (!cmdBuffer) {
-            std::cerr << "Failed to acquire command buffer: " << SDL_GetError() << std::endl;
+            LOG_ERROR("Failed to acquire command buffer: {}", SDL_GetError());
             return;
         }
 
         if (!SDL_AcquireGPUSwapchainTexture(cmdBuffer, m_window.getHandle(), &m_swapchainTexture, nullptr, nullptr)) {
-            std::cerr << "Failed to acquire swapchain texture: " << SDL_GetError() << std::endl;
+            LOG_ERROR("Failed to acquire swapchain texture: {}", SDL_GetError());
             SDL_CancelGPUCommandBuffer(cmdBuffer);
             return;
         }
 
         if (!m_swapchainTexture) {
-            std::cerr << "Swapchain texture is null after acquire" << std::endl;
+            LOG_ERROR("Swapchain texture is null after acquire");
         }
     }
 }

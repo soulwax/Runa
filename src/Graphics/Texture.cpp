@@ -2,9 +2,10 @@
 
 #include "Texture.h"
 #include "Renderer.h"
+#include "Core/Log.h"
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
-#include <iostream>
+#include <cstring>
 #include <stdexcept>
 
 namespace Runa {
@@ -98,19 +99,34 @@ void Texture::loadFromFile(const std::string& path) {
         throw std::runtime_error("Failed to create GPU texture for: " + path + " - " + SDL_GetError());
     }
 
-    // Upload texture data
-    SDL_GPUTextureTransferInfo transferInfo{};
-    transferInfo.transfer_buffer = nullptr;  // We'll use a direct upload
+    // Create transfer buffer for texture data
+    Uint32 textureSize = m_width * m_height * 4; // RGBA = 4 bytes per pixel
+    SDL_GPUTransferBufferCreateInfo transferBufferInfo{};
+    transferBufferInfo.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD;
+    transferBufferInfo.size = textureSize;
+    transferBufferInfo.props = 0;
 
-    SDL_GPUTextureRegion textureRegion{};
-    textureRegion.texture = m_texture;
-    textureRegion.w = m_width;
-    textureRegion.h = m_height;
-    textureRegion.d = 1;
+    SDL_GPUTransferBuffer* transferBuffer = SDL_CreateGPUTransferBuffer(m_device, &transferBufferInfo);
+    if (!transferBuffer) {
+        SDL_DestroySurface(rgbaSurface);
+        throw std::runtime_error("Failed to create transfer buffer for texture upload");
+    }
+
+    // Map transfer buffer and copy pixel data
+    void* mappedData = SDL_MapGPUTransferBuffer(m_device, transferBuffer, false);
+    if (!mappedData) {
+        SDL_ReleaseGPUTransferBuffer(m_device, transferBuffer);
+        SDL_DestroySurface(rgbaSurface);
+        throw std::runtime_error("Failed to map transfer buffer");
+    }
+
+    std::memcpy(mappedData, rgbaSurface->pixels, textureSize);
+    SDL_UnmapGPUTransferBuffer(m_device, transferBuffer);
 
     // Create command buffer for upload
     SDL_GPUCommandBuffer* uploadCmd = SDL_AcquireGPUCommandBuffer(m_device);
     if (!uploadCmd) {
+        SDL_ReleaseGPUTransferBuffer(m_device, transferBuffer);
         SDL_DestroySurface(rgbaSurface);
         throw std::runtime_error("Failed to acquire command buffer for texture upload");
     }
@@ -118,18 +134,31 @@ void Texture::loadFromFile(const std::string& path) {
     SDL_GPUCopyPass* copyPass = SDL_BeginGPUCopyPass(uploadCmd);
     if (copyPass) {
         SDL_GPUTextureTransferInfo transferSrc{};
-        transferSrc.pixels = rgbaSurface->pixels;
+        transferSrc.transfer_buffer = transferBuffer;
+        transferSrc.offset = 0;
         transferSrc.pixels_per_row = m_width;
         transferSrc.rows_per_layer = m_height;
+
+        SDL_GPUTextureRegion textureRegion{};
+        textureRegion.texture = m_texture;
+        textureRegion.mip_level = 0;
+        textureRegion.layer = 0;
+        textureRegion.x = 0;
+        textureRegion.y = 0;
+        textureRegion.z = 0;
+        textureRegion.w = m_width;
+        textureRegion.h = m_height;
+        textureRegion.d = 1;
 
         SDL_UploadToGPUTexture(copyPass, &transferSrc, &textureRegion, false);
         SDL_EndGPUCopyPass(copyPass);
     }
 
     SDL_SubmitGPUCommandBuffer(uploadCmd);
+    SDL_ReleaseGPUTransferBuffer(m_device, transferBuffer);
 
     SDL_DestroySurface(rgbaSurface);
-    std::cout << "Loaded texture: " << path << " (" << m_width << "x" << m_height << ")" << std::endl;
+    LOG_INFO("Loaded texture: {} ({}x{})", path, m_width, m_height);
 }
 
 void Texture::createFromPixels(int width, int height, const void* pixelData) {
@@ -152,30 +181,54 @@ void Texture::createFromPixels(int width, int height, const void* pixelData) {
     }
 
     if (pixelData) {
-        // Upload pixel data
-        SDL_GPUCommandBuffer* uploadCmd = SDL_AcquireGPUCommandBuffer(m_device);
-        if (uploadCmd) {
-            SDL_GPUCopyPass* copyPass = SDL_BeginGPUCopyPass(uploadCmd);
-            if (copyPass) {
-                SDL_GPUTextureTransferInfo transferSrc{};
-                transferSrc.pixels = const_cast<void*>(pixelData);
-                transferSrc.pixels_per_row = width;
-                transferSrc.rows_per_layer = height;
+        // Create transfer buffer for pixel data
+        Uint32 textureSize = width * height * 4; // RGBA = 4 bytes per pixel
+        SDL_GPUTransferBufferCreateInfo transferBufferInfo{};
+        transferBufferInfo.usage = SDL_GPU_TRANSFERBUFFERUSAGE_UPLOAD;
+        transferBufferInfo.size = textureSize;
+        transferBufferInfo.props = 0;
 
-                SDL_GPUTextureRegion textureRegion{};
-                textureRegion.texture = m_texture;
-                textureRegion.w = width;
-                textureRegion.h = height;
-                textureRegion.d = 1;
+        SDL_GPUTransferBuffer* transferBuffer = SDL_CreateGPUTransferBuffer(m_device, &transferBufferInfo);
+        if (transferBuffer) {
+            // Map transfer buffer and copy pixel data
+            void* mappedData = SDL_MapGPUTransferBuffer(m_device, transferBuffer, false);
+            if (mappedData) {
+                std::memcpy(mappedData, pixelData, textureSize);
+                SDL_UnmapGPUTransferBuffer(m_device, transferBuffer);
 
-                SDL_UploadToGPUTexture(copyPass, &transferSrc, &textureRegion, false);
-                SDL_EndGPUCopyPass(copyPass);
+                // Upload pixel data
+                SDL_GPUCommandBuffer* uploadCmd = SDL_AcquireGPUCommandBuffer(m_device);
+                if (uploadCmd) {
+                    SDL_GPUCopyPass* copyPass = SDL_BeginGPUCopyPass(uploadCmd);
+                    if (copyPass) {
+                        SDL_GPUTextureTransferInfo transferSrc{};
+                        transferSrc.transfer_buffer = transferBuffer;
+                        transferSrc.offset = 0;
+                        transferSrc.pixels_per_row = width;
+                        transferSrc.rows_per_layer = height;
+
+                        SDL_GPUTextureRegion textureRegion{};
+                        textureRegion.texture = m_texture;
+                        textureRegion.mip_level = 0;
+                        textureRegion.layer = 0;
+                        textureRegion.x = 0;
+                        textureRegion.y = 0;
+                        textureRegion.z = 0;
+                        textureRegion.w = width;
+                        textureRegion.h = height;
+                        textureRegion.d = 1;
+
+                        SDL_UploadToGPUTexture(copyPass, &transferSrc, &textureRegion, false);
+                        SDL_EndGPUCopyPass(copyPass);
+                    }
+                    SDL_SubmitGPUCommandBuffer(uploadCmd);
+                }
+                SDL_ReleaseGPUTransferBuffer(m_device, transferBuffer);
             }
-            SDL_SubmitGPUCommandBuffer(uploadCmd);
         }
     }
 
-    std::cout << "Created texture from pixels (" << width << "x" << height << ")" << std::endl;
+    LOG_INFO("Created texture from pixels ({}x{})", width, height);
 }
 
 } // namespace Runa

@@ -46,3 +46,6 @@ build/
 
 # Compiled SPIR-V shaders
 *.spv
+
+CLAUDE.md
+.cursor/

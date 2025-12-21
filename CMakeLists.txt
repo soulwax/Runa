@@ -38,7 +38,7 @@ FetchContent_Declare(
 FetchContent_Declare(
     yaml-cpp
     GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
-    GIT_TAG 0.8.0
+    GIT_TAG master
     GIT_SHALLOW TRUE
 )
 
@@ -96,6 +96,7 @@ target_link_libraries(Runa2 PRIVATE
     SDL3::SDL3
     SDL3_image::SDL3_image
     yaml-cpp::yaml-cpp
+    spdlog::spdlog
 )
 
 # Include directories

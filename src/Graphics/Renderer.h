@@ -24,6 +24,7 @@ public:
 
     SDL_GPUDevice* getDevice() const { return m_device; }
     bool isValid() const { return m_device != nullptr; }
+    Window& getWindow() { return m_window; }
 
     void beginFrame();
     void endFrame();
