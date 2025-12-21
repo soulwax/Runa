@@ -1,0 +1,107 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Configure CMake (Debug)",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "-G", "Ninja",
+        "-DCMAKE_BUILD_TYPE=Debug",
+        "-DCMAKE_C_COMPILER=gcc",
+        "-DCMAKE_CXX_COMPILER=g++",
+        "-S", ".",
+        "-B", "build/debug"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Configure CMake (Release)",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "-G", "Ninja",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_C_COMPILER=gcc",
+        "-DCMAKE_CXX_COMPILER=g++",
+        "-S", ".",
+        "-B", "build/release"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build (Debug)",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build", "build/debug"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "dependsOn": ["Configure CMake (Debug)"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Build (Release)",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build", "build/release"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "dependsOn": ["Configure CMake (Release)"],
+      "group": "build",
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Build and Run (Debug)",
+      "type": "shell",
+      "command": "cmake --build build/debug && build/debug/Runa2.exe",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "dependsOn": ["Configure CMake (Debug)"],
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Build and Run (Release)",
+      "type": "shell",
+      "command": "cmake --build build/release && build/release/Runa2.exe",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "dependsOn": ["Configure CMake (Release)"],
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Clean (Debug)",
+      "type": "shell",
+      "command": "rm",
+      "args": ["-rf", "build/debug"],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Clean (Release)",
+      "type": "shell",
+      "command": "rm",
+      "args": ["-rf", "build/release"],
+      "problemMatcher": []
+    }
+  ]
+}

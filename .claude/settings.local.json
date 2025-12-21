@@ -1,7 +1,11 @@
 {
   "permissions": {
     "allow": [
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(cmake:*)",
+      "Bash(where ninja)",
+      "Bash(where gcc:*)",
+      "Bash(./build/debug/Runa2.exe)"
     ]
   }
 }
