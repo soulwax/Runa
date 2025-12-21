@@ -6,17 +6,19 @@ This directory contains GLSL shaders for the Runa2 game engine.
 
 To compile shaders, you need the **Vulkan SDK** installed, which includes the `glslc` compiler.
 
-Download from: https://vulkan.lunarg.com/sdk/home
+Download from: <https://vulkan.lunarg.com/sdk/home>
 
 ## Compiling Shaders
 
 ### Windows
+
 ```bash
 cd shaders
 compile_shaders.bat
 ```
 
 ### Linux/Mac or Git Bash on Windows
+
 ```bash
 cd shaders
 chmod +x compile_shaders.sh

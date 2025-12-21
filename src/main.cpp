@@ -1,32 +1,99 @@
 // File: src/main.cpp
 
 #include "Core/Application.h"
+#include "Core/ResourceManager.h"
+#include "Graphics/TileMap.h"
+#include "Graphics/SpriteBatch.h"
 #include <iostream>
 #include <memory>
+#include <fstream>
+#include <sstream>
 
 class GameApp : public Runa::Application {
+    std::unique_ptr<Runa::ResourceManager> m_resources;
+    std::unique_ptr<Runa::TileMap> m_tileMap;
+    std::unique_ptr<Runa::SpriteBatch> m_spriteBatch;
+
 public:
-    GameApp() : Application("Runa2 - Game Engine", 1280, 720) {}
+    GameApp() : Application("Runa2 - Tilemap Demo", 1280, 720) {}
 
 protected:
     void onInit() override {
-        std::cout << "Game initialized!" << std::endl;
+        std::cout << "=== Runa2 Tilemap Demo ===" << std::endl;
+        std::cout << "Loading resources..." << std::endl;
+
+        // Create resource manager
+        m_resources = std::make_unique<Runa::ResourceManager>(getRenderer());
+
+        // Load the plains tileset
+        try {
+            m_resources->loadSpriteSheetFromYAML("Resources/manifests/tilesets.yaml");
+            std::cout << "Tileset loaded successfully!" << std::endl;
+        } catch (const std::exception& e) {
+            std::cerr << "Failed to load tileset: " << e.what() << std::endl;
+            return;
+        }
+
+        // Create tilemap (40x30 tiles, 16 pixels per tile)
+        m_tileMap = std::make_unique<Runa::TileMap>(40, 30, 16);
+
+        // Load scene from file
+        try {
+            std::ifstream file("Resources/scenes/sample_scene.txt");
+            if (file) {
+                std::stringstream buffer;
+                buffer << file.rdbuf();
+                m_tileMap->loadFromString(buffer.str());
+                std::cout << "Scene loaded successfully!" << std::endl;
+            } else {
+                std::cout << "Scene file not found, creating simple pattern..." << std::endl;
+                // Create a simple grass pattern as fallback
+                for (int y = 0; y < 30; ++y) {
+                    for (int x = 0; x < 40; ++x) {
+                        m_tileMap->setTile(x, y, (x + y) % 6);
+                    }
+                }
+            }
+        } catch (const std::exception& e) {
+            std::cerr << "Error loading scene: " << e.what() << std::endl;
+        }
+
+        // Create sprite batch
+        m_spriteBatch = std::make_unique<Runa::SpriteBatch>(getRenderer());
+
+        std::cout << "\n=== Ready ===" << std::endl;
+        std::cout << "Displaying 40x30 tilemap from plains.png" << std::endl;
+        std::cout << "Map size: 640x480 pixels (16px tiles)" << std::endl;
         std::cout << "Press ESC or close window to exit." << std::endl;
     }
 
     void onUpdate(float deltaTime) override {
-        // Game logic updates here
+        // No dynamic updates for this static demo
     }
 
     void onRender() override {
-        // Clear screen with a dark blue color
-        getRenderer().clear(0.1f, 0.1f, 0.2f, 1.0f);
+        // Clear screen with a dark background
+        getRenderer().clear(0.05f, 0.05f, 0.1f, 1.0f);
 
-        // Rendering code here
+        // Render the tilemap
+        if (m_tileMap && m_spriteBatch && m_resources) {
+            auto* tileset = m_resources->getSpriteSheet("plains_tileset");
+            if (tileset) {
+                m_spriteBatch->begin();
+
+                // Center the map on screen (1280x720 screen, 640x480 map)
+                int offsetX = (1280 - 640) / 2;
+                int offsetY = (720 - 480) / 2;
+
+                m_tileMap->render(*m_spriteBatch, *tileset, "plains_tile", offsetX, offsetY);
+
+                m_spriteBatch->end();
+            }
+        }
     }
 
     void onShutdown() override {
-        std::cout << "Game shutting down..." << std::endl;
+        std::cout << "Demo shutting down..." << std::endl;
     }
 };
 

@@ -1,0 +1,43 @@
+# Sprite manifest for slime enemy
+# Slime sprite is 192x144 (6 columns x 3 rows of 32x48 frames)
+
+spritesheet:
+  name: "slime"
+  texture: "../mystic_woods_2.2/sprites/characters/slime.png"
+
+  sprites:
+    # Idle animation
+    - name: "idle"
+      type: "animation"
+      x: 0
+      y: 0
+      frame_width: 32
+      frame_height: 48
+      frame_count: 6
+      columns: 6
+      frame_duration: 0.15
+      loop: true
+
+    # Walk animation
+    - name: "walk"
+      type: "animation"
+      x: 0
+      y: 48
+      frame_width: 32
+      frame_height: 48
+      frame_count: 6
+      columns: 6
+      frame_duration: 0.12
+      loop: true
+
+    # Attack animation
+    - name: "attack"
+      type: "animation"
+      x: 0
+      y: 96
+      frame_width: 32
+      frame_height: 48
+      frame_count: 6
+      columns: 6
+      frame_duration: 0.1
+      loop: false

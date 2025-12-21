@@ -34,5 +34,11 @@
 // C++ Standard Library - Time
 #include <chrono>
 
+// Third-party libraries
+// spdlog - Fast C++ logging library
+#include <spdlog/spdlog.h>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/sinks/basic_file_sink.h>
+
 // SDL3 - Core headers used throughout the project
 #include <SDL3/SDL.h>
