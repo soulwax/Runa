@@ -148,3 +148,47 @@ target_compile_options(Runa2 PRIVATE
     $<$<CONFIG:Debug>:-g -O0>
     $<$<CONFIG:Release>:-O3>
 )
+
+# Function to copy DLLs to executable directory
+function(copy_dlls_to_exe target)
+    # Copy engine DLL
+    add_custom_command(TARGET ${target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:Runa2Engine>
+            $<TARGET_FILE_DIR:${target}>
+        COMMENT "Copying Runa2Engine.dll"
+    )
+    
+    # Copy SDL3 DLLs
+    add_custom_command(TARGET ${target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:SDL3::SDL3>
+            $<TARGET_FILE_DIR:${target}>
+        COMMENT "Copying SDL3.dll"
+    )
+    
+    add_custom_command(TARGET ${target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:SDL3_image::SDL3_image>
+            $<TARGET_FILE_DIR:${target}>
+        COMMENT "Copying SDL3_image.dll"
+    )
+    
+    # Copy spdlog DLL - use the actual target file if it's a DLL
+    # Note: copy_if_different will silently fail if file doesn't exist in some cases
+    # We'll use a script to handle this more gracefully
+    if(TARGET spdlog::spdlog)
+        get_target_property(spdlog_type spdlog::spdlog TYPE)
+        if(spdlog_type STREQUAL "SHARED_LIBRARY")
+            add_custom_command(TARGET ${target} POST_BUILD
+                COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                    $<TARGET_FILE:spdlog::spdlog>
+                    $<TARGET_FILE_DIR:${target}>
+                COMMENT "Copying spdlog DLL"
+            )
+        endif()
+    endif()
+endfunction()
+
+# Copy all required DLLs
+copy_dlls_to_exe(Runa2)
