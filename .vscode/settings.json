@@ -1,0 +1,13 @@
+{
+  "cmake.generator": "Ninja",
+  "cmake.configureArgs": [
+    "-DCMAKE_TOOLCHAIN_FILE=toolchains/clang-mingw.cmake"
+  ],
+  "cmake.buildDirectory": "build",
+  "cmake.exportCompileCommandsFile": "compile_commands.json",
+
+  // Tell clangd where the compile database lives
+  "clangd.arguments": [
+    "--compile-commands-dir=build"
+  ]
+}
