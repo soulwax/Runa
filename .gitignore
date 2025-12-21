@@ -43,3 +43,6 @@
 *.dwo
 
 build/
+
+# Compiled SPIR-V shaders
+*.spv

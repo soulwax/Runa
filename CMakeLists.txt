@@ -27,14 +27,30 @@ FetchContent_MakeAvailable(SDL3)
 
 # Add executable
 add_executable(Runa2
+    src/runapch.cpp
+    src/runapch.h
     src/main.cpp
+    src/Window.cpp
+    src/Window.h
+    src/Renderer.cpp
+    src/Renderer.h
+    src/Shader.cpp
+    src/Shader.h
+    src/Application.cpp
+    src/Application.h
 )
 
 # Link SDL3
 target_link_libraries(Runa2 PRIVATE SDL3::SDL3)
+
+# Include directories
+target_include_directories(Runa2 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Enable debug symbols for Debug builds
 target_compile_options(Runa2 PRIVATE
     $<$<CONFIG:Debug>:-g -O0>
     $<$<CONFIG:Release>:-O3>
 )
+
+# Configure precompiled headers
+target_precompile_headers(Runa2 PRIVATE src/runapch.h)

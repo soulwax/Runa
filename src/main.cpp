@@ -1,50 +1,42 @@
 // File: src/main.cpp
 
-#include <SDL3/SDL.h>
+#include "Application.h"
 #include <iostream>
+#include <memory>
+
+class GameApp : public Runa::Application {
+public:
+    GameApp() : Application("Runa2 - Game Engine", 1280, 720) {}
+
+protected:
+    void onInit() override {
+        std::cout << "Game initialized!" << std::endl;
+        std::cout << "Press ESC or close window to exit." << std::endl;
+    }
+
+    void onUpdate(float deltaTime) override {
+        // Game logic updates here
+    }
+
+    void onRender() override {
+        // Clear screen with a dark blue color
+        getRenderer().clear(0.1f, 0.1f, 0.2f, 1.0f);
+
+        // Rendering code here
+    }
+
+    void onShutdown() override {
+        std::cout << "Game shutting down..." << std::endl;
+    }
+};
 
 int main(int argc, char* argv[]) {
-    // Initialize SDL
-    if (!SDL_Init(SDL_INIT_VIDEO)) {
-        std::cerr << "SDL_Init failed: " << SDL_GetError() << std::endl;
+    try {
+        auto app = std::make_unique<GameApp>();
+        app->run();
+        return 0;
+    } catch (const std::exception& e) {
+        std::cerr << "Fatal error: " << e.what() << std::endl;
         return 1;
     }
-
-    // Create a window
-    SDL_Window* window = SDL_CreateWindow(
-        "Runa2 - SDL3 Test",
-        800, 600,
-        SDL_WINDOW_RESIZABLE
-    );
-
-    if (!window) {
-        std::cerr << "SDL_CreateWindow failed: " << SDL_GetError() << std::endl;
-        SDL_Quit();
-        return 1;
-    }
-
-    std::cout << "SDL3 initialized successfully!" << std::endl;
-    std::cout << "Window created. Press Ctrl+C to exit or close the window." << std::endl;
-
-    // Main loop
-    bool running = true;
-    SDL_Event event;
-
-    while (running) {
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_EVENT_QUIT) {
-                running = false;
-            }
-        }
-
-        // Simple delay to prevent CPU spinning
-        SDL_Delay(16); // ~60 FPS
-    }
-
-    // Cleanup
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-
-    std::cout << "SDL3 cleanup complete." << std::endl;
-    return 0;
 }
