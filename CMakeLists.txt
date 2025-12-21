@@ -27,17 +27,19 @@ FetchContent_MakeAvailable(SDL3)
 
 # Add executable
 add_executable(Runa2
-    src/runapch.cpp
-    src/runapch.h
     src/main.cpp
-    src/Window.cpp
-    src/Window.h
-    src/Renderer.cpp
-    src/Renderer.h
-    src/Shader.cpp
-    src/Shader.h
-    src/Application.cpp
-    src/Application.h
+
+    # Core
+    src/Core/Application.cpp
+    src/Core/Application.h
+
+    # Graphics
+    src/Graphics/Window.cpp
+    src/Graphics/Window.h
+    src/Graphics/Renderer.cpp
+    src/Graphics/Renderer.h
+    src/Graphics/Shader.cpp
+    src/Graphics/Shader.h
 )
 
 # Link SDL3
@@ -51,6 +53,3 @@ target_compile_options(Runa2 PRIVATE
     $<$<CONFIG:Debug>:-g -O0>
     $<$<CONFIG:Release>:-O3>
 )
-
-# Configure precompiled headers
-target_precompile_headers(Runa2 PRIVATE src/runapch.h)

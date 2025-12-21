@@ -1,3 +1,5 @@
+REM File: shaders/compile_shaders.bat
+
 @echo off
 REM Shader compilation batch script for Windows using glslc (part of Vulkan SDK)
 REM This script compiles GLSL shaders to SPIR-V format for use with SDL3 GPU

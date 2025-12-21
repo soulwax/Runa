@@ -1,4 +1,4 @@
-// File: src/Renderer.cpp
+// File: src/Graphics/Renderer.cpp
 
 #include "Renderer.h"
 #include <iostream>

@@ -1,4 +1,4 @@
-// File: src/Window.h
+// File: src/Graphics/Window.h
 
 #pragma once
 

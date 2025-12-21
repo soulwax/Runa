@@ -1,4 +1,4 @@
-// File: src/Renderer.h
+// File: src/Graphics/Renderer.h
 
 #pragma once
 

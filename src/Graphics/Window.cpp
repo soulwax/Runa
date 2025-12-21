@@ -1,4 +1,4 @@
-// File: src/Window.cpp
+// File: src/Graphics/Window.cpp
 
 #include "Window.h"
 #include <iostream>

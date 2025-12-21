@@ -1,4 +1,4 @@
-// File: src/Shader.cpp
+// File: src/Graphics/Shader.cpp
 
 #include "Shader.h"
 #include <fstream>

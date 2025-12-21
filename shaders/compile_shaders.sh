@@ -1,8 +1,6 @@
 #!/bin/bash
-# Shader compilation script for Windows using glslc (part of Vulkan SDK)
-# This script compiles GLSL shaders to SPIR-V format for use with SDL3 GPU
+# File: shaders/compile_shaders.sh
 
-# Check if glslc is available
 if ! command -v glslc &> /dev/null; then
     echo "Error: glslc not found. Please install the Vulkan SDK."
     echo "Download from: https://vulkan.lunarg.com/sdk/home"

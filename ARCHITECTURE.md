@@ -21,9 +21,11 @@ main.cpp
 ### Class Hierarchy
 
 #### Application (`Application.h/cpp`)
+
 The base application class that manages the game lifecycle.
 
 **Responsibilities:**
+
 - Initialize SDL3
 - Create and manage Window and Renderer
 - Run the main game loop
@@ -31,12 +33,14 @@ The base application class that manages the game lifecycle.
 - Provide virtual hooks for game logic
 
 **Virtual Methods (Override in your game):**
+
 - `onInit()` - Called once after initialization
 - `onUpdate(float deltaTime)` - Called every frame for game logic
 - `onRender()` - Called every frame for rendering
 - `onShutdown()` - Called before cleanup
 
 **Usage:**
+
 ```cpp
 class MyGame : public Runa::Application {
 public:
@@ -59,22 +63,27 @@ protected:
 ```
 
 #### Window (`Window.h/cpp`)
+
 Manages SDL3 window creation and event handling.
 
 **Responsibilities:**
+
 - Create and destroy SDL3 window
 - Process window events (resize, close, keyboard)
 - Track window state (size, should close)
 
 **Key Features:**
+
 - Resizable windows with automatic resize events
 - ESC key to close
 - Move semantics (no copying)
 
 #### Renderer (`Renderer.h/cpp`)
+
 Manages SDL3 GPU device and rendering operations.
 
 **Responsibilities:**
+
 - Initialize SDL3 GPU device
 - Manage swapchain textures
 - Clear screen
@@ -82,24 +91,29 @@ Manages SDL3 GPU device and rendering operations.
 - Manage render passes
 
 **Key Methods:**
+
 - `beginFrame()` - Acquire swapchain texture
 - `endFrame()` - Submit command buffer and present
 - `clear(r, g, b, a)` - Clear screen to color
 - `createShader(vertPath, fragPath)` - Load compiled SPIR-V shaders
 
 **Supported GPU Backends:**
+
 - Direct3D 12 (Windows)
 - Vulkan (Windows, Linux)
 
 #### Shader (`Shader.h/cpp`)
+
 Manages GLSL shaders compiled to SPIR-V format.
 
 **Responsibilities:**
+
 - Load SPIR-V binary files
 - Create SDL3 GPU shader objects
 - Manage shader lifecycle
 
 **Workflow:**
+
 1. Write GLSL shaders (`.vert`, `.frag`)
 2. Compile to SPIR-V (`.spv`) using `glslc`
 3. Load in engine using `Renderer::createShader()`
@@ -195,6 +209,7 @@ Main Loop:
 ## Frame Timing
 
 The engine automatically tracks:
+
 - Delta time (time between frames)
 - FPS counter (printed every second)
 - High-precision timing using `std::chrono`
@@ -202,6 +217,7 @@ The engine automatically tracks:
 ## Event Handling
 
 Currently supported events:
+
 - **SDL_EVENT_QUIT** - Window close button
 - **SDL_EVENT_WINDOW_RESIZED** - Window resize
 - **SDL_EVENT_KEY_DOWN** - ESC key to close
@@ -279,6 +295,7 @@ class GameApp : public Runa::Application {
 ## Future Enhancements
 
 Potential areas for expansion:
+
 - Texture loading and management
 - Sprite batching system
 - Camera and transformation matrices

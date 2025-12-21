@@ -1,4 +1,4 @@
-// File: src/Shader.h
+// File: src/Graphics/Shader.h
 
 #pragma once
 

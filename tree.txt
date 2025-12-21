@@ -1,5 +1,6 @@
 Runa2
 ├───.gitignore
+├───ARCHITECTURE.md
 ├───CLAUDE.md
 ├───CMakeLists.txt
 ├───LICENSE.md
@@ -55,9 +56,25 @@ Runa2
 │                   ├───walls.png
 │                   ├───wooden_door.png
 │                   └───wooden_door_b.png
+├───shaders/
+│   ├───basic.frag
+│   ├───basic.vert
+│   ├───compile_shaders.bat
+│   ├───compile_shaders.sh
+│   └───README.md
 ├───src/
 │   ├───main.cpp
-│   ├───Window.cpp
-│   └───Window.h
+│   ├───runapch.cpp
+│   ├───runapch.h
+│   ├───Core/
+│   │   ├───Application.cpp
+│   │   └───Application.h
+│   └───Graphics/
+│       ├───Renderer.cpp
+│       ├───Renderer.h
+│       ├───Shader.cpp
+│       ├───Shader.h
+│       ├───Window.cpp
+│       └───Window.h
 └───toolchains/
     └───clang-mingw.cmake
