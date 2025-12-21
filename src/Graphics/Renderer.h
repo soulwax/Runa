@@ -26,6 +26,8 @@ public:
     SDL_GPUDevice* getDevice() const { return m_device; }
     bool isValid() const { return m_device != nullptr; }
     Window& getWindow() { return m_window; }
+    SDL_GPUTexture* getSwapchainTexture() const { return m_swapchainTexture; }
+    SDL_GPUCommandBuffer* acquireCommandBuffer();
 
     void beginFrame();
     void endFrame();

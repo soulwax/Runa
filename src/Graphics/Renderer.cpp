@@ -103,6 +103,10 @@ std::shared_ptr<Shader> Renderer::createShader(const std::string& vertexPath, co
     }
 }
 
+SDL_GPUCommandBuffer* Renderer::acquireCommandBuffer() {
+    return SDL_AcquireGPUCommandBuffer(m_device);
+}
+
 void Renderer::acquireSwapchainTexture() {
     if (!m_swapchainTexture) {
         SDL_GPUCommandBuffer* cmdBuffer = SDL_AcquireGPUCommandBuffer(m_device);
@@ -119,6 +123,9 @@ void Renderer::acquireSwapchainTexture() {
 
         if (!m_swapchainTexture) {
             LOG_ERROR("Swapchain texture is null after acquire");
+        } else {
+            // Submit the command buffer that acquired the texture
+            SDL_SubmitGPUCommandBuffer(cmdBuffer);
         }
     }
 }

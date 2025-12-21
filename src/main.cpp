@@ -71,7 +71,7 @@ protected:
     }
 
     void onUpdate(float deltaTime) override {
-        // No dynamic updates for this static demo
+        // TODO: No dynamic updates for static DEMO
     }
 
     void onRender() override {
@@ -85,8 +85,8 @@ protected:
                 m_spriteBatch->begin();
 
                 // Center the map on screen (1280x720 screen, 640x480 map)
-                int offsetX = (1280 - 640) / 2;
-                int offsetY = (720 - 480) / 2;
+                int offsetX = (1280 - 640) >> 1;
+                int offsetY = (720 - 480) >> 1;
 
                 m_tileMap->render(*m_spriteBatch, *tileset, "plains_tile", offsetX, offsetY);
 
