@@ -1,3 +1,5 @@
+// File: src/main.cpp
+
 #include <iostream>
 
 int main() {
