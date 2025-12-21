@@ -1,4 +1,4 @@
-// File: src/Application.cpp
+// File: src/Core/Application.cpp
 
 #include "Application.h"
 #include <iostream>

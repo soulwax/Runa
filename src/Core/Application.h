@@ -1,9 +1,9 @@
-// File: src/Application.h
+// File: src/Core/Application.h
 
 #pragma once
 
-#include "Window.h"
-#include "Renderer.h"
+#include "../Graphics/Window.h"
+#include "../Graphics/Renderer.h"
 #include <memory>
 
 namespace Runa {
