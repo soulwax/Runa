@@ -114,10 +114,21 @@ void SpriteBatch::end() {
         return;
     }
 
-    // Set up render pass - use LOAD to preserve existing content (from clear)
+    // Set up render pass - use CLEAR if renderer requested a clear, otherwise LOAD
     SDL_GPUColorTargetInfo colorTarget{};
     colorTarget.texture = swapchainTexture;
-    colorTarget.load_op = SDL_GPU_LOADOP_LOAD;  // Load existing content (from clear)
+    
+    if (m_renderer.needsClear()) {
+        auto clearColor = m_renderer.getClearColor();
+        colorTarget.clear_color.r = clearColor.r;
+        colorTarget.clear_color.g = clearColor.g;
+        colorTarget.clear_color.b = clearColor.b;
+        colorTarget.clear_color.a = clearColor.a;
+        colorTarget.load_op = SDL_GPU_LOADOP_CLEAR;
+        m_renderer.clearApplied();
+    } else {
+        colorTarget.load_op = SDL_GPU_LOADOP_LOAD;  // Load existing content
+    }
     colorTarget.store_op = SDL_GPU_STOREOP_STORE;
 
     SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(cmdBuffer, &colorTarget, 1, nullptr);

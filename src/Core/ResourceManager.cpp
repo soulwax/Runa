@@ -18,7 +18,19 @@ void ResourceManager::loadSpriteSheetFromYAML(const std::string& yamlPath) {
     LOG_INFO("Loading spritesheet manifest: {}", yamlPath);
 
     try {
-        YAML::Node config = YAML::LoadFile(yamlPath);
+        // Convert to absolute path if relative
+        std::filesystem::path path(yamlPath);
+        if (path.is_relative()) {
+            // Try to resolve relative to current working directory
+            path = std::filesystem::absolute(path);
+        }
+        
+        if (!std::filesystem::exists(path)) {
+            throw std::runtime_error("YAML file does not exist: " + path.string());
+        }
+        
+        LOG_DEBUG("Loading YAML from: {}", path.string());
+        YAML::Node config = YAML::LoadFile(path.string());
 
         if (!config["spritesheet"]) {
             throw std::runtime_error("YAML file missing 'spritesheet' root node");

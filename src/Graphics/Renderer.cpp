@@ -61,37 +61,13 @@ void Renderer::clear(float r, float g, float b, float a) {
         return;
     }
 
-    SDL_GPUCommandBuffer* cmdBuffer = SDL_AcquireGPUCommandBuffer(m_device);
-    if (!cmdBuffer) {
-        LOG_ERROR("Failed to acquire command buffer for clear: {}", SDL_GetError());
-        return;
-    }
-
-    // Create color target info
-    SDL_GPUColorTargetInfo colorTargetInfo{};
-    colorTargetInfo.texture = m_swapchainTexture;
-    colorTargetInfo.clear_color.r = r;
-    colorTargetInfo.clear_color.g = g;
-    colorTargetInfo.clear_color.b = b;
-    colorTargetInfo.clear_color.a = a;
-    colorTargetInfo.load_op = SDL_GPU_LOADOP_CLEAR;
-    colorTargetInfo.store_op = SDL_GPU_STOREOP_STORE;
-
-    // Begin render pass
-    SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(
-        cmdBuffer,
-        &colorTargetInfo,
-        1,
-        nullptr
-    );
-
-    if (renderPass) {
-        SDL_EndGPURenderPass(renderPass);
-    } else {
-        LOG_ERROR("Failed to begin render pass: {}", SDL_GetError());
-    }
-
-    SDL_SubmitGPUCommandBuffer(cmdBuffer);
+    // Store clear color for later use in render pass
+    // The actual clearing will happen in the render pass with LOADOP_CLEAR
+    m_clearColor.r = r;
+    m_clearColor.g = g;
+    m_clearColor.b = b;
+    m_clearColor.a = a;
+    m_needsClear = true;
 }
 
 std::shared_ptr<Shader> Renderer::createShader(const std::string& vertexPath, const std::string& fragmentPath) {
