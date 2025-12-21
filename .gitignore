@@ -49,3 +49,5 @@ build/
 
 CLAUDE.md
 .cursor/
+
+vendor/
