@@ -1,8 +1,0 @@
-[
-{
-  "directory": "D:/Workspace/C++/Runa2/build/debug",
-  "command": "C:\\Users\\soulwax\\scoop\\apps\\mingw\\current\\bin\\g++.exe -g -std=c++20 -g -O0 -o CMakeFiles\\Runa2.dir\\src\\main.cpp.obj -c D:\\Workspace\\C++\\Runa2\\src\\main.cpp",
-  "file": "D:/Workspace/C++/Runa2/src/main.cpp",
-  "output": "D:/Workspace/C++/Runa2/build/debug/CMakeFiles/Runa2.dir/src/main.cpp.obj"
-}
-]

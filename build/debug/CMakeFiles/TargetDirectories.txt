@@ -1,3 +1,0 @@
-D:/Workspace/C++/Runa2/build/debug/CMakeFiles/Runa2.dir
-D:/Workspace/C++/Runa2/build/debug/CMakeFiles/edit_cache.dir
-D:/Workspace/C++/Runa2/build/debug/CMakeFiles/rebuild_cache.dir
