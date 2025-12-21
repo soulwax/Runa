@@ -99,18 +99,17 @@ add_library(Runa2Engine SHARED
 target_compile_definitions(Runa2Engine PRIVATE RUNA2_ENGINE_EXPORTS)
 
 # Link libraries to engine
+# SDL3 and SDL3_image are PUBLIC so executables can access headers
 target_link_libraries(Runa2Engine PRIVATE
-    SDL3::SDL3
-    SDL3_image::SDL3_image
     yaml-cpp::yaml-cpp
     spdlog::spdlog
+    PUBLIC
+    SDL3::SDL3
+    SDL3_image::SDL3_image
 )
 
 # Include directories for engine (PUBLIC so executables linking to it get these includes)
-target_include_directories(Runa2Engine PUBLIC 
-    ${CMAKE_CURRENT_SOURCE_DIR}/src
-    $<TARGET_PROPERTY:SDL3::SDL3,INTERFACE_INCLUDE_DIRECTORIES>
-)
+target_include_directories(Runa2Engine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src)
 
 # Enable debug symbols for Debug builds
 target_compile_options(Runa2Engine PRIVATE
@@ -135,8 +134,10 @@ add_executable(Runa2
 )
 
 # Link game executable to engine DLL
+# Also link spdlog since Log.h includes runapch.h which needs spdlog
 target_link_libraries(Runa2 PRIVATE
     Runa2Engine
+    spdlog::spdlog
 )
 
 # Include directories for game

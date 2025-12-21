@@ -3,11 +3,12 @@
 
 #pragma once
 
+#include "../RunaAPI.h"
 #include "runapch.h"
 
 namespace Runa {
 
-class Log {
+class RUNA_API Log {
 private:
     static std::shared_ptr<spdlog::logger> s_logger;
 

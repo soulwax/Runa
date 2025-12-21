@@ -61,6 +61,11 @@ void Log::init() {
                 if (existing) {
                     s_logger = existing;
                     s_logger->warn("Failed to initialize file logging: {} (using existing logger)", ex.what());
+                } else {
+                    // Logger exists but is null/falsy, create a new one
+                    s_logger = spdlog::stdout_color_mt("runa2");
+                    s_logger->set_pattern("[%^%l%$] %v");
+                    s_logger->warn("Failed to initialize file logging: {}", ex.what());
                 }
             } catch (const spdlog::spdlog_ex&) {
                 // Logger doesn't exist, create a new one
