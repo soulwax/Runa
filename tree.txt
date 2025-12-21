@@ -5,6 +5,7 @@ Runa2
 ├───CMakeLists.txt
 ├───LICENSE.md
 ├───README.md
+├───STRUCTURE.md
 ├───tree.txt
 ├───.claude/
 │   └───settings.local.json
