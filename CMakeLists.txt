@@ -34,6 +34,14 @@ FetchContent_Declare(
     GIT_SHALLOW TRUE
 )
 
+# SDL3_ttf
+FetchContent_Declare(
+    SDL3_ttf
+    GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf.git
+    GIT_TAG main
+    GIT_SHALLOW TRUE
+)
+
 # yaml-cpp
 FetchContent_Declare(
     yaml-cpp
@@ -67,7 +75,7 @@ set(SPDLOG_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 # their own default output directories. We avoid setting global CMAKE_*_OUTPUT_DIRECTORY
 # variables with FORCE here, as that would override dependency defaults and is unnecessary
 # since our own targets (Runa2Engine and Runa2) have explicit output directory settings.
-FetchContent_MakeAvailable(SDL3 SDL3_image yaml-cpp spdlog)
+FetchContent_MakeAvailable(SDL3 SDL3_image SDL3_ttf yaml-cpp spdlog)
 
 # ============================================================================
 # Engine Library (DLL)
@@ -110,13 +118,14 @@ add_library(Runa2Engine SHARED
 target_compile_definitions(Runa2Engine PRIVATE RUNA2_ENGINE_EXPORTS)
 
 # Link libraries to engine
-# SDL3 and SDL3_image are PUBLIC so executables can access headers
+# SDL3, SDL3_image, and SDL3_ttf are PUBLIC so executables can access headers
 target_link_libraries(Runa2Engine PRIVATE
     yaml-cpp::yaml-cpp
     spdlog::spdlog
     PUBLIC
     SDL3::SDL3
     SDL3_image::SDL3_image
+    SDL3_ttf::SDL3_ttf
 )
 
 # Include directories for engine (PUBLIC so executables linking to it get these includes)
@@ -190,6 +199,13 @@ function(copy_dlls_to_exe target)
             $<TARGET_FILE:SDL3_image::SDL3_image>
             $<TARGET_FILE_DIR:${target}>
         COMMENT "Copying SDL3_image.dll"
+    )
+    
+    add_custom_command(TARGET ${target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:SDL3_ttf::SDL3_ttf>
+            $<TARGET_FILE_DIR:${target}>
+        COMMENT "Copying SDL3_ttf.dll"
     )
     
     # Copy spdlog DLL - check if it exists as a shared library

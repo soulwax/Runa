@@ -16,6 +16,7 @@
 ### Dependencies (via CMake FetchContent)
 - **SDL3** - Window management, events, GPU abstraction
 - **SDL3_image** - Image loading (PNG support)
+- **SDL3_ttf** - TrueType font rendering
 - **yaml-cpp** - YAML parsing for sprite manifests
 - **spdlog** - Fast logging library (fully integrated with console and file logging)
 
