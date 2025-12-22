@@ -41,42 +41,42 @@ void Renderer::beginFrame() {
 }
 
 void Renderer::endFrame() {
-    // If we have a swapchain but no sprites were rendered, we still need to submit
-    // a command buffer to present the cleared frame
-    if (m_swapchainTexture && m_needsClear) {
-        // SpriteBatch didn't submit, so we need to submit the clear ourselves
+    // If clear was requested but SpriteBatch::end() wasn't called, we need to submit a clear
+    if (m_needsClear) {
+        // Acquire command buffer and swapchain
         SDL_GPUCommandBuffer* cmdBuffer = SDL_AcquireGPUCommandBuffer(m_device);
         if (cmdBuffer) {
-            SDL_GPUColorTargetInfo colorTarget{};
-            colorTarget.texture = m_swapchainTexture;
-            colorTarget.clear_color.r = m_clearColor.r;
-            colorTarget.clear_color.g = m_clearColor.g;
-            colorTarget.clear_color.b = m_clearColor.b;
-            colorTarget.clear_color.a = m_clearColor.a;
-            colorTarget.load_op = SDL_GPU_LOADOP_CLEAR;
-            colorTarget.store_op = SDL_GPU_STOREOP_STORE;
-            
-            SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(cmdBuffer, &colorTarget, 1, nullptr);
-            if (renderPass) {
-                SDL_EndGPURenderPass(renderPass);
+            SDL_GPUTexture* swapchainTexture = nullptr;
+            if (SDL_AcquireGPUSwapchainTexture(cmdBuffer, m_window.getHandle(), &swapchainTexture, nullptr, nullptr) && swapchainTexture) {
+                SDL_GPUColorTargetInfo colorTarget{};
+                colorTarget.texture = swapchainTexture;
+                colorTarget.clear_color.r = m_clearColor.r;
+                colorTarget.clear_color.g = m_clearColor.g;
+                colorTarget.clear_color.b = m_clearColor.b;
+                colorTarget.clear_color.a = m_clearColor.a;
+                colorTarget.load_op = SDL_GPU_LOADOP_CLEAR;
+                colorTarget.store_op = SDL_GPU_STOREOP_STORE;
+                
+                SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(cmdBuffer, &colorTarget, 1, nullptr);
+                if (renderPass) {
+                    SDL_EndGPURenderPass(renderPass);
+                }
+                SDL_SubmitGPUCommandBuffer(cmdBuffer);
+            } else {
+                // Swapchain not available, cancel the command buffer
+                SDL_CancelGPUCommandBuffer(cmdBuffer);
             }
-            SDL_SubmitGPUCommandBuffer(cmdBuffer);
         }
     }
     
-    // Reset swapchain texture - it will be acquired again next frame
-    m_swapchainTexture = nullptr;
-    m_needsClear = false;  // Reset clear flag for next frame
+    // Reset clear flag for next frame
+    m_needsClear = false;
 }
 
 void Renderer::clear(float r, float g, float b, float a) {
-    if (!m_swapchainTexture) {
-        LOG_WARN("Cannot clear: no swapchain texture acquired");
-        return;
-    }
-
     // Store clear color for later use in render pass
     // The actual clearing will happen in the render pass with LOADOP_CLEAR
+    // Note: We don't check for swapchain here because it will be acquired in SpriteBatch::end()
     m_clearColor.r = r;
     m_clearColor.g = g;
     m_clearColor.b = b;
@@ -99,24 +99,9 @@ SDL_GPUCommandBuffer* Renderer::acquireCommandBuffer() {
 
 void Renderer::acquireSwapchainTexture() {
     if (!m_swapchainTexture) {
-        SDL_GPUCommandBuffer* cmdBuffer = SDL_AcquireGPUCommandBuffer(m_device);
-        if (!cmdBuffer) {
-            LOG_ERROR("Failed to acquire command buffer: {}", SDL_GetError());
-            return;
-        }
-
-        if (!SDL_AcquireGPUSwapchainTexture(cmdBuffer, m_window.getHandle(), &m_swapchainTexture, nullptr, nullptr)) {
-            LOG_ERROR("Failed to acquire swapchain texture: {}", SDL_GetError());
-            SDL_CancelGPUCommandBuffer(cmdBuffer);
-            return;
-        }
-
-        if (!m_swapchainTexture) {
-            LOG_ERROR("Swapchain texture is null after acquire");
-        } else {
-            // Submit the command buffer that acquired the texture
-            SDL_SubmitGPUCommandBuffer(cmdBuffer);
-        }
+        // Don't acquire here - let SpriteBatch acquire it on its command buffer
+        // This ensures the swapchain is acquired on the same command buffer that uses it
+        // For now, we'll acquire it lazily when needed
     }
 }
 

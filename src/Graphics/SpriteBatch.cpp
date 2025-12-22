@@ -16,10 +16,10 @@ SpriteBatch::SpriteBatch(Renderer& renderer)
 
 void SpriteBatch::initializeShader() {
     try {
-        m_shader = m_renderer.createShader("shaders/sprite.vert", "shaders/sprite.frag");
+        m_shader = m_renderer.createShader("Resources/shaders/compiled/sprite.vert.spv", "Resources/shaders/compiled/sprite.frag.spv");
         if (!m_shader || !m_shader->isValid()) {
             LOG_WARN("Failed to load sprite shader, falling back to basic shader");
-            m_shader = m_renderer.createShader("shaders/basic.vert", "shaders/basic.frag");
+            m_shader = m_renderer.createShader("Resources/shaders/compiled/basic.vert.spv", "Resources/shaders/compiled/basic.frag.spv");
         }
     } catch (const std::exception& e) {
         LOG_ERROR("Error initializing sprite shader: {}", e.what());
@@ -96,16 +96,7 @@ void SpriteBatch::end() {
         return;
     }
 
-    // Use the swapchain texture already acquired by the renderer
-    SDL_GPUTexture* swapchainTexture = m_renderer.getSwapchainTexture();
-    if (!swapchainTexture) {
-        LOG_WARN("No swapchain texture available - renderer may not have begun frame");
-        m_drawCalls.clear();
-        m_inBatch = false;
-        return;
-    }
-
-    // Acquire command buffer for rendering
+    // Acquire command buffer first - we need it to acquire the swapchain
     SDL_GPUCommandBuffer* cmdBuffer = m_renderer.acquireCommandBuffer();
     if (!cmdBuffer) {
         LOG_ERROR("Failed to acquire command buffer: {}", SDL_GetError());
@@ -114,38 +105,54 @@ void SpriteBatch::end() {
         return;
     }
 
-    // Set up render pass - use CLEAR if renderer requested a clear, otherwise LOAD
-    SDL_GPUColorTargetInfo colorTarget{};
-    colorTarget.texture = swapchainTexture;
-    
-    if (m_renderer.needsClear()) {
-        auto clearColor = m_renderer.getClearColor();
-        colorTarget.clear_color.r = clearColor.r;
-        colorTarget.clear_color.g = clearColor.g;
-        colorTarget.clear_color.b = clearColor.b;
-        colorTarget.clear_color.a = clearColor.a;
-        colorTarget.load_op = SDL_GPU_LOADOP_CLEAR;
-        m_renderer.clearApplied();
-    } else {
-        colorTarget.load_op = SDL_GPU_LOADOP_LOAD;  // Load existing content
-    }
-    colorTarget.store_op = SDL_GPU_STOREOP_STORE;
-
-    SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(cmdBuffer, &colorTarget, 1, nullptr);
-    if (!renderPass) {
-        LOG_ERROR("Failed to begin render pass: {}", SDL_GetError());
+    // Acquire swapchain texture on the same command buffer that will use it
+    SDL_GPUTexture* swapchainTexture = nullptr;
+    if (!SDL_AcquireGPUSwapchainTexture(cmdBuffer, m_renderer.getWindow().getHandle(), &swapchainTexture, nullptr, nullptr)) {
+        LOG_ERROR("Failed to acquire swapchain texture: {}", SDL_GetError());
         SDL_CancelGPUCommandBuffer(cmdBuffer);
         m_drawCalls.clear();
         m_inBatch = false;
         return;
     }
 
-    // Render each sprite
-    for (const auto& call : m_drawCalls) {
-        renderSprite(call, cmdBuffer, renderPass);
+    if (!swapchainTexture) {
+        // Swapchain not available yet (too many frames in flight)
+        // This is not an error, just skip this frame
+        SDL_CancelGPUCommandBuffer(cmdBuffer);
+        m_drawCalls.clear();
+        m_inBatch = false;
+        return;
     }
 
-    SDL_EndGPURenderPass(renderPass);
+    // If we need to clear, do it in a render pass first
+    if (m_renderer.needsClear()) {
+        SDL_GPUColorTargetInfo colorTarget{};
+        colorTarget.texture = swapchainTexture;
+        auto clearColor = m_renderer.getClearColor();
+        colorTarget.clear_color.r = clearColor.r;
+        colorTarget.clear_color.g = clearColor.g;
+        colorTarget.clear_color.b = clearColor.b;
+        colorTarget.clear_color.a = clearColor.a;
+        colorTarget.load_op = SDL_GPU_LOADOP_CLEAR;
+        colorTarget.store_op = SDL_GPU_STOREOP_STORE;
+        
+        SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(cmdBuffer, &colorTarget, 1, nullptr);
+        if (!renderPass) {
+            LOG_ERROR("Failed to begin render pass: {}", SDL_GetError());
+            SDL_CancelGPUCommandBuffer(cmdBuffer);
+            m_drawCalls.clear();
+            m_inBatch = false;
+            return;
+        }
+        SDL_EndGPURenderPass(renderPass);
+        m_renderer.clearApplied();
+    }
+
+    // Render each sprite using SDL_BlitGPUTexture (called outside render pass)
+    for (const auto& call : m_drawCalls) {
+        renderSprite(call, cmdBuffer, nullptr, swapchainTexture);
+    }
+
     SDL_SubmitGPUCommandBuffer(cmdBuffer);
 
     LOG_TRACE("SpriteBatch: Rendered {} sprites", m_drawCalls.size());
@@ -153,81 +160,43 @@ void SpriteBatch::end() {
     m_inBatch = false;
 }
 
-void SpriteBatch::renderSprite(const SpriteDrawCall& call, SDL_GPUCommandBuffer* cmdBuffer, SDL_GPURenderPass* renderPass) {
-    if (!call.texture || !call.texture->isValid()) {
+void SpriteBatch::renderSprite(const SpriteDrawCall& call, SDL_GPUCommandBuffer* cmdBuffer, SDL_GPURenderPass* renderPass, SDL_GPUTexture* swapchainTexture) {
+    if (!call.texture || !call.texture->isValid() || !swapchainTexture) {
         return;
     }
 
-    SDL_GPUDevice* device = m_renderer.getDevice();
-    int screenWidth = m_renderer.getWindow().getWidth();
-    int screenHeight = m_renderer.getWindow().getHeight();
-
-    // Calculate destination rectangle
-    int dstX = call.x;
-    int dstY = call.y;
-    int dstW = static_cast<int>(call.srcWidth * call.scaleX);
-    int dstH = static_cast<int>(call.srcHeight * call.scaleY);
-
-    // Get texture dimensions for UV coordinates
-    int texWidth = call.texture->getWidth();
-    int texHeight = call.texture->getHeight();
-
-    // Calculate UV coordinates (normalized 0-1)
-    float u0 = static_cast<float>(call.srcX) / texWidth;
-    float v0 = static_cast<float>(call.srcY) / texHeight;
-    float u1 = static_cast<float>(call.srcX + call.srcWidth) / texWidth;
-    float v1 = static_cast<float>(call.srcY + call.srcHeight) / texHeight;
-
-    // Create quad vertices (two triangles)
-    struct Vertex {
-        float x, y;
-        float u, v;
-        float r, g, b, a;
-    };
-
-    Vertex vertices[6] = {
-        // Triangle 1
-        { static_cast<float>(dstX), static_cast<float>(dstY), u0, v0, call.r, call.g, call.b, call.a },
-        { static_cast<float>(dstX + dstW), static_cast<float>(dstY), u1, v0, call.r, call.g, call.b, call.a },
-        { static_cast<float>(dstX), static_cast<float>(dstY + dstH), u0, v1, call.r, call.g, call.b, call.a },
-        // Triangle 2
-        { static_cast<float>(dstX + dstW), static_cast<float>(dstY), u1, v0, call.r, call.g, call.b, call.a },
-        { static_cast<float>(dstX + dstW), static_cast<float>(dstY + dstH), u1, v1, call.r, call.g, call.b, call.a },
-        { static_cast<float>(dstX), static_cast<float>(dstY + dstH), u0, v1, call.r, call.g, call.b, call.a },
-    };
-
-    // Create vertex buffer
-    SDL_GPUBufferCreateInfo bufferInfo{};
-    bufferInfo.size = sizeof(vertices);
-    bufferInfo.usage = SDL_GPU_BUFFERUSAGE_VERTEX;
+    // Use SDL_BlitGPUTexture for simple sprite rendering
+    // This must be called OUTSIDE a render pass
     
-    SDL_GPUBuffer* vertexBuffer = SDL_CreateGPUBuffer(device, &bufferInfo);
-    if (!vertexBuffer) {
-        LOG_ERROR("Failed to create vertex buffer: {}", SDL_GetError());
-        return;
-    }
-
-    // Note: Full GPU sprite rendering requires:
-    // - Graphics pipeline with vertex/fragment shaders
-    // - Descriptor sets for texture binding
-    // - Proper vertex buffer upload and binding
-    // - Draw command execution
-    //
-    // This is a complex implementation that requires detailed SDL3 GPU API knowledge.
-    // For the demo, we're logging the draw calls. A production implementation
-    // would complete the full rendering pipeline here.
-    //
-    // The structure is in place - vertex data is prepared, buffers are created.
-    // The remaining work is to:
-    // 1. Upload vertex data to GPU (requires proper transfer API)
-    // 2. Create and bind graphics pipeline
-    // 3. Bind texture as descriptor set
-    // 4. Issue draw command
+    SDL_GPUBlitInfo blitInfo{};
+    SDL_zero(blitInfo);
     
-    LOG_DEBUG("Prepared sprite render: {}x{} at ({}, {})", dstW, dstH, dstX, dstY);
-
-    // Clean up
-    SDL_ReleaseGPUBuffer(device, vertexBuffer);
+    // Source texture region
+    blitInfo.source.texture = call.texture->getHandle();
+    blitInfo.source.x = call.srcX;
+    blitInfo.source.y = call.srcY;
+    blitInfo.source.w = call.srcWidth;
+    blitInfo.source.h = call.srcHeight;
+    blitInfo.source.mip_level = 0;
+    blitInfo.source.layer_or_depth_plane = 0;
+    
+    // Destination region (on the swapchain)
+    blitInfo.destination.texture = swapchainTexture;
+    blitInfo.destination.x = call.x;
+    blitInfo.destination.y = call.y;
+    blitInfo.destination.w = static_cast<Uint32>(call.srcWidth * call.scaleX);
+    blitInfo.destination.h = static_cast<Uint32>(call.srcHeight * call.scaleY);
+    blitInfo.destination.mip_level = 0;
+    blitInfo.destination.layer_or_depth_plane = 0;
+    
+    // Blit settings
+    blitInfo.load_op = SDL_GPU_LOADOP_LOAD;  // Load existing content (blend with what's there)
+    blitInfo.filter = SDL_GPU_FILTER_NEAREST;  // Pixel-perfect for sprites
+    blitInfo.flip_mode = SDL_FLIP_NONE;
+    blitInfo.cycle = false;
+    
+    // Perform the blit (outside render pass)
+    SDL_BlitGPUTexture(cmdBuffer, &blitInfo);
 }
 
 } // namespace Runa
