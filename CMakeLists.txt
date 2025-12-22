@@ -42,6 +42,10 @@ FetchContent_Declare(
     GIT_SHALLOW TRUE
 )
 
+# yaml-cpp build options
+# Note: YAML_BUILD_SHARED_LIBS intentionally lacks the CPP prefix to avoid
+# conflicts with CMake's standard BUILD_SHARED_LIBS variable. This is the
+# official variable name as defined in yaml-cpp's CMakeLists.txt.
 set(YAML_CPP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set(YAML_CPP_BUILD_TOOLS OFF CACHE BOOL "" FORCE)
 set(YAML_BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
@@ -58,6 +62,11 @@ set(SPDLOG_BUILD_SHARED OFF CACHE BOOL "" FORCE)
 set(SPDLOG_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(SPDLOG_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 
+# Make dependencies available
+# Note: All dependencies are configured as static libraries, so they will use
+# their own default output directories. We avoid setting global CMAKE_*_OUTPUT_DIRECTORY
+# variables with FORCE here, as that would override dependency defaults and is unnecessary
+# since our own targets (Runa2Engine and Runa2) have explicit output directory settings.
 FetchContent_MakeAvailable(SDL3 SDL3_image yaml-cpp spdlog)
 
 # ============================================================================
@@ -93,6 +102,8 @@ add_library(Runa2Engine SHARED
     src/Graphics/SpriteBatch.h
     src/Graphics/TileMap.cpp
     src/Graphics/TileMap.h
+    src/Graphics/PostProcess.cpp
+    src/Graphics/PostProcess.h
 )
 
 # Define export macro for engine DLL
@@ -147,6 +158,13 @@ target_include_directories(Runa2 PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/src)
 target_compile_options(Runa2 PRIVATE
     $<$<CONFIG:Debug>:-g -O0>
     $<$<CONFIG:Release>:-O3>
+)
+
+# Set output directory for executable (keep it in build root with Runa2Engine.dll)
+set_target_properties(Runa2 PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
+    RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}"
+    RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}"
 )
 
 # Function to copy DLLs to executable directory

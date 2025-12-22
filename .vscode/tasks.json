@@ -67,30 +67,42 @@
       "problemMatcher": ["$gcc"]
     },
     {
-      "label": "Build and Run (Debug)",
+      "label": "Run (Debug)",
       "type": "shell",
-      "command": "cmake --build build/debug && build/debug/Runa2.exe",
+      "command": "${workspaceFolder}/build/debug/Runa2.exe",
       "options": {
         "cwd": "${workspaceFolder}"
       },
-      "dependsOn": ["Configure CMake (Debug)"],
-      "problemMatcher": ["$gcc"]
+      "problemMatcher": []
+    },
+    {
+      "label": "Run (Release)",
+      "type": "shell",
+      "command": "${workspaceFolder}/build/release/Runa2.exe",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build and Run (Debug)",
+      "dependsOn": ["Build (Debug)", "Run (Debug)"],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
     },
     {
       "label": "Build and Run (Release)",
-      "type": "shell",
-      "command": "cmake --build build/release && build/release/Runa2.exe",
-      "options": {
-        "cwd": "${workspaceFolder}"
-      },
-      "dependsOn": ["Configure CMake (Release)"],
-      "problemMatcher": ["$gcc"]
+      "dependsOn": ["Build (Release)", "Run (Release)"],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
     },
     {
       "label": "Clean (Debug)",
       "type": "shell",
-      "command": "rm",
-      "args": ["-rf", "build/debug"],
+      "command": "cmake",
+      "args": [
+        "--build", "build/debug", "--target", "clean"
+      ],
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -99,8 +111,28 @@
     {
       "label": "Clean (Release)",
       "type": "shell",
-      "command": "rm",
-      "args": ["-rf", "build/release"],
+      "command": "cmake",
+      "args": [
+        "--build", "build/release", "--target", "clean"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Clean All (Remove Build Directories)",
+      "type": "shell",
+      "command": "Remove-Item",
+      "args": [
+        "-Recurse", "-Force", "build"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "shell": {
+          "executable": "pwsh.exe"
+        }
+      },
       "problemMatcher": []
     }
   ]
