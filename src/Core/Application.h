@@ -24,11 +24,15 @@ protected:
 
     Window& getWindow() { return *m_window; }
     Renderer& getRenderer() { return *m_renderer; }
+    
+    // Get current FPS (updated every second)
+    int getFPS() const { return m_currentFPS; }
 
 private:
     std::unique_ptr<Window> m_window;
     std::unique_ptr<Renderer> m_renderer;
     bool m_running = false;
+    int m_currentFPS = 0;
 
     void mainLoop();
 };

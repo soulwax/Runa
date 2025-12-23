@@ -12,13 +12,17 @@
 #include "Graphics/TileMap.h"
 #include "Graphics/SpriteBatch.h"
 #include "Graphics/PostProcess.h"
+#include "Graphics/Font.h"
 #include <chrono>
+#include <sstream>
 
 class GameApp : public Runa::Application {
     std::unique_ptr<Runa::ResourceManager> m_resources;
     std::unique_ptr<Runa::TileMap> m_tileMap;
     std::unique_ptr<Runa::SpriteBatch> m_spriteBatch;
     std::unique_ptr<Runa::PostProcess> m_postProcess;
+    std::unique_ptr<Runa::Font> m_font;
+    std::unique_ptr<Runa::Texture> m_fpsTexture;
     std::chrono::steady_clock::time_point m_startTime;
 
 public:
@@ -71,6 +75,16 @@ protected:
         // Create post-process effect
         m_postProcess = std::make_unique<Runa::PostProcess>(getRenderer());
         
+        // Load font for FPS display
+        try {
+            m_font = std::make_unique<Runa::Font>(getRenderer(), "Resources/Fonts/Renogare.otf", 24);
+            if (!m_font->isValid()) {
+                LOG_WARN("Failed to load font for FPS display");
+            }
+        } catch (const std::exception& e) {
+            LOG_WARN("Failed to create font: {}", e.what());
+        }
+        
         // Initialize start time for shader animation
         m_startTime = std::chrono::steady_clock::now();
 
@@ -105,6 +119,25 @@ protected:
                 m_tileMap->render(*m_spriteBatch, *tileset, "plains_tile", offsetX, offsetY);
 
                 m_spriteBatch->end();
+            }
+        }
+        
+        // Render FPS in upper left corner
+        if (m_font && m_font->isValid() && m_spriteBatch) {
+            int fps = getFPS();
+            if (fps > 0) {
+                std::stringstream fpsText;
+                fpsText << "FPS: " << fps;
+                
+                // Render text to texture
+                m_fpsTexture = m_font->renderText(fpsText.str(), {255, 255, 255, 255});
+                
+                if (m_fpsTexture && m_fpsTexture->isValid()) {
+                    // Draw FPS text in upper left corner
+                    m_spriteBatch->begin();
+                    m_spriteBatch->draw(*m_fpsTexture, 10, 10);
+                    m_spriteBatch->end();
+                }
             }
         }
         

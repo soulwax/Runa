@@ -2,6 +2,7 @@
 
 #include "Application.h"
 #include "Log.h"
+#include <SDL3_ttf/SDL_ttf.h>
 #include <chrono>
 
 namespace Runa {
@@ -17,6 +18,14 @@ Application::Application(const std::string& title, int width, int height) {
 
     LOG_INFO("SDL3 initialized successfully");
 
+    // Initialize SDL_ttf
+    if (TTF_Init() != 0) {
+        LOG_WARN("Failed to initialize SDL_ttf: {}", TTF_GetError());
+        // Don't throw - font rendering is optional
+    } else {
+        LOG_INFO("SDL3_ttf initialized successfully");
+    }
+
     // Create window and renderer
     m_window = std::make_unique<Window>(title, width, height);
     m_renderer = std::make_unique<Renderer>(*m_window);
@@ -27,6 +36,11 @@ Application::~Application() {
 
     m_renderer.reset();
     m_window.reset();
+
+    // Quit SDL_ttf if it was initialized
+    if (TTF_WasInit()) {
+        TTF_Quit();
+    }
 
     SDL_Quit();
     LOG_INFO("Application shut down");
@@ -61,7 +75,8 @@ void Application::mainLoop() {
         accumulatedTime += deltaTime;
         frameCount++;
         if (accumulatedTime >= 1.0f) {
-            LOG_DEBUG("FPS: {}", frameCount);
+            m_currentFPS = frameCount;
+            LOG_DEBUG("FPS: {}", m_currentFPS);
             frameCount = 0;
             accumulatedTime = 0.0f;
         }
