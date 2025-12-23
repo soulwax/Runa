@@ -112,6 +112,8 @@ add_library(Runa2Engine SHARED
     src/Graphics/TileMap.h
     src/Graphics/PostProcess.cpp
     src/Graphics/PostProcess.h
+    src/Graphics/Font.cpp
+    src/Graphics/Font.h
 )
 
 # Define export macro for engine DLL
