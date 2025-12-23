@@ -70,6 +70,10 @@ set(SPDLOG_BUILD_SHARED OFF CACHE BOOL "" FORCE)
 set(SPDLOG_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(SPDLOG_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 
+# SDL3_ttf defaults to using *system* FreeType unless MSVC/Android. On MinGW this
+# commonly fails (no package manager integration), so force vendored deps.
+set(SDLTTF_VENDORED ON CACHE BOOL "" FORCE)
+
 # Make dependencies available
 # Note: All dependencies are configured as static libraries, so they will use
 # their own default output directories. We avoid setting global CMAKE_*_OUTPUT_DIRECTORY
