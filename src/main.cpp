@@ -5,6 +5,8 @@
 #include <fstream>
 #include <sstream>
 #include <exception>
+#include <filesystem>
+#include <SDL3/SDL_filesystem.h>
 
 #include "Core/Application.h"
 #include "Core/ResourceManager.h"
@@ -15,6 +17,42 @@
 #include "Graphics/Font.h"
 #include <chrono>
 #include <sstream>
+
+namespace {
+    // Helper function to find project root and resolve resource paths
+    std::filesystem::path resolveResourcePath(const std::string& resourcePath) {
+        // Start from executable directory
+        char* basePath = SDL_GetBasePath();
+        std::filesystem::path currentPath = basePath ? basePath : std::filesystem::current_path();
+        SDL_free(basePath);
+        
+        // Walk up the directory tree looking for Resources folder or CMakeLists.txt
+        std::filesystem::path checkPath = currentPath;
+        for (int i = 0; i < 10; ++i) { // Limit search depth
+            if (std::filesystem::exists(checkPath / "Resources") || 
+                std::filesystem::exists(checkPath / "CMakeLists.txt")) {
+                std::filesystem::path resolved = checkPath / resourcePath;
+                if (std::filesystem::exists(resolved)) {
+                    return resolved;
+                }
+            }
+            if (checkPath.has_parent_path() && checkPath != checkPath.parent_path()) {
+                checkPath = checkPath.parent_path();
+            } else {
+                break;
+            }
+        }
+        
+        // Fallback: try current working directory
+        std::filesystem::path fallback = std::filesystem::current_path() / resourcePath;
+        if (std::filesystem::exists(fallback)) {
+            return fallback;
+        }
+        
+        // Last resort: return as-is (might be absolute path)
+        return resourcePath;
+    }
+}
 
 class GameApp : public Runa::Application {
     std::unique_ptr<Runa::ResourceManager> m_resources;
@@ -50,7 +88,8 @@ protected:
 
         // Load scene from file
         try {
-            std::ifstream file("Resources/scenes/sample_scene.txt");
+            std::filesystem::path scenePath = resolveResourcePath("Resources/scenes/sample_scene.txt");
+            std::ifstream file(scenePath);
             if (file) {
                 std::stringstream buffer;
                 buffer << file.rdbuf();
@@ -77,7 +116,8 @@ protected:
         
         // Load font for FPS display
         try {
-            m_font = std::make_unique<Runa::Font>(getRenderer(), "Resources/Fonts/Renogare.otf", 24);
+            std::filesystem::path fontPath = resolveResourcePath("Resources/Fonts/Renogare.otf");
+            m_font = std::make_unique<Runa::Font>(getRenderer(), fontPath.string(), 24);
             if (!m_font->isValid()) {
                 LOG_WARN("Failed to load font for FPS display");
             }

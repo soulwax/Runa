@@ -6,8 +6,36 @@
 #include <fstream>
 #include <stdexcept>
 #include <filesystem>
+#include <SDL3/SDL_filesystem.h>
 
 namespace Runa {
+
+namespace {
+    // Helper function to find project root (where Resources/ folder is)
+    std::filesystem::path findProjectRoot() {
+        // Start from executable directory
+        char* basePath = SDL_GetBasePath();
+        std::filesystem::path currentPath = basePath ? basePath : std::filesystem::current_path();
+        SDL_free(basePath);
+        
+        // Walk up the directory tree looking for Resources folder or CMakeLists.txt
+        std::filesystem::path checkPath = currentPath;
+        for (int i = 0; i < 10; ++i) { // Limit search depth
+            if (std::filesystem::exists(checkPath / "Resources") || 
+                std::filesystem::exists(checkPath / "CMakeLists.txt")) {
+                return checkPath;
+            }
+            if (checkPath.has_parent_path() && checkPath != checkPath.parent_path()) {
+                checkPath = checkPath.parent_path();
+            } else {
+                break;
+            }
+        }
+        
+        // Fallback: use current working directory
+        return std::filesystem::current_path();
+    }
+}
 
 ResourceManager::ResourceManager(Renderer& renderer)
     : m_renderer(renderer) {
@@ -18,11 +46,18 @@ void ResourceManager::loadSpriteSheetFromYAML(const std::string& yamlPath) {
     LOG_INFO("Loading spritesheet manifest: {}", yamlPath);
 
     try {
-        // Convert to absolute path if relative
+        // Find project root and resolve path relative to it
+        std::filesystem::path projectRoot = findProjectRoot();
         std::filesystem::path path(yamlPath);
+        
         if (path.is_relative()) {
-            // Try to resolve relative to current working directory
-            path = std::filesystem::absolute(path);
+            // Try project root first
+            path = projectRoot / path;
+            
+            // If not found, try current working directory as fallback
+            if (!std::filesystem::exists(path)) {
+                path = std::filesystem::absolute(yamlPath);
+            }
         }
         
         if (!std::filesystem::exists(path)) {
@@ -43,11 +78,23 @@ void ResourceManager::loadSpriteSheetFromYAML(const std::string& yamlPath) {
 
         // Get texture path (resolve relative to YAML file location)
         std::string texturePath = sheetNode["texture"].as<std::string>();
-        std::filesystem::path yamlDir = std::filesystem::path(yamlPath).parent_path();
-        std::string fullTexturePath = (yamlDir / texturePath).string();
+        std::filesystem::path yamlDir = path.parent_path();
+        std::filesystem::path texturePathObj(texturePath);
+        
+        // If texture path is relative, resolve relative to YAML file location
+        if (texturePathObj.is_relative()) {
+            std::string fullTexturePath = (yamlDir / texturePath).string();
+            // If not found relative to YAML, try project root
+            if (!std::filesystem::exists(fullTexturePath)) {
+                fullTexturePath = (projectRoot / texturePath).string();
+            }
+            texturePath = fullTexturePath;
+        } else {
+            texturePath = texturePathObj.string();
+        }
 
         // Create spritesheet
-        auto spriteSheet = std::make_unique<SpriteSheet>(m_renderer, fullTexturePath);
+        auto spriteSheet = std::make_unique<SpriteSheet>(m_renderer, texturePath);
 
         // Parse sprites
         if (sheetNode["sprites"]) {

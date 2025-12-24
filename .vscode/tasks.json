@@ -53,6 +53,12 @@
       "problemMatcher": ["$gcc"]
     },
     {
+      "label": "Build and Debug (Debug)",
+      "dependsOn": ["Build (Debug)"],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    {
       "label": "Build (Release)",
       "type": "shell",
       "command": "cmake",
@@ -89,6 +95,24 @@
       "dependsOn": ["Build (Debug)", "Run (Debug)"],
       "dependsOrder": "sequence",
       "problemMatcher": []
+    },
+    {
+      "label": "Build and Launch GDB (Debug)",
+      "type": "shell",
+      "command": "pwsh.exe",
+      "args": [
+        "-Command",
+        "cmake --build build/debug; if ($LASTEXITCODE -eq 0) { Start-Process pwsh.exe -ArgumentList '-NoExit', '-Command', 'cd ${workspaceFolder}; C:\\Users\\soulwax\\scoop\\apps\\mingw\\current\\bin\\gdb.exe build/debug/Runa2.exe' }"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$gcc"],
+      "dependsOn": ["Configure CMake (Debug)"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
     },
     {
       "label": "Build and Run (Release)",
