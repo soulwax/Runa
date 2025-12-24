@@ -68,4 +68,6 @@ private:
     void initializeShader();
     void renderSprite(const SpriteDrawCall& call, SDL_GPUCommandBuffer* cmdBuffer, SDL_GPURenderPass* renderPass, SDL_GPUTexture* swapchainTexture);
 
+};
+
 } // namespace Runa

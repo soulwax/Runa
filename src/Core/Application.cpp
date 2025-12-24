@@ -19,8 +19,8 @@ Application::Application(const std::string& title, int width, int height) {
     LOG_INFO("SDL3 initialized successfully");
 
     // Initialize SDL_ttf
-    if (TTF_Init() != 0) {
-        LOG_WARN("Failed to initialize SDL_ttf: {}", TTF_GetError());
+    if (!TTF_Init()) {
+        LOG_WARN("Failed to initialize SDL_ttf: {}", SDL_GetError());
         // Don't throw - font rendering is optional
     } else {
         LOG_INFO("SDL3_ttf initialized successfully");

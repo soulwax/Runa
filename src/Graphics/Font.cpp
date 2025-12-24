@@ -12,15 +12,15 @@ Font::Font(Renderer& renderer, const std::string& fontPath, int fontSize)
     : m_renderer(renderer), m_fontSize(fontSize) {
     
     // Initialize TTF if not already initialized
-    if (!TTF_WasInit() && TTF_Init() != 0) {
-        LOG_ERROR("Failed to initialize SDL_ttf: {}", TTF_GetError());
+    if (!TTF_WasInit() && !TTF_Init()) {
+        LOG_ERROR("Failed to initialize SDL_ttf: {}", SDL_GetError());
         return;
     }
 
     // Load font
-    m_font = TTF_OpenFont(fontPath.c_str(), fontSize);
+    m_font = TTF_OpenFont(fontPath.c_str(), static_cast<float>(fontSize));
     if (!m_font) {
-        LOG_ERROR("Failed to load font '{}': {}", fontPath, TTF_GetError());
+        LOG_ERROR("Failed to load font '{}': {}", fontPath, SDL_GetError());
         return;
     }
 
@@ -65,15 +65,15 @@ std::unique_ptr<Texture> Font::renderText(const std::string& text, SDL_Color col
     }
 
     // Render text to surface
-    SDL_Surface* textSurface = TTF_RenderText_Solid(m_font, text.c_str(), color);
+    SDL_Surface* textSurface = TTF_RenderText_Solid(m_font, text.c_str(), text.size(), color);
     if (!textSurface) {
-        LOG_ERROR("Failed to render text surface: {}", TTF_GetError());
+        LOG_ERROR("Failed to render text surface: {}", SDL_GetError());
         return nullptr;
     }
 
     // Convert surface to RGBA32 format if needed
     SDL_Surface* rgbaSurface = textSurface;
-    if (textSurface->format->format != SDL_PIXELFORMAT_RGBA32) {
+    if (textSurface->format != SDL_PIXELFORMAT_RGBA32) {
         rgbaSurface = SDL_ConvertSurface(textSurface, SDL_PIXELFORMAT_RGBA32);
         SDL_DestroySurface(textSurface);
         if (!rgbaSurface) {
