@@ -20,36 +20,9 @@
 
 namespace {
     // Helper function to find project root and resolve resource paths
-    std::filesystem::path resolveResourcePath(const std::string& resourcePath) {
-        // Start from executable directory
-        char* basePath = SDL_GetBasePath();
-        std::filesystem::path currentPath = basePath ? basePath : std::filesystem::current_path();
-        SDL_free(basePath);
-        
-        // Walk up the directory tree looking for Resources folder or CMakeLists.txt
-        std::filesystem::path checkPath = currentPath;
-        for (int i = 0; i < 10; ++i) { // Limit search depth
-            if (std::filesystem::exists(checkPath / "Resources") || 
-                std::filesystem::exists(checkPath / "CMakeLists.txt")) {
-                std::filesystem::path resolved = checkPath / resourcePath;
-                if (std::filesystem::exists(resolved)) {
-                    return resolved;
-                }
-            }
-            if (checkPath.has_parent_path() && checkPath != checkPath.parent_path()) {
-                checkPath = checkPath.parent_path();
-            } else {
-                break;
-            }
-        }
-        
-        // Fallback: try current working directory
-        std::filesystem::path fallback = std::filesystem::current_path() / resourcePath;
-        if (std::filesystem::exists(fallback)) {
-            return fallback;
-        }
-        
-        // Last resort: return as-is (might be absolute path)
+    std::string resolveResourcePath(const std::string& resourcePath) {
+        // Simple approach: just use relative path from current directory
+        // The working directory should be set to the project root when running
         return resourcePath;
     }
 }
@@ -88,7 +61,7 @@ protected:
 
         // Load scene from file
         try {
-            std::filesystem::path scenePath = resolveResourcePath("Resources/scenes/sample_scene.txt");
+            std::string scenePath = resolveResourcePath("Resources/scenes/sample_scene.txt");
             std::ifstream file(scenePath);
             if (file) {
                 std::stringstream buffer;
@@ -106,20 +79,47 @@ protected:
             }
         } catch (const std::exception& e) {
             LOG_ERROR("Error loading scene: {}", e.what());
+            // Create fallback pattern even if there's an error
+            for (int y = 0; y < 30; ++y) {
+                for (int x = 0; x < 40; ++x) {
+                    m_tileMap->setTile(x, y, (x + y) % 6);
+                }
+            }
         }
+        
+        LOG_DEBUG("Scene loading completed, creating sprite batch...");
 
         // Create sprite batch
-        m_spriteBatch = std::make_unique<Runa::SpriteBatch>(getRenderer());
+        try {
+            LOG_DEBUG("Creating SpriteBatch...");
+            m_spriteBatch = std::make_unique<Runa::SpriteBatch>(getRenderer());
+            LOG_DEBUG("SpriteBatch created successfully");
+        } catch (const std::exception& e) {
+            LOG_ERROR("Failed to create SpriteBatch: {}", e.what());
+            throw;
+        }
         
         // Create post-process effect
-        m_postProcess = std::make_unique<Runa::PostProcess>(getRenderer());
+        try {
+            LOG_DEBUG("Creating PostProcess...");
+            m_postProcess = std::make_unique<Runa::PostProcess>(getRenderer());
+            LOG_DEBUG("PostProcess created successfully");
+        } catch (const std::exception& e) {
+            LOG_ERROR("Failed to create PostProcess: {}", e.what());
+            throw;
+        }
         
         // Load font for FPS display
         try {
-            std::filesystem::path fontPath = resolveResourcePath("Resources/Fonts/Renogare.otf");
-            m_font = std::make_unique<Runa::Font>(getRenderer(), fontPath.string(), 24);
-            if (!m_font->isValid()) {
-                LOG_WARN("Failed to load font for FPS display");
+            std::string fontPath = resolveResourcePath("Resources/Fonts/Renogare.otf");
+            m_font = std::make_unique<Runa::Font>(getRenderer(), fontPath, 24);
+            if (m_font->isValid()) {
+                m_font = std::make_unique<Runa::Font>(getRenderer(), fontPath, 24);
+                if (!m_font->isValid()) {
+                    LOG_WARN("Failed to load font for FPS display");
+                } else {
+                    LOG_INFO("Font loaded successfully");
+                }
             }
         } catch (const std::exception& e) {
             LOG_WARN("Failed to create font: {}", e.what());
@@ -128,7 +128,7 @@ protected:
         // Initialize start time for shader animation
         m_startTime = std::chrono::steady_clock::now();
 
-        LOG_INFO("\n=== Ready ===");
+        LOG_INFO("=== Ready ===");
         LOG_INFO("Displaying 40x30 tilemap from plains.png with psychedelic effect!");
         LOG_INFO("Map size: 640x480 pixels (16px tiles)");
         LOG_INFO("Press ESC or close window to exit.");

@@ -51,7 +51,16 @@ void Application::run() {
     m_running = true;
 
     // Initialize game-specific resources
-    onInit();
+    try {
+        onInit();
+        LOG_INFO("onInit() completed successfully");
+    } catch (const std::exception& e) {
+        LOG_CRITICAL("Exception in onInit(): {}", e.what());
+        throw;
+    } catch (...) {
+        LOG_CRITICAL("Unknown exception in onInit()");
+        throw;
+    }
 
     LOG_INFO("Starting main loop...");
     mainLoop();

@@ -14,10 +14,10 @@ namespace {
     // Helper function to find project root (where Resources/ folder is)
     std::filesystem::path findProjectRoot() {
         // Start from executable directory
-        char* basePath = SDL_GetBasePath();
+        const char* basePath = SDL_GetBasePath();
         std::filesystem::path currentPath = basePath ? basePath : std::filesystem::current_path();
-        SDL_free(basePath);
-        
+        SDL_free(const_cast<char*>(basePath));
+
         // Walk up the directory tree looking for Resources folder or CMakeLists.txt
         std::filesystem::path checkPath = currentPath;
         for (int i = 0; i < 10; ++i) { // Limit search depth

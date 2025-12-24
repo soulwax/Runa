@@ -23,6 +23,14 @@ Renderer::Renderer(Window& window) : m_window(window) {
         SDL_DestroyGPUDevice(m_device);
         throw std::runtime_error(std::string("Failed to claim window for GPU: ") + SDL_GetError());
     }
+    
+    // Configure swapchain to support sampling (needed for post-process effects)
+    SDL_GPUSwapchainComposition swapchainComposition = SDL_GPU_SWAPCHAINCOMPOSITION_SDR;
+    SDL_GPUPresentMode presentMode = SDL_GPU_PRESENTMODE_VSYNC;
+    
+    if (!SDL_SetGPUSwapchainParameters(m_device, m_window.getHandle(), swapchainComposition, presentMode)) {
+        LOG_WARN("Failed to set swapchain parameters: {}", SDL_GetError());
+    }
 
     LOG_INFO("Renderer initialized with SDL3 GPU backend");
     LOG_INFO("GPU Driver: {}", SDL_GetGPUDeviceDriver(m_device));
