@@ -170,7 +170,7 @@ void Texture::createFromPixels(int width, int height, const void* pixelData) {
     textureInfo.layer_count_or_depth = 1;
     textureInfo.num_levels = 1;
     textureInfo.sample_count = SDL_GPU_SAMPLECOUNT_1;
-    textureInfo.usage = SDL_GPU_TEXTUREUSAGE_SAMPLER;
+    textureInfo.usage = SDL_GPU_TEXTUREUSAGE_SAMPLER; // SAMPLER allows texture to be used in blits with alpha
 
     m_texture = SDL_CreateGPUTexture(m_device, &textureInfo);
     if (!m_texture) {

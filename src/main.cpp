@@ -256,18 +256,30 @@ protected:
         
         // Load font for FPS display
         try {
-            std::string fontPath = resolveResourcePath("Resources/Fonts/Renogare.otf");
+            // Try .ttf first (more compatible), fallback to .otf
+            std::string fontPath = resolveResourcePath("Resources/Fonts/Renogare.ttf");
+            if (!std::filesystem::exists(fontPath)) {
+                fontPath = resolveResourcePath("Resources/Fonts/Renogare.otf");
+            }
+            
+            LOG_INFO("Loading font from: {}", fontPath);
+            
+            // Check if font file exists
+            if (!std::filesystem::exists(fontPath)) {
+                LOG_ERROR("Font file does not exist: {}", fontPath);
+                LOG_ERROR("Current working directory: {}", std::filesystem::current_path().string());
+            } else {
+                LOG_INFO("Font file found: {}", fontPath);
+            }
+            
             m_font = std::make_unique<Runa::Font>(getRenderer(), fontPath, 24);
             if (m_font->isValid()) {
-                m_font = std::make_unique<Runa::Font>(getRenderer(), fontPath, 24);
-                if (!m_font->isValid()) {
-                    LOG_WARN("Failed to load font for FPS display");
-                } else {
-                    LOG_INFO("Font loaded successfully");
-                }
+                LOG_INFO("Font loaded successfully: {}", fontPath);
+            } else {
+                LOG_ERROR("Font failed to load or is invalid: {}", fontPath);
             }
         } catch (const std::exception& e) {
-            LOG_WARN("Failed to create font: {}", e.what());
+            LOG_ERROR("Failed to create font: {}", e.what());
         }
         
         // Initialize start time for shader animation
