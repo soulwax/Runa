@@ -1,10 +1,9 @@
 // File: src/Graphics/Font.cpp
 
+#include "../runapch.h"
 #include "Font.h"
 #include "Renderer.h"
 #include "Core/Log.h"
-#include <SDL3_ttf/SDL_ttf.h>
-#include <sstream>
 
 namespace Runa {
 

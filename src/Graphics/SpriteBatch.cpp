@@ -1,11 +1,10 @@
 // File: src/Graphics/SpriteBatch.cpp
 
+#include "../runapch.h"
 #include "SpriteBatch.h"
 #include "Renderer.h"
 #include "Shader.h"
 #include "Core/Log.h"
-#include <SDL3/SDL.h>
-#include <cstring>
 
 namespace Runa {
 

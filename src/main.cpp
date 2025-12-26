@@ -1,13 +1,6 @@
 // File: src/main.cpp
 
-#include <iostream>
-#include <memory>
-#include <fstream>
-#include <sstream>
-#include <exception>
-#include <filesystem>
-#include <SDL3/SDL_filesystem.h>
-
+#include "runapch.h"
 #include "Core/Application.h"
 #include "Core/ResourceManager.h"
 #include "Core/Log.h"
@@ -15,8 +8,6 @@
 #include "Graphics/SpriteBatch.h"
 #include "Graphics/PostProcess.h"
 #include "Graphics/Font.h"
-#include <chrono>
-#include <sstream>
 
 namespace {
     // Helper function to find project root and resolve resource paths
@@ -129,7 +120,7 @@ protected:
         m_startTime = std::chrono::steady_clock::now();
 
         LOG_INFO("=== Ready ===");
-        LOG_INFO("Displaying 40x30 tilemap from plains.png with psychedelic effect!");
+        LOG_INFO("Displaying 40x30 tilemap from plains.png");
         LOG_INFO("Map size: 640x480 pixels (16px tiles)");
         LOG_INFO("Press ESC or close window to exit.");
     }
@@ -181,7 +172,9 @@ protected:
             }
         }
         
-        // Apply psychedelic post-process effect to the swapchain
+        // DISABLED: Post-process effect causes crash - swapchain texture needs SAMPLER usage flag
+        // TODO: Fix post-processing by rendering to intermediate texture first
+        /*
         if (m_postProcess) {
             // Get the current swapchain and apply effect
             SDL_GPUCommandBuffer* cmdBuffer = getRenderer().acquireCommandBuffer();
@@ -196,6 +189,7 @@ protected:
                 }
             }
         }
+        */
     }
 
     void onShutdown() override {

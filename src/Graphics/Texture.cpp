@@ -1,12 +1,9 @@
 // File: src/Graphics/Texture.cpp
 
+#include "../runapch.h"
 #include "Texture.h"
 #include "Renderer.h"
 #include "Core/Log.h"
-#include <SDL3/SDL.h>
-#include <SDL3_image/SDL_image.h>
-#include <cstring>
-#include <stdexcept>
 
 namespace Runa {
 

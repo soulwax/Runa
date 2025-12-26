@@ -1,12 +1,9 @@
 // File: src/Core/ResourceManager.cpp
 
+#include "../runapch.h"
 #include "ResourceManager.h"
 #include "Log.h"
 #include <yaml-cpp/yaml.h>
-#include <fstream>
-#include <stdexcept>
-#include <filesystem>
-#include <SDL3/SDL_filesystem.h>
 
 namespace Runa {
 

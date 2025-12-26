@@ -1,9 +1,8 @@
 // File: src/Core/Application.cpp
 
+#include "../runapch.h"
 #include "Application.h"
 #include "Log.h"
-#include <SDL3_ttf/SDL_ttf.h>
-#include <chrono>
 
 namespace Runa {
 
@@ -69,12 +68,18 @@ void Application::run() {
 void Application::mainLoop() {
     using Clock = std::chrono::high_resolution_clock;
     using Duration = std::chrono::duration<float>;
+    using namespace std::chrono_literals;
 
     auto lastTime = Clock::now();
     float accumulatedTime = 0.0f;
     int frameCount = 0;
 
+    // Target 60 FPS (16.67ms per frame)
+    constexpr auto targetFrameTime = std::chrono::duration<float>(1.0f / 60.0f);
+
     while (m_running && !m_window->shouldClose()) {
+        auto frameStart = Clock::now();
+
         // Calculate delta time
         auto currentTime = Clock::now();
         float deltaTime = Duration(currentTime - lastTime).count();
@@ -100,6 +105,14 @@ void Application::mainLoop() {
         m_renderer->beginFrame();
         onRender();
         m_renderer->endFrame();
+
+        // Frame rate limiting: sleep to maintain 60 FPS
+        auto frameEnd = Clock::now();
+        auto frameDuration = frameEnd - frameStart;
+        if (frameDuration < targetFrameTime) {
+            auto sleepTime = targetFrameTime - frameDuration;
+            std::this_thread::sleep_for(sleepTime);
+        }
     }
 }
 

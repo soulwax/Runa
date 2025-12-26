@@ -1,8 +1,8 @@
 // File: src/Graphics/Renderer.cpp
 
+#include "../runapch.h"
 #include "Renderer.h"
 #include "Core/Log.h"
-#include <stdexcept>
 
 namespace Runa {
 

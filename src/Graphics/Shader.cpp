@@ -1,9 +1,8 @@
 // File: src/Graphics/Shader.cpp
 
+#include "../runapch.h"
 #include "Shader.h"
 #include "Core/Log.h"
-#include <fstream>
-#include <stdexcept>
 
 namespace Runa {
 

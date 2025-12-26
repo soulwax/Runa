@@ -1,8 +1,8 @@
 // File: src/Graphics/Window.cpp
 
+#include "../runapch.h"
 #include "Window.h"
 #include "Core/Log.h"
-#include <stdexcept>
 
 namespace Runa {
 
