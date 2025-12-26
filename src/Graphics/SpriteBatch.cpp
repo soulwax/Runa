@@ -154,7 +154,24 @@ void SpriteBatch::end() {
 
     SDL_SubmitGPUCommandBuffer(cmdBuffer);
 
-    LOG_TRACE("SpriteBatch: Rendered {} sprites", m_drawCalls.size());
+    // Throttle logging to once per second
+    static auto lastLogTime = std::chrono::steady_clock::now();
+    static size_t totalSprites = 0;
+    static size_t batchCount = 0;
+    
+    auto now = std::chrono::steady_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - lastLogTime).count();
+    
+    totalSprites += m_drawCalls.size();
+    batchCount++;
+    
+    if (elapsed >= 1) {
+        LOG_TRACE("SpriteBatch: Rendered {} sprites ({} batches)", totalSprites, batchCount);
+        totalSprites = 0;
+        batchCount = 0;
+        lastLogTime = now;
+    }
+    
     m_drawCalls.clear();
     m_inBatch = false;
 }

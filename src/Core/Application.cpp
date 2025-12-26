@@ -90,6 +90,7 @@ void Application::mainLoop() {
         frameCount++;
         if (accumulatedTime >= 1.0f) {
             m_currentFPS = frameCount;
+            // FPS is logged here - other throttled messages will appear at the same time
             LOG_DEBUG("FPS: {}", m_currentFPS);
             frameCount = 0;
             accumulatedTime = 0.0f;
