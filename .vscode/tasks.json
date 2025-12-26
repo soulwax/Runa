@@ -1,0 +1,163 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Configure CMake (Debug)",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "-G", "Ninja",
+        "-DCMAKE_BUILD_TYPE=Debug",
+        "-DCMAKE_C_COMPILER=gcc",
+        "-DCMAKE_CXX_COMPILER=g++",
+        "-S", ".",
+        "-B", "build/debug"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Configure CMake (Release)",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "-G", "Ninja",
+        "-DCMAKE_BUILD_TYPE=Release",
+        "-DCMAKE_C_COMPILER=gcc",
+        "-DCMAKE_CXX_COMPILER=g++",
+        "-S", ".",
+        "-B", "build/release"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build (Debug)",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build", "build/debug"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "dependsOn": ["Configure CMake (Debug)"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Build and Debug (Debug)",
+      "dependsOn": ["Build (Debug)"],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    {
+      "label": "Build (Release)",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build", "build/release"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "dependsOn": ["Configure CMake (Release)"],
+      "group": "build",
+      "problemMatcher": ["$gcc"]
+    },
+    {
+      "label": "Run (Debug)",
+      "type": "shell",
+      "command": "${workspaceFolder}/build/debug/Runa2.exe",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Run (Release)",
+      "type": "shell",
+      "command": "${workspaceFolder}/build/release/Runa2.exe",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Build and Run (Debug)",
+      "dependsOn": ["Build (Debug)", "Run (Debug)"],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    {
+      "label": "Build and Launch GDB (Debug)",
+      "type": "shell",
+      "command": "pwsh.exe",
+      "args": [
+        "-Command",
+        "cmake --build build/debug; if ($LASTEXITCODE -eq 0) { Start-Process pwsh.exe -ArgumentList '-NoExit', '-Command', 'cd ${workspaceFolder}; C:\\Users\\soulwax\\scoop\\apps\\mingw\\current\\bin\\gdb.exe build/debug/Runa2.exe' }"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$gcc"],
+      "dependsOn": ["Configure CMake (Debug)"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Build and Run (Release)",
+      "dependsOn": ["Build (Release)", "Run (Release)"],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
+    },
+    {
+      "label": "Clean (Debug)",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build", "build/debug", "--target", "clean"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Clean (Release)",
+      "type": "shell",
+      "command": "cmake",
+      "args": [
+        "--build", "build/release", "--target", "clean"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Clean All (Remove Build Directories)",
+      "type": "shell",
+      "command": "Remove-Item",
+      "args": [
+        "-Recurse", "-Force", "build"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "shell": {
+          "executable": "pwsh.exe"
+        }
+      },
+      "problemMatcher": []
+    }
+  ]
+}
