@@ -7,7 +7,11 @@
       "Bash(where gcc:*)",
       "Bash(./build/debug/Runa2.exe)",
       "Bash(timeout 3:*)",
-      "Bash(./Runa2.exe)"
+      "Bash(./Runa2.exe)",
+      "Bash(ls:*)",
+      "Bash(rm:*)",
+      "Bash(ninja)",
+      "Bash(where:*)"
     ]
   }
 }
