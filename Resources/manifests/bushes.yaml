@@ -1,0 +1,211 @@
+- id: bush_small_a
+  atlas_x: 0
+  atlas_y: 0
+  tile_size: 16
+  layer: detail
+  category: decoration
+
+  walkable: true
+  swimmable: false
+  climbable: false
+  crawlable: false
+  fly_through: true
+  blocks_movement: false
+  movement_cost: 1.0
+
+  has_collision: false
+
+  contains_transparency: true
+  alpha_mode: cutout
+  casts_shadow: false
+  receives_shadow: true
+  z_bias: 0
+
+  interactable: false
+  destructible: true
+  collectible: false
+  hit_points: 1
+
+  footstep_sound: grass
+  impact_sound: plant
+  ambient_sound: null
+
+  provides_cover: false
+  concealment: 0.1
+
+  editor_color: "#5FAF6A"
+  editor_icon: bush
+
+
+- id: bush_small_b
+  atlas_x: 16
+  atlas_y: 0
+  <<: *bush_small_a
+
+
+- id: bush_medium_a
+  atlas_x: 32
+  atlas_y: 0
+  tile_size: 16
+  layer: detail
+  category: decoration
+
+  walkable: true
+  swimmable: false
+  climbable: false
+  crawlable: false
+  fly_through: true
+  blocks_movement: false
+  movement_cost: 1.05
+
+  has_collision: false
+
+  contains_transparency: true
+  alpha_mode: cutout
+  casts_shadow: false
+  receives_shadow: true
+  z_bias: 1
+
+  interactable: false
+  destructible: true
+  collectible: false
+  hit_points: 2
+
+  footstep_sound: grass
+  impact_sound: plant
+  ambient_sound: null
+
+  provides_cover: true
+  concealment: 0.25
+
+  editor_color: "#4F9F5A"
+  editor_icon: bush
+
+
+- id: bush_medium_b
+  atlas_x: 48
+  atlas_y: 0
+  <<: *bush_medium_a
+
+
+- id: bush_large_a
+  atlas_x: 64
+  atlas_y: 0
+  tile_size: 16
+  layer: detail
+  category: decoration
+
+  walkable: true
+  swimmable: false
+  climbable: false
+  crawlable: false
+  fly_through: true
+  blocks_movement: false
+  movement_cost: 1.1
+
+  has_collision: false
+
+  contains_transparency: true
+  alpha_mode: cutout
+  casts_shadow: true
+  receives_shadow: true
+  z_bias: 2
+
+  interactable: false
+  destructible: true
+  collectible: false
+  hit_points: 3
+
+  footstep_sound: grass
+  impact_sound: plant
+  ambient_sound: rustle
+
+  provides_cover: true
+  concealment: 0.4
+
+  editor_color: "#3F8F4A"
+  editor_icon: bush
+
+
+- id: bush_large_b
+  atlas_x: 80
+  atlas_y: 0
+  <<: *bush_large_a
+
+
+- id: shrub_wild
+  atlas_x: 96
+  atlas_y: 0
+  tile_size: 16
+  layer: detail
+  category: decoration
+
+  walkable: true
+  swimmable: false
+  climbable: false
+  crawlable: false
+  fly_through: true
+  blocks_movement: false
+  movement_cost: 1.15
+
+  has_collision: false
+
+  contains_transparency: true
+  alpha_mode: cutout
+  casts_shadow: true
+  receives_shadow: true
+  z_bias: 2
+
+  interactable: false
+  destructible: true
+  collectible: false
+  hit_points: 3
+
+  footstep_sound: grass
+  impact_sound: plant
+  ambient_sound: rustle
+
+  provides_cover: true
+  concealment: 0.5
+
+  editor_color: "#2F7F3A"
+  editor_icon: shrub
+
+
+- id: shrub_dense
+  atlas_x: 112
+  atlas_y: 0
+  tile_size: 16
+  layer: detail
+  category: decoration
+
+  walkable: true
+  swimmable: false
+  climbable: false
+  crawlable: false
+  fly_through: true
+  blocks_movement: false
+  movement_cost: 1.2
+
+  has_collision: false
+
+  contains_transparency: true
+  alpha_mode: cutout
+  casts_shadow: true
+  receives_shadow: true
+  z_bias: 3
+
+  interactable: false
+  destructible: true
+  collectible: false
+  hit_points: 4
+
+  footstep_sound: grass
+  impact_sound: plant
+  ambient_sound: rustle
+
+  provides_cover: true
+  concealment: 0.7
+
+  editor_color: "#1F6F2A"
+  editor_icon: shrub
