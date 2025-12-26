@@ -163,6 +163,86 @@ void ResourceManager::loadSpriteSheetFromYAML(const std::string& yamlPath) {
     }
 }
 
+void ResourceManager::loadTilesetFromAtlasYAML(const std::string& yamlPath, const std::string& imagePath, const std::string& name) {
+    LOG_INFO("Loading tileset from atlas YAML: {} (image: {})", yamlPath, imagePath);
+
+    try {
+        // Find project root and resolve paths
+        std::filesystem::path projectRoot = findProjectRoot();
+        std::filesystem::path yamlPathObj(yamlPath);
+        std::filesystem::path imagePathObj(imagePath);
+        
+        // Resolve YAML path
+        if (yamlPathObj.is_relative()) {
+            yamlPathObj = projectRoot / yamlPathObj;
+            if (!std::filesystem::exists(yamlPathObj)) {
+                yamlPathObj = std::filesystem::absolute(yamlPath);
+            }
+        }
+        
+        // Resolve image path (relative to YAML file location first, then project root)
+        if (imagePathObj.is_relative()) {
+            std::filesystem::path yamlDir = yamlPathObj.parent_path();
+            std::filesystem::path fullImagePath = yamlDir / imagePathObj;
+            if (!std::filesystem::exists(fullImagePath)) {
+                fullImagePath = projectRoot / imagePathObj;
+            }
+            imagePathObj = fullImagePath;
+        }
+        
+        if (!std::filesystem::exists(yamlPathObj)) {
+            throw std::runtime_error("YAML file does not exist: " + yamlPathObj.string());
+        }
+        if (!std::filesystem::exists(imagePathObj)) {
+            throw std::runtime_error("Image file does not exist: " + imagePathObj.string());
+        }
+        
+        LOG_DEBUG("Loading atlas YAML from: {} (image: {})", yamlPathObj.string(), imagePathObj.string());
+        YAML::Node config = YAML::LoadFile(yamlPathObj.string());
+
+        if (!config["tiles"]) {
+            throw std::runtime_error("YAML file missing 'tiles' root node");
+        }
+
+        // Get tile size from meta (default to 16)
+        int tileSize = 16;
+        if (config["meta"] && config["meta"]["tile_size"]) {
+            tileSize = config["meta"]["tile_size"].as<int>();
+        }
+
+        // Create spritesheet from image
+        auto spriteSheet = std::make_unique<SpriteSheet>(m_renderer, imagePathObj.string());
+
+        // Parse tiles
+        YAML::Node tilesNode = config["tiles"];
+        int tileCount = 0;
+        
+        for (const auto& tileNode : tilesNode) {
+            if (!tileNode["id"]) {
+                continue; // Skip tiles without id
+            }
+            
+            std::string tileId = tileNode["id"].as<std::string>();
+            int atlasX = tileNode["atlas_x"] ? tileNode["atlas_x"].as<int>() : 0;
+            int atlasY = tileNode["atlas_y"] ? tileNode["atlas_y"].as<int>() : 0;
+            int tileSizeOverride = tileNode["tile_size"] ? tileNode["tile_size"].as<int>() : tileSize;
+            
+            // Add sprite using atlas coordinates
+            spriteSheet->addSprite(tileId, atlasX, atlasY, tileSizeOverride, tileSizeOverride);
+            tileCount++;
+        }
+
+        // Store spritesheet
+        m_spriteSheets[name] = std::move(spriteSheet);
+        LOG_INFO("Loaded tileset '{}' with {} tiles from atlas coordinates", name, tileCount);
+
+    } catch (const YAML::Exception& e) {
+        throw std::runtime_error("YAML parsing error in " + yamlPath + ": " + e.what());
+    } catch (const std::exception& e) {
+        throw std::runtime_error("Error loading tileset from " + yamlPath + ": " + e.what());
+    }
+}
+
 SpriteSheet* ResourceManager::getSpriteSheet(const std::string& name) {
     auto it = m_spriteSheets.find(name);
     return it != m_spriteSheets.end() ? it->second.get() : nullptr;

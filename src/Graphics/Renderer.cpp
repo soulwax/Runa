@@ -49,36 +49,10 @@ void Renderer::beginFrame() {
 }
 
 void Renderer::endFrame() {
-    // If clear was requested but SpriteBatch::end() wasn't called, we need to submit a clear
-    if (m_needsClear) {
-        // Acquire command buffer and swapchain
-        SDL_GPUCommandBuffer* cmdBuffer = SDL_AcquireGPUCommandBuffer(m_device);
-        if (cmdBuffer) {
-            SDL_GPUTexture* swapchainTexture = nullptr;
-            if (SDL_AcquireGPUSwapchainTexture(cmdBuffer, m_window.getHandle(), &swapchainTexture, nullptr, nullptr) && swapchainTexture) {
-                SDL_GPUColorTargetInfo colorTarget{};
-                colorTarget.texture = swapchainTexture;
-                colorTarget.clear_color.r = m_clearColor.r;
-                colorTarget.clear_color.g = m_clearColor.g;
-                colorTarget.clear_color.b = m_clearColor.b;
-                colorTarget.clear_color.a = m_clearColor.a;
-                colorTarget.load_op = SDL_GPU_LOADOP_CLEAR;
-                colorTarget.store_op = SDL_GPU_STOREOP_STORE;
-                
-                SDL_GPURenderPass* renderPass = SDL_BeginGPURenderPass(cmdBuffer, &colorTarget, 1, nullptr);
-                if (renderPass) {
-                    SDL_EndGPURenderPass(renderPass);
-                }
-                SDL_SubmitGPUCommandBuffer(cmdBuffer);
-            } else {
-                // Swapchain not available, cancel the command buffer
-                SDL_CancelGPUCommandBuffer(cmdBuffer);
-            }
-        }
-    }
-    
-    // Reset clear flag for next frame
-    m_needsClear = false;
+    // Clear flag is managed by SpriteBatch::end() which calls clearApplied()
+    // If SpriteBatch wasn't used, we might need to clear here, but for now
+    // we assume SpriteBatch handles all clearing
+    // The flag will be reset by clearApplied() or set again next frame
 }
 
 void Renderer::clear(float r, float g, float b, float a) {

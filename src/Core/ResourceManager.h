@@ -20,8 +20,14 @@ public:
     ResourceManager(const ResourceManager&) = delete;
     ResourceManager& operator=(const ResourceManager&) = delete;
 
-    // Load spritesheet from YAML manifest
+    // Load spritesheet from YAML manifest (spritesheet format)
     void loadSpriteSheetFromYAML(const std::string& yamlPath);
+
+    // Load tileset from YAML with atlas coordinates (plains.yaml format)
+    // yamlPath: Path to YAML file with tiles array
+    // imagePath: Path to corresponding image file
+    // name: Name to store the spritesheet under
+    void loadTilesetFromAtlasYAML(const std::string& yamlPath, const std::string& imagePath, const std::string& name);
 
     // Get spritesheet by name
     SpriteSheet* getSpriteSheet(const std::string& name);

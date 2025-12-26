@@ -123,7 +123,6 @@ void SpriteBatch::end() {
         return;
     }
 
-    // If we need to clear, do it in a render pass first
     if (m_renderer.needsClear()) {
         SDL_GPUColorTargetInfo colorTarget{};
         colorTarget.texture = swapchainTexture;

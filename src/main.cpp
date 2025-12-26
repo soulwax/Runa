@@ -169,6 +169,7 @@ class GameApp : public Runa::Application {
     std::unique_ptr<Runa::Font> m_font;
     std::unique_ptr<Runa::Texture> m_fpsTexture;
     std::chrono::steady_clock::time_point m_startTime;
+    std::vector<std::string> m_tileNames; // Store tile names for rendering
 
 public:
     GameApp() : Application("Runa2 - Tilemap Demo", 1280, 720) {}
@@ -181,22 +182,54 @@ protected:
         // Create resource manager
         m_resources = std::make_unique<Runa::ResourceManager>(getRenderer());
 
-        // Load the plains tileset
+        // Load the plains tileset from atlas YAML format
         try {
-            m_resources->loadSpriteSheetFromYAML("Resources/manifests/tilesets.yaml");
-            LOG_INFO("Tileset loaded successfully!");
+            m_resources->loadTilesetFromAtlasYAML(
+                "Resources/mystic_woods_2.2/sprites/tilesets/plains.yaml",
+                "Resources/mystic_woods_2.2/sprites/tilesets/plains.png",
+                "plains_atlas"
+            );
+            LOG_INFO("Plains tileset loaded successfully from atlas YAML!");
         } catch (const std::exception& e) {
-            LOG_ERROR("Failed to load tileset: {}", e.what());
+            LOG_ERROR("Failed to load plains tileset: {}", e.what());
             return;
         }
 
-        // Create tilemap (40x30 tiles, 16 pixels per tile)
-        m_tileMap = std::make_unique<Runa::TileMap>(40, 30, 16);
-
-        // Generate serene grass plains scene
-        LOG_INFO("Generating serene grass plains scene...");
-        generateSerenePlainsScene(*m_tileMap);
-        LOG_INFO("Scene generated successfully!");
+        // Create a test scene to display all tiles from plains.yaml
+        // We'll render them in a grid for verification
+        LOG_INFO("Creating test scene with all plains tiles...");
+        
+        // Get the spritesheet to count tiles
+        auto* tileset = m_resources->getSpriteSheet("plains_atlas");
+        if (!tileset) {
+            LOG_ERROR("Failed to get plains_atlas spritesheet");
+            return;
+        }
+        
+        auto tileNames = tileset->getSpriteNames();
+        LOG_INFO("Found {} tiles in plains_atlas", tileNames.size());
+        
+        // Create a tilemap large enough to display all tiles in a grid
+        // Arrange in columns of 10 tiles
+        int tilesPerRow = 10;
+        int numRows = (static_cast<int>(tileNames.size()) + tilesPerRow - 1) / tilesPerRow;
+        int mapWidth = tilesPerRow;
+        int mapHeight = numRows;
+        
+        m_tileMap = std::make_unique<Runa::TileMap>(mapWidth, mapHeight, 16);
+        
+        // Fill tilemap with tile indices (we'll render by name instead)
+        // Store tile names for rendering
+        m_tileNames.clear();
+        m_tileNames.reserve(tileNames.size());
+        for (size_t i = 0; i < tileNames.size(); ++i) {
+            int x = static_cast<int>(i % tilesPerRow);
+            int y = static_cast<int>(i / tilesPerRow);
+            m_tileMap->setTile(x, y, static_cast<int>(i));
+            m_tileNames.push_back(tileNames[i]);
+        }
+        
+        LOG_INFO("Test scene created: {}x{} grid displaying {} tiles", mapWidth, mapHeight, tileNames.size());
         
         LOG_DEBUG("Scene loading completed, creating sprite batch...");
 
@@ -240,9 +273,9 @@ protected:
         m_startTime = std::chrono::steady_clock::now();
 
         LOG_INFO("=== Ready ===");
-        LOG_INFO("Displaying serene grass plains scene");
-        LOG_INFO("Map size: 640x480 pixels (40x30 tiles at 16px each)");
-        LOG_INFO("Features: Varied grass, winding path, decorative elements, flower clusters");
+        LOG_INFO("Displaying test scene with all tiles from plains.yaml");
+        LOG_INFO("Tiles are rendered using their atlas_x/atlas_y coordinates");
+        LOG_INFO("Verify that each tile appears at the correct position in the image");
         LOG_INFO("Press ESC or close window to exit.");
     }
 
@@ -255,20 +288,40 @@ protected:
         auto currentTime = std::chrono::steady_clock::now();
         float time = std::chrono::duration<float>(currentTime - m_startTime).count();
         
-        // Clear screen with a serene sky blue background
-        getRenderer().clear(0.53f, 0.81f, 0.92f, 1.0f); // Light sky blue
-
         // Render the tilemap
         if (m_tileMap && m_spriteBatch && m_resources) {
-            auto* tileset = m_resources->getSpriteSheet("plains_tileset");
+            auto* tileset = m_resources->getSpriteSheet("plains_atlas");
             if (tileset) {
+                // Clear screen with a dark background for better visibility
+                getRenderer().clear(0.1f, 0.1f, 0.15f, 1.0f);
+                
                 m_spriteBatch->begin();
 
-                // Center the map on screen (1280x720 screen, 640x480 map)
-                int offsetX = (1280 - 640) >> 1;
-                int offsetY = (720 - 480) >> 1;
+                // Calculate tilemap size and center it
+                int tileSize = m_tileMap->getTileSize();
+                int mapWidth = m_tileMap->getWidth() * tileSize;
+                int mapHeight = m_tileMap->getHeight() * tileSize;
+                int offsetX = (1280 - mapWidth) >> 1;
+                int offsetY = (720 - mapHeight) >> 1;
 
-                m_tileMap->render(*m_spriteBatch, *tileset, "plains_tile", offsetX, offsetY);
+                // Render each tile by name (using atlas coordinates from YAML)
+                for (int y = 0; y < m_tileMap->getHeight(); ++y) {
+                    for (int x = 0; x < m_tileMap->getWidth(); ++x) {
+                        int tileIndex = m_tileMap->getTile(x, y);
+                        if (tileIndex >= 0 && tileIndex < static_cast<int>(m_tileNames.size())) {
+                            const std::string& tileName = m_tileNames[tileIndex];
+                            const Runa::Sprite* sprite = tileset->getSprite(tileName);
+                            
+                            if (sprite && !sprite->frames.empty()) {
+                                const Runa::SpriteFrame& frame = sprite->frames[0];
+                                int screenX = offsetX + (x * tileSize);
+                                int screenY = offsetY + (y * tileSize);
+                                
+                                m_spriteBatch->draw(tileset->getTexture(), screenX, screenY, frame);
+                            }
+                        }
+                    }
+                }
 
                 m_spriteBatch->end();
             }
