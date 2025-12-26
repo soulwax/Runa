@@ -51,3 +51,4 @@ CLAUDE.md
 .cursor/
 
 vendor/
+logs/

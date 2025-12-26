@@ -1,6 +1,7 @@
 // File: src/main.cpp
 
 #include "runapch.h"
+#include <random>
 #include "Core/Application.h"
 #include "Core/ResourceManager.h"
 #include "Core/Log.h"
@@ -15,6 +16,148 @@ namespace {
         // Simple approach: just use relative path from current directory
         // The working directory should be set to the project root when running
         return resourcePath;
+    }
+
+    // Generate a serene grass plains scene
+    void generateSerenePlainsScene(Runa::TileMap& tileMap) {
+        const int width = tileMap.getWidth();
+        const int height = tileMap.getHeight();
+        
+        // Simple seeded random number generator for consistent results
+        std::mt19937 rng(42); // Fixed seed for consistent scene
+        
+        // Base grass layer - use varied grass tiles (0-5 for basic, 6-11 for flowers)
+        std::uniform_int_distribution<int> basicGrass(0, 5);
+        std::uniform_int_distribution<int> flowerGrass(6, 11);
+        std::uniform_int_distribution<int> grassChoice(0, 4); // 80% basic, 20% flowers
+        
+        // Fill with natural grass variation
+        for (int y = 0; y < height; ++y) {
+            for (int x = 0; x < width; ++x) {
+                // Mostly basic grass with occasional flower patches
+                if (grassChoice(rng) < 4) {
+                    tileMap.setTile(x, y, basicGrass(rng));
+                } else {
+                    tileMap.setTile(x, y, flowerGrass(rng));
+                }
+            }
+        }
+        
+        // Create a winding path through the scene
+        // Path tiles: 36-47 (12 path tiles available)
+        std::uniform_int_distribution<int> pathTile(36, 42); // Use first 7 path tiles
+        
+        // Create a gentle curved path from left to right
+        int pathX = width / 5;
+        int pathY = height / 3;
+        int targetX = width * 4 / 5;
+        int targetY = height * 2 / 3;
+        
+        // Draw the path with smooth curves
+        std::uniform_int_distribution<int> pathVariation(-1, 1);
+        std::uniform_int_distribution<int> curveChance(0, 10);
+        
+        // Draw path from start to end
+        while (pathY < targetY || pathX < targetX) {
+            // Set path tile
+            tileMap.setTile(pathX, pathY, pathTile(rng));
+            
+            // Move towards target with gentle curves
+            if (pathX < targetX) {
+                pathX++;
+                // Occasionally curve up or down
+                if (curveChance(rng) < 2 && pathY > 2 && pathY < height - 3) {
+                    pathY += pathVariation(rng);
+                }
+            }
+            
+            if (pathY < targetY) {
+                pathY++;
+                // Occasionally curve left or right
+                if (curveChance(rng) < 2 && pathX > 2 && pathX < width - 3) {
+                    pathX += pathVariation(rng);
+                }
+            }
+            
+            // Keep path in bounds
+            pathX = std::max(2, std::min(width - 3, pathX));
+            pathY = std::max(2, std::min(height - 3, pathY));
+        }
+        
+        // Add decorative elements (tiles 60-71) scattered naturally
+        std::uniform_int_distribution<int> decorTile(60, 71);
+        std::uniform_int_distribution<int> decorChance(0, 100);
+        
+        // Place decorative elements (rocks, flowers, etc.) - about 3% of tiles
+        // Avoid placing on path
+        for (int y = 3; y < height - 3; ++y) {
+            for (int x = 3; x < width - 3; ++x) {
+                // Skip path tiles
+                int currentTile = tileMap.getTile(x, y);
+                if (currentTile >= 36 && currentTile <= 47) {
+                    continue;
+                }
+                
+                // 3% chance to place a decorative element
+                if (decorChance(rng) < 3) {
+                    tileMap.setTile(x, y, decorTile(rng));
+                }
+            }
+        }
+        
+        // Add flower patches (grass with flowers) in natural clusters
+        std::uniform_int_distribution<int> clusterX(8, width - 9);
+        std::uniform_int_distribution<int> clusterY(8, height - 9);
+        
+        // Create 5-7 flower clusters of varying sizes
+        int numClusters = 6;
+        for (int i = 0; i < numClusters; ++i) {
+            int centerX = clusterX(rng);
+            int centerY = clusterY(rng);
+            
+            // Random cluster size (2x2 to 4x4)
+            std::uniform_int_distribution<int> clusterSize(2, 4);
+            int size = clusterSize(rng);
+            
+            // Create a cluster of flower grass
+            for (int dy = -size/2; dy <= size/2; ++dy) {
+                for (int dx = -size/2; dx <= size/2; ++dx) {
+                    int x = centerX + dx;
+                    int y = centerY + dy;
+                    if (x >= 0 && x < width && y >= 0 && y < height) {
+                        int currentTile = tileMap.getTile(x, y);
+                        // Don't overwrite path or decorations
+                        if ((currentTile < 36 || currentTile > 47) && 
+                            (currentTile < 60 || currentTile > 71)) {
+                            tileMap.setTile(x, y, flowerGrass(rng));
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Add some border grass variations for natural edges
+        std::uniform_int_distribution<int> borderTile(12, 35); // Border and corner tiles
+        for (int x = 0; x < width; ++x) {
+            // Top border
+            if (tileMap.getTile(x, 0) < 36) {
+                tileMap.setTile(x, 0, basicGrass(rng));
+            }
+            // Bottom border
+            if (tileMap.getTile(x, height - 1) < 36) {
+                tileMap.setTile(x, height - 1, basicGrass(rng));
+            }
+        }
+        for (int y = 0; y < height; ++y) {
+            // Left border
+            if (tileMap.getTile(0, y) < 36) {
+                tileMap.setTile(0, y, basicGrass(rng));
+            }
+            // Right border
+            if (tileMap.getTile(width - 1, y) < 36) {
+                tileMap.setTile(width - 1, y, basicGrass(rng));
+            }
+        }
     }
 }
 
@@ -50,33 +193,10 @@ protected:
         // Create tilemap (40x30 tiles, 16 pixels per tile)
         m_tileMap = std::make_unique<Runa::TileMap>(40, 30, 16);
 
-        // Load scene from file
-        try {
-            std::string scenePath = resolveResourcePath("Resources/scenes/sample_scene.txt");
-            std::ifstream file(scenePath);
-            if (file) {
-                std::stringstream buffer;
-                buffer << file.rdbuf();
-                m_tileMap->loadFromString(buffer.str());
-                LOG_INFO("Scene loaded successfully!");
-            } else {
-                LOG_INFO("Scene file not found, creating simple pattern...");
-                // Create a simple grass pattern as fallback
-                for (int y = 0; y < 30; ++y) {
-                    for (int x = 0; x < 40; ++x) {
-                        m_tileMap->setTile(x, y, (x + y) % 6);
-                    }
-                }
-            }
-        } catch (const std::exception& e) {
-            LOG_ERROR("Error loading scene: {}", e.what());
-            // Create fallback pattern even if there's an error
-            for (int y = 0; y < 30; ++y) {
-                for (int x = 0; x < 40; ++x) {
-                    m_tileMap->setTile(x, y, (x + y) % 6);
-                }
-            }
-        }
+        // Generate serene grass plains scene
+        LOG_INFO("Generating serene grass plains scene...");
+        generateSerenePlainsScene(*m_tileMap);
+        LOG_INFO("Scene generated successfully!");
         
         LOG_DEBUG("Scene loading completed, creating sprite batch...");
 
@@ -120,8 +240,9 @@ protected:
         m_startTime = std::chrono::steady_clock::now();
 
         LOG_INFO("=== Ready ===");
-        LOG_INFO("Displaying 40x30 tilemap from plains.png");
-        LOG_INFO("Map size: 640x480 pixels (16px tiles)");
+        LOG_INFO("Displaying serene grass plains scene");
+        LOG_INFO("Map size: 640x480 pixels (40x30 tiles at 16px each)");
+        LOG_INFO("Features: Varied grass, winding path, decorative elements, flower clusters");
         LOG_INFO("Press ESC or close window to exit.");
     }
 
@@ -134,8 +255,8 @@ protected:
         auto currentTime = std::chrono::steady_clock::now();
         float time = std::chrono::duration<float>(currentTime - m_startTime).count();
         
-        // Clear screen with a dark background
-        getRenderer().clear(0.05f, 0.05f, 0.1f, 1.0f);
+        // Clear screen with a serene sky blue background
+        getRenderer().clear(0.53f, 0.81f, 0.92f, 1.0f); // Light sky blue
 
         // Render the tilemap
         if (m_tileMap && m_spriteBatch && m_resources) {
