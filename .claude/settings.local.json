@@ -11,7 +11,8 @@
       "Bash(ls:*)",
       "Bash(rm:*)",
       "Bash(ninja)",
-      "Bash(where:*)"
+      "Bash(where:*)",
+      "Bash(ninja -C build/debug:*)"
     ]
   }
 }

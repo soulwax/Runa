@@ -61,11 +61,23 @@ namespace Runa
     void SpriteBatch::createPipeline()
     {
         SDL_GPUDevice *device = m_renderer.getDevice();
-        if (!device || !m_shader || !m_shader->isValid())
+        if (!device)
         {
-            LOG_ERROR("Cannot create pipeline: invalid device or shader");
+            LOG_ERROR("Cannot create pipeline: device is null");
             return;
         }
+        if (!m_shader)
+        {
+            LOG_ERROR("Cannot create pipeline: shader is null");
+            return;
+        }
+        if (!m_shader->isValid())
+        {
+            LOG_ERROR("Cannot create pipeline: shader is invalid - vertex or fragment shader failed to load");
+            return;
+        }
+
+        LOG_DEBUG("Creating SpriteBatch pipeline with alpha blending...");
 
         // Create sampler for texture sampling
         SDL_GPUSamplerCreateInfo samplerInfo{};
@@ -271,9 +283,23 @@ namespace Runa
         }
 
         SDL_GPUDevice *device = m_renderer.getDevice();
-        if (!device || !m_pipeline || !m_sampler)
+        if (!device)
         {
-            LOG_ERROR("Invalid GPU device, pipeline, or sampler in SpriteBatch::end()");
+            LOG_ERROR("SpriteBatch::end(): GPU device is null!");
+            m_drawCalls.clear();
+            m_inBatch = false;
+            return;
+        }
+        if (!m_pipeline)
+        {
+            LOG_ERROR("SpriteBatch::end(): Pipeline is null! (shader loading or pipeline creation failed)");
+            m_drawCalls.clear();
+            m_inBatch = false;
+            return;
+        }
+        if (!m_sampler)
+        {
+            LOG_ERROR("SpriteBatch::end(): Sampler is null!");
             m_drawCalls.clear();
             m_inBatch = false;
             return;

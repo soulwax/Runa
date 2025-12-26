@@ -115,6 +115,7 @@ std::shared_ptr<spdlog::logger> Log::getLogger() {
                 } catch (...) {
                     // If even the emergency logger fails, return nullptr
                     // Callers should check for nullptr, but in practice this should never happen
+                    return nullptr;
                 }
             }
         }
