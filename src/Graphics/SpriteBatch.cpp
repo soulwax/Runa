@@ -148,7 +148,7 @@ namespace Runa
         // Multisample state
         SDL_GPUMultisampleState multisampleState{};
         multisampleState.sample_count = SDL_GPU_SAMPLECOUNT_1;
-        multisampleState.sample_mask = 0xFFFFFFFF;
+        multisampleState.sample_mask = 0;  // Must be 0 when enable_mask is false
         multisampleState.enable_mask = false;
 
         pipelineInfo.multisample_state = multisampleState;

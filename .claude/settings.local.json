@@ -12,7 +12,10 @@
       "Bash(rm:*)",
       "Bash(ninja)",
       "Bash(where:*)",
-      "Bash(ninja -C build/debug:*)"
+      "Bash(ninja -C build/debug:*)",
+      "Bash(git checkout:*)",
+      "Bash(build/debug/Runa2.exe)",
+      "Bash(cmd /c \"build\\\\debug\\\\Runa2.exe\")"
     ]
   }
 }
