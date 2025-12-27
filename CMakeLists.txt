@@ -98,6 +98,14 @@ add_library(Runa2Engine SHARED
     src/Core/Log.h
     src/Core/ResourceManager.cpp
     src/Core/ResourceManager.h
+    src/Core/Input.cpp
+    src/Core/Input.h
+    src/Core/Entity.cpp
+    src/Core/Entity.h
+    src/Core/PlayerController.cpp
+    src/Core/PlayerController.h
+    src/Core/Collision.cpp
+    src/Core/Collision.h
 
     # Graphics
     src/Graphics/Window.cpp
@@ -118,10 +126,15 @@ add_library(Runa2Engine SHARED
     src/Graphics/PostProcess.h
     src/Graphics/Font.cpp
     src/Graphics/Font.h
+    src/Graphics/Camera.cpp
+    src/Graphics/Camera.h
 )
 
 # Define export macro for engine DLL
-target_compile_definitions(Runa2Engine PRIVATE RUNA2_ENGINE_EXPORTS)
+target_compile_definitions(Runa2Engine PRIVATE
+    RUNA2_ENGINE_EXPORTS
+    SPDLOG_FMT_RUNTIME_CHECKS=0  # Disable compile-time format string checking
+)
 
 # Link libraries to engine
 # SDL3, SDL3_image, and SDL3_ttf are PUBLIC so executables can access headers
@@ -164,6 +177,11 @@ add_executable(Runa2
 target_link_libraries(Runa2 PRIVATE
     Runa2Engine
     spdlog::spdlog
+)
+
+# Define spdlog options for game executable
+target_compile_definitions(Runa2 PRIVATE
+    SPDLOG_FMT_RUNTIME_CHECKS=0  # Disable compile-time format string checking
 )
 
 # Include directories for game

@@ -1,0 +1,17 @@
+CompileFlags:
+  CompilationDatabase: build/debug
+
+# Suppress warnings from external dependencies
+Diagnostics:
+  Suppress:
+    - "pp_file_not_found"
+    - "modernize-deprecated-headers"
+    - "cppcoreguidelines-pro-type-reinterpret-cast"
+  UnusedIncludes: None
+  ClangTidy:
+    Remove:
+      - misc-*
+      - modernize-*
+      - readability-*
+      - cppcoreguidelines-**
+      - performance-*
