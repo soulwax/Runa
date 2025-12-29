@@ -22,7 +22,8 @@
       "Bash(cmd /c \"tasklist | findstr /i clangd\")",
       "Bash(git submodule:*)",
       "Bash(tee:*)",
-      "Bash(timeout:*)"
+      "Bash(timeout:*)",
+      "Bash(glslangValidator:*)"
     ]
   }
 }

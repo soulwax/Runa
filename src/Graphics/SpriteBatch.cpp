@@ -45,11 +45,18 @@ namespace Runa
     {
         try
         {
-            m_shader = m_renderer.createShader("Resources/shaders/compiled/sprite.vert.spv", "Resources/shaders/compiled/sprite.frag.spv");
+            // Try color-only shader first (no textures, no push constants - minimal for testing)
+            LOG_INFO("Loading color-only sprite shader for testing...");
+            m_shader = m_renderer.createShader("Resources/shaders/compiled/sprite_color.vert.spv", "Resources/shaders/compiled/sprite_color.frag.spv");
             if (!m_shader || !m_shader->isValid())
             {
-                LOG_WARN("Failed to load sprite shader, falling back to basic shader");
-                m_shader = m_renderer.createShader("Resources/shaders/compiled/basic.vert.spv", "Resources/shaders/compiled/basic.frag.spv");
+                LOG_WARN("Failed to load color-only shader, trying fixed sprite shader");
+                m_shader = m_renderer.createShader("Resources/shaders/compiled/sprite_fixed.vert.spv", "Resources/shaders/compiled/sprite.frag.spv");
+                if (!m_shader || !m_shader->isValid())
+                {
+                    LOG_WARN("Failed to load fixed sprite shader, trying original sprite shader");
+                    m_shader = m_renderer.createShader("Resources/shaders/compiled/sprite.vert.spv", "Resources/shaders/compiled/sprite.frag.spv");
+                }
             }
         }
         catch (const std::exception &e)
@@ -449,9 +456,9 @@ namespace Runa
         // Bind pipeline
         SDL_BindGPUGraphicsPipeline(renderPass, m_pipeline);
 
-        // Set push constants (screen size)
-        float screenSize[2] = {1280.0f, 720.0f}; // TODO: Get actual window size
-        SDL_PushGPUVertexUniformData(cmdBuffer, 0, screenSize, sizeof(screenSize));
+        // NOTE: Fixed shader has hardcoded screen size, no push constants needed
+        // float screenSize[2] = {1280.0f, 720.0f};
+        // SDL_PushGPUVertexUniformData(cmdBuffer, 0, screenSize, sizeof(screenSize));
 
         // Bind vertex buffer
         SDL_GPUBufferBinding vertexBinding{};
