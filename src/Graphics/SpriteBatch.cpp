@@ -475,11 +475,12 @@ namespace Runa
                 continue;
             }
 
-            // Bind texture
-            SDL_GPUTextureSamplerBinding textureBinding;
-            textureBinding.texture = call.texture->getHandle();
-            textureBinding.sampler = m_sampler;
-            SDL_BindGPUFragmentSamplers(renderPass, 0, &textureBinding, 1);
+            // NOTE: Texture binding disabled for color-only shader testing
+            // Once we see colored rectangles rendering, we'll fix texture support
+            // SDL_GPUTextureSamplerBinding textureBinding;
+            // textureBinding.texture = call.texture->getHandle();
+            // textureBinding.sampler = m_sampler;
+            // SDL_BindGPUFragmentSamplers(renderPass, 0, &textureBinding, 1);
 
             // Draw the sprite (6 vertices)
             SDL_DrawGPUPrimitives(renderPass, 6, 1, vertexOffset, 0);
