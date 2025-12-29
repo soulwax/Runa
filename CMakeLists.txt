@@ -74,6 +74,13 @@ set(SPDLOG_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 # commonly fails (no package manager integration), so force vendored deps.
 set(SDLTTF_VENDORED ON CACHE BOOL "" FORCE)
 
+# SDL3_image: Disable problematic formats to avoid Git submodule issues
+# We only need PNG/JPG support for basic sprite loading
+set(SDL3IMAGE_JXL OFF CACHE BOOL "" FORCE)
+set(SDL3IMAGE_AVIF OFF CACHE BOOL "" FORCE)
+set(SDL3IMAGE_TIF OFF CACHE BOOL "" FORCE)
+set(SDL3IMAGE_WEBP OFF CACHE BOOL "" FORCE)
+
 # Make dependencies available
 # Note: All dependencies are configured as static libraries, so they will use
 # their own default output directories. We avoid setting global CMAKE_*_OUTPUT_DIRECTORY

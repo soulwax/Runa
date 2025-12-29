@@ -5,14 +5,14 @@
     "-DCMAKE_CXX_COMPILER=g++",
     "-DCMAKE_BUILD_TYPE=Debug"
   ],
-  "cmake.buildDirectory": "${workspaceFolder}/build/debug",
+  "cmake.buildDirectory": "${workspaceFolder}/build/debug_new",
   // Tell clangd where the compile database lives
   "clangd.arguments": [
-    "--compile-commands-dir=${workspaceFolder}/build/debug"
+    "--compile-commands-dir=${workspaceFolder}/build/debug_new"
   ],
   // C/C++ Extension configuration
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
-  "C_Cpp.default.compileCommands": "${workspaceFolder}/build/debug/compile_commands.json"
+  "C_Cpp.default.compileCommands": "${workspaceFolder}/build/debug_new/compile_commands.json"
   // Add includePath:
   // src/**,
   // External libraries if any

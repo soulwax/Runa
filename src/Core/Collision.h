@@ -3,7 +3,7 @@
 #ifndef RUNA_CORE_COLLISION_H
 #define RUNA_CORE_COLLISION_H
 
-#include "RunaAPI.h"
+#include "../RunaAPI.h"
 #include "Entity.h"
 #include "Graphics/TileMap.h"
 #include <vector>

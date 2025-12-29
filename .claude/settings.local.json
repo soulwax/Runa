@@ -20,7 +20,9 @@
       "Bash(tasklist:*)",
       "Bash(cmd /c \"tasklist | findstr /i ninja\")",
       "Bash(cmd /c \"tasklist | findstr /i clangd\")",
-      "Bash(git submodule:*)"
+      "Bash(git submodule:*)",
+      "Bash(tee:*)",
+      "Bash(timeout:*)"
     ]
   }
 }

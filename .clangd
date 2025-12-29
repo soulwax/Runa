@@ -1,5 +1,5 @@
 CompileFlags:
-  CompilationDatabase: build/debug
+  CompilationDatabase: build/debug_new
   # Add flags to help clangd find includes even if compile_commands.json is missing/incomplete
   Add:
     - "-std=c++20"
@@ -7,6 +7,17 @@ CompileFlags:
     - "-DRUNA2_ENGINE_EXPORTS"
     - "-Wall"
     - "-Wextra"
+    # Fix spdlog consteval errors - treat these as system headers to suppress consteval warnings
+    - "-isystem"
+    - "build/debug_new/_deps/spdlog-src/include"
+    - "-isystem"
+    - "build/debug_new/_deps/sdl3-src/include"
+    - "-isystem"
+    - "build/debug_new/_deps/sdl3_image-src/include"
+    - "-isystem"
+    - "build/debug_new/_deps/sdl3_ttf-src/include"
+    - "-isystem"
+    - "build/debug_new/_deps/yaml-cpp-src/include"
 
 # Index settings
 Index:
@@ -14,7 +25,6 @@ Index:
 
 # Suppress warnings from external dependencies only (not project files)
 Diagnostics:
-  # Remove pp_file_not_found suppression - we want to see real include errors
   Suppress:
     - "modernize-deprecated-headers"
   UnusedIncludes: None
@@ -25,8 +35,3 @@ Diagnostics:
       - readability-*
       - cppcoreguidelines-*
       - performance-*
-
-# Recognise SDL3 as a system include path
-CompileFlags:
-  SystemIncludePath:
-    - "vendor\SDL\include"

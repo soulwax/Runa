@@ -5,7 +5,7 @@
 #define RUNA_CORE_LOG_H
 
 #include "../runapch.h"
-#include "RunaAPI.h"
+#include "../RunaAPI.h"
 
 namespace Runa {
 

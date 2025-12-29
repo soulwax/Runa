@@ -11,7 +11,7 @@
         "-DCMAKE_C_COMPILER=gcc",
         "-DCMAKE_CXX_COMPILER=g++",
         "-S", ".",
-        "-B", "build/debug"
+        "-B", "build/debug_new"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -40,7 +40,7 @@
       "type": "shell",
       "command": "cmake",
       "args": [
-        "--build", "build/debug"
+        "--build", "build/debug_new"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -75,7 +75,7 @@
     {
       "label": "Run (Debug)",
       "type": "shell",
-      "command": "${workspaceFolder}/build/debug/Runa2.exe",
+      "command": "${workspaceFolder}/build/debug_new/Runa2.exe",
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -102,7 +102,7 @@
       "command": "pwsh.exe",
       "args": [
         "-Command",
-        "cmake --build build/debug; if ($LASTEXITCODE -eq 0) { Start-Process pwsh.exe -ArgumentList '-NoExit', '-Command', 'cd ${workspaceFolder}; C:\\Users\\soulwax\\scoop\\apps\\mingw\\current\\bin\\gdb.exe build/debug/Runa2.exe' }"
+        "cmake --build build/debug_new; if ($LASTEXITCODE -eq 0) { Start-Process pwsh.exe -ArgumentList '-NoExit', '-Command', 'cd ${workspaceFolder}; C:\\Users\\soulwax\\scoop\\apps\\mingw\\current\\bin\\gdb.exe build/debug_new/Runa2.exe' }"
       ],
       "options": {
         "cwd": "${workspaceFolder}"
@@ -125,7 +125,7 @@
       "type": "shell",
       "command": "cmake",
       "args": [
-        "--build", "build/debug", "--target", "clean"
+        "--build", "build/debug_new", "--target", "clean"
       ],
       "options": {
         "cwd": "${workspaceFolder}"

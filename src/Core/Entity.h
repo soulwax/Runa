@@ -3,7 +3,7 @@
 #ifndef RUNA_CORE_ENTITY_H
 #define RUNA_CORE_ENTITY_H
 
-#include "RunaAPI.h"
+#include "../RunaAPI.h"
 #include "Graphics/SpriteSheet.h"
 #include <memory>
 #include <string>
