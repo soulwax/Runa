@@ -1,7 +1,8 @@
 // File: src/RunaAPI.h
 // DLL Export/Import Macros for Windows
 
-#pragma once
+#ifndef RUNA_RUNAAPI_H
+#define RUNA_RUNAAPI_H
 
 #ifdef _WIN32
     #ifdef RUNA2_ENGINE_EXPORTS
@@ -12,3 +13,5 @@
 #else
     #define RUNA_API
 #endif
+
+#endif // RUNA_RUNAAPI_H

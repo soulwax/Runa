@@ -1,6 +1,6 @@
 // File: src/Core/Application.cpp
 
-#include "../runapch.h"
+#include "runapch.h"
 #include "Application.h"
 #include "Log.h"
 
@@ -28,6 +28,11 @@ Application::Application(const std::string& title, int width, int height) {
     // Create window and renderer
     m_window = std::make_unique<Window>(title, width, height);
     m_renderer = std::make_unique<Renderer>(*m_window);
+
+    // Create input system and connect it to window
+    m_input = std::make_unique<Input>(*m_window);
+    m_window->setInput(m_input.get());
+    LOG_INFO("Input system initialized");
 }
 
 Application::~Application() {

@@ -1,8 +1,9 @@
 // File: src/Graphics/SpriteBatch.h
 
-#pragma once
+#ifndef RUNA_GRAPHICS_SPRITEBATCH_H
+#define RUNA_GRAPHICS_SPRITEBATCH_H
 
-#include "../RunaAPI.h"
+#include "RunaAPI.h"
 #include "Texture.h"
 #include "SpriteSheet.h"
 #include <SDL3/SDL.h>
@@ -85,3 +86,5 @@ namespace Runa
     };
 
 } // namespace Runa
+
+#endif // RUNA_GRAPHICS_SPRITEBATCH_H

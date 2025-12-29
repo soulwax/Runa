@@ -3,6 +3,7 @@
 #include "../runapch.h"
 #include "Window.h"
 #include "Core/Log.h"
+#include "Core/Input.h"
 
 namespace Runa
 {
@@ -35,9 +36,21 @@ namespace Runa
 
     void Window::processEvents()
     {
+        // Clear per-frame input state
+        if (m_input)
+        {
+            m_input->beginFrame();
+        }
+
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
+            // Update input system with event
+            if (m_input)
+            {
+                m_input->update(event);
+            }
+
             switch (event.type)
             {
             case SDL_EVENT_QUIT:

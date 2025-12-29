@@ -1,8 +1,9 @@
 // File: src/Graphics/Texture.h
 
-#pragma once
+#ifndef RUNA_GRAPHICS_TEXTURE_H
+#define RUNA_GRAPHICS_TEXTURE_H
 
-#include "../RunaAPI.h"
+#include "RunaAPI.h"
 #include <SDL3/SDL.h>
 #include <string>
 
@@ -48,3 +49,5 @@ namespace Runa
     };
 
 } // namespace Runa
+
+#endif // RUNA_GRAPHICS_TEXTURE_H

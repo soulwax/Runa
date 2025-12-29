@@ -1,6 +1,6 @@
 // File: src/Core/ResourceManager.cpp
 
-#include "../runapch.h"
+#include "runapch.h"
 #include "ResourceManager.h"
 #include "Log.h"
 #include <yaml-cpp/yaml.h>

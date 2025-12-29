@@ -1,6 +1,6 @@
 // File: src/Graphics/SpriteSheet.cpp
 
-#include "../runapch.h"
+#include "runapch.h"
 #include "SpriteSheet.h"
 #include "Renderer.h"
 #include "Core/Log.h"

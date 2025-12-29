@@ -1,8 +1,9 @@
 // File: src/Graphics/Shader.h
 
-#pragma once
+#ifndef RUNA_GRAPHICS_SHADER_H
+#define RUNA_GRAPHICS_SHADER_H
 
-#include "../RunaAPI.h"
+#include "RunaAPI.h"
 #include <SDL3/SDL.h>
 #include <string>
 #include <vector>
@@ -37,3 +38,5 @@ private:
 };
 
 } // namespace Runa
+
+#endif // RUNA_GRAPHICS_SHADER_H

@@ -1,8 +1,9 @@
 // File: src/Graphics/Font.h
 
-#pragma once
+#ifndef RUNA_GRAPHICS_FONT_H
+#define RUNA_GRAPHICS_FONT_H
 
-#include "../RunaAPI.h"
+#include "RunaAPI.h"
 #include "Texture.h"
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
@@ -39,6 +40,8 @@ private:
 };
 
 } // namespace Runa
+#endif // RUNA_GRAPHICS_FONT_H
+
 
 
 

@@ -1,6 +1,6 @@
 // File: src/Graphics/TileMap.cpp
 
-#include "../runapch.h"
+#include "runapch.h"
 #include "TileMap.h"
 #include "Core/Log.h"
 
@@ -93,6 +93,23 @@ namespace Runa
         }
 
         LOG_DEBUG(FMT_STRING("TileMap loaded from string ({} rows parsed)"), y);
+    }
+
+    void TileMap::setSolidTile(int tileIndex, bool solid)
+    {
+        if (solid)
+        {
+            m_solidTiles.insert(tileIndex);
+        }
+        else
+        {
+            m_solidTiles.erase(tileIndex);
+        }
+    }
+
+    bool TileMap::isSolidTile(int tileIndex) const
+    {
+        return m_solidTiles.find(tileIndex) != m_solidTiles.end();
     }
 
 } // namespace Runa

@@ -1,7 +1,7 @@
 // File: src/Core/Log.cpp
 // Logging wrapper for spdlog
 
-#include "../runapch.h"
+#include "runapch.h"
 #include "Log.h"
 
 namespace Runa {

@@ -1,10 +1,11 @@
 // File: src/Core/ResourceManager.h
 
-#pragma once
+#ifndef RUNA_CORE_RESOURCEMANAGER_H
+#define RUNA_CORE_RESOURCEMANAGER_H
 
-#include "../RunaAPI.h"
-#include "../Graphics/SpriteSheet.h"
-#include "../Graphics/Renderer.h"
+#include "RunaAPI.h"
+#include "Graphics/SpriteSheet.h"
+#include "Graphics/Renderer.h"
 #include <string>
 #include <unordered_map>
 #include <memory>
@@ -50,3 +51,5 @@ private:
 };
 
 } // namespace Runa
+
+#endif // RUNA_CORE_RESOURCEMANAGER_H

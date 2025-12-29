@@ -6,13 +6,15 @@
     "-DCMAKE_BUILD_TYPE=Debug"
   ],
   "cmake.buildDirectory": "${workspaceFolder}/build/debug",
-
   // Tell clangd where the compile database lives
   "clangd.arguments": [
     "--compile-commands-dir=${workspaceFolder}/build/debug"
   ],
-
   // C/C++ Extension configuration
   "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
   "C_Cpp.default.compileCommands": "${workspaceFolder}/build/debug/compile_commands.json"
+  // Add includePath:
+  // src/**,
+  // External libraries if any
+  // SDL3, SDL3_image, SDL3_ttf, SDL3_mixer, OpenGL, GLM, spdlog, etc.
 }

@@ -1,8 +1,9 @@
 // File: src/Graphics/SpriteSheet.h
 
-#pragma once
+#ifndef RUNA_GRAPHICS_SPRITESHEET_H
+#define RUNA_GRAPHICS_SPRITESHEET_H
 
-#include "../RunaAPI.h"
+#include "RunaAPI.h"
 #include "Texture.h"
 #include <string>
 #include <vector>
@@ -80,3 +81,5 @@ namespace Runa
     };
 
 } // namespace Runa
+
+#endif // RUNA_GRAPHICS_SPRITESHEET_H

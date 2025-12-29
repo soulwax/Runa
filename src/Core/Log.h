@@ -1,10 +1,11 @@
 // File: src/Core/Log.h
 // Logging wrapper for spdlog
 
-#pragma once
+#ifndef RUNA_CORE_LOG_H
+#define RUNA_CORE_LOG_H
 
-#include "../RunaAPI.h"
-#include "runapch.h"
+#include "../runapch.h"
+#include "RunaAPI.h"
 
 namespace Runa {
 
@@ -32,3 +33,5 @@ public:
 #define LOG_WARN(...)     Runa::Log::getLogger()->warn(__VA_ARGS__)
 #define LOG_ERROR(...)    Runa::Log::getLogger()->error(__VA_ARGS__)
 #define LOG_CRITICAL(...) Runa::Log::getLogger()->critical(__VA_ARGS__)
+
+#endif // RUNA_CORE_LOG_H

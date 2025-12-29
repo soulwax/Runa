@@ -1,6 +1,6 @@
 // File: src/Graphics/SpriteBatch.cpp
 
-#include "../runapch.h"
+#include "runapch.h"
 #include "SpriteBatch.h"
 #include "Renderer.h"
 #include "Shader.h"

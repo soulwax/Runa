@@ -1,8 +1,9 @@
 // File: src/Graphics/PostProcess.h
 
-#pragma once
+#ifndef RUNA_GRAPHICS_POSTPROCESS_H
+#define RUNA_GRAPHICS_POSTPROCESS_H
 
-#include "../RunaAPI.h"
+#include "RunaAPI.h"
 #include "Renderer.h"
 #include "Shader.h"
 #include "Texture.h"
@@ -28,4 +29,6 @@ private:
 };
 
 } // namespace Runa
+
+#endif // RUNA_GRAPHICS_POSTPROCESS_H
 

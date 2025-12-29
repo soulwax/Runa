@@ -2,7 +2,8 @@
 // Precompiled Header - Common C++ and library headers
 // Optimized for frequently used headers across the codebase
 
-#pragma once
+#ifndef RUNA_RUNAPCH_H
+#define RUNA_RUNAPCH_H
 
 // ============================================================================
 // C++ Standard Library - Containers (most frequently used)
@@ -71,3 +72,5 @@
 #include <SDL3/SDL_filesystem.h>
 #include <SDL3_image/SDL_image.h>
 #include <SDL3_ttf/SDL_ttf.h>
+
+#endif // RUNA_RUNAPCH_H

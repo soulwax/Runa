@@ -1,17 +1,32 @@
 CompileFlags:
   CompilationDatabase: build/debug
+  # Add flags to help clangd find includes even if compile_commands.json is missing/incomplete
+  Add:
+    - "-std=c++20"
+    - "-Isrc"
+    - "-DRUNA2_ENGINE_EXPORTS"
+    - "-Wall"
+    - "-Wextra"
 
-# Suppress warnings from external dependencies
+# Index settings
+Index:
+  Background: Build
+
+# Suppress warnings from external dependencies only (not project files)
 Diagnostics:
+  # Remove pp_file_not_found suppression - we want to see real include errors
   Suppress:
-    - "pp_file_not_found"
     - "modernize-deprecated-headers"
-    - "cppcoreguidelines-pro-type-reinterpret-cast"
   UnusedIncludes: None
   ClangTidy:
     Remove:
       - misc-*
       - modernize-*
       - readability-*
-      - cppcoreguidelines-**
+      - cppcoreguidelines-*
       - performance-*
+
+# Recognise SDL3 as a system include path
+CompileFlags:
+  SystemIncludePath:
+    - "vendor\SDL\include"
