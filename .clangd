@@ -5,10 +5,11 @@ CompileFlags:
     - "-std=c++20"
     - "-Isrc"
     - "-DRUNA2_ENGINE_EXPORTS"
+    - "-DSPDLOG_FMT_RUNTIME_CHECKS=0"
     - "-Wall"
     - "-Wextra"
-    # Fix spdlog consteval errors - treat these as system headers to suppress consteval warnings
-    - "-isystem"
+    # Add spdlog as regular include (not system) so defines work properly
+    - "-I"
     - "build/debug_new/_deps/spdlog-src/include"
     - "-isystem"
     - "build/debug_new/_deps/sdl3-src/include"
@@ -27,6 +28,7 @@ Index:
 Diagnostics:
   Suppress:
     - "modernize-deprecated-headers"
+    - "invalid_consteval_call"
   UnusedIncludes: None
   ClangTidy:
     Remove:
