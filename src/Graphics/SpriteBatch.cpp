@@ -45,17 +45,16 @@ namespace Runa
     {
         try
         {
-            // Try color-only shader first (no textures, no push constants - minimal for testing)
-            LOG_INFO("Loading color-only sprite shader for testing...");
-            m_shader = m_renderer.createShader("Resources/shaders/compiled/sprite_color.vert.spv", "Resources/shaders/compiled/sprite_color.frag.spv");
+            // Try textured shader with hardcoded screen size (fixed vertex shader + texture fragment shader)
+            LOG_INFO("Loading textured sprite shader...");
+            m_shader = m_renderer.createShader("Resources/shaders/compiled/sprite_fixed.vert.spv", "Resources/shaders/compiled/sprite.frag.spv");
             if (!m_shader || !m_shader->isValid())
             {
-                LOG_WARN("Failed to load color-only shader, trying fixed sprite shader");
-                m_shader = m_renderer.createShader("Resources/shaders/compiled/sprite_fixed.vert.spv", "Resources/shaders/compiled/sprite.frag.spv");
+                LOG_WARN("Failed to load textured shader, trying color-only shader");
+                m_shader = m_renderer.createShader("Resources/shaders/compiled/sprite_color.vert.spv", "Resources/shaders/compiled/sprite_color.frag.spv");
                 if (!m_shader || !m_shader->isValid())
                 {
-                    LOG_WARN("Failed to load fixed sprite shader, trying original sprite shader");
-                    m_shader = m_renderer.createShader("Resources/shaders/compiled/sprite.vert.spv", "Resources/shaders/compiled/sprite.frag.spv");
+                    LOG_ERROR("Failed to load any sprite shader!");
                 }
             }
         }
@@ -475,12 +474,11 @@ namespace Runa
                 continue;
             }
 
-            // NOTE: Texture binding disabled for color-only shader testing
-            // Once we see colored rectangles rendering, we'll fix texture support
-            // SDL_GPUTextureSamplerBinding textureBinding;
-            // textureBinding.texture = call.texture->getHandle();
-            // textureBinding.sampler = m_sampler;
-            // SDL_BindGPUFragmentSamplers(renderPass, 0, &textureBinding, 1);
+            // Bind texture sampler (now properly supported with num_samplers in shader)
+            SDL_GPUTextureSamplerBinding textureBinding;
+            textureBinding.texture = call.texture->getHandle();
+            textureBinding.sampler = m_sampler;
+            SDL_BindGPUFragmentSamplers(renderPass, 0, &textureBinding, 1);
 
             // Draw the sprite (6 vertices)
             SDL_DrawGPUPrimitives(renderPass, 6, 1, vertexOffset, 0);

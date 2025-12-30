@@ -88,11 +88,27 @@ std::vector<uint8_t> Shader::readFile(const std::string& path) {
 
 SDL_GPUShader* Shader::createShaderFromSPIRV(const std::vector<uint8_t>& spirvCode, SDL_GPUShaderStage stage) {
     SDL_GPUShaderCreateInfo shaderInfo{};
+    SDL_zero(shaderInfo);
+
     shaderInfo.code = spirvCode.data();
     shaderInfo.code_size = spirvCode.size();
     shaderInfo.stage = stage;
     shaderInfo.entrypoint = "main";
     shaderInfo.format = SDL_GPU_SHADERFORMAT_SPIRV;
+
+    // Fragment shaders with texture sampling need sampler count specified
+    // Vertex shaders with push constants need uniform buffer count specified
+    if (stage == SDL_GPU_SHADERSTAGE_FRAGMENT) {
+        shaderInfo.num_samplers = 1;  // One texture sampler at binding 0
+        shaderInfo.num_uniform_buffers = 0;
+        shaderInfo.num_storage_buffers = 0;
+        shaderInfo.num_storage_textures = 0;
+    } else if (stage == SDL_GPU_SHADERSTAGE_VERTEX) {
+        shaderInfo.num_samplers = 0;
+        shaderInfo.num_uniform_buffers = 0;  // No uniforms for fixed shader
+        shaderInfo.num_storage_buffers = 0;
+        shaderInfo.num_storage_textures = 0;
+    }
 
     SDL_GPUShader* shader = SDL_CreateGPUShader(m_device, &shaderInfo);
     if (!shader) {
