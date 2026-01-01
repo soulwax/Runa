@@ -34,14 +34,13 @@ SpriteBatch::~SpriteBatch() {
 
 void SpriteBatch::initializeShader() {
   try {
-    // Try textured shader with hardcoded screen size (fixed vertex shader +
-    // texture fragment shader)
+    // Load textured sprite shader with correct descriptor set (set 2)
     LOG_INFO("Loading textured sprite shader...");
     m_shader = m_renderer.createShader(
         "Resources/shaders/compiled/sprite_fixed.vert.spv",
         "Resources/shaders/compiled/sprite.frag.spv");
     if (!m_shader || !m_shader->isValid()) {
-      LOG_WARN("Failed to load textured shader, trying color-only shader");
+      LOG_WARN("Failed to load textured shader, trying color-only fallback");
       m_shader = m_renderer.createShader(
           "Resources/shaders/compiled/sprite_color.vert.spv",
           "Resources/shaders/compiled/sprite_color.frag.spv");
@@ -304,6 +303,14 @@ void SpriteBatch::end() {
     float v1 = call.srcY / texHeight;
     float u2 = (call.srcX + call.srcWidth) / texWidth;
     float v2 = (call.srcY + call.srcHeight) / texHeight;
+
+    // DEBUG: Log UV coords for first sprite
+    static bool logged = false;
+    if (!logged) {
+        LOG_INFO("Sprite UV coords - u1:{} v1:{} u2:{} v2:{} (tex:{}x{}, src:{},{} {}x{})",
+            u1, v1, u2, v2, texWidth, texHeight, call.srcX, call.srcY, call.srcWidth, call.srcHeight);
+        logged = true;
+    }
 
     // Add 6 vertices for 2 triangles (quad)
     allVertices.push_back(

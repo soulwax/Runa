@@ -152,10 +152,28 @@ void Texture::loadFromFile(const std::string& path) {
     }
 
     SDL_SubmitGPUCommandBuffer(uploadCmd);
+
+    // CRITICAL: Wait for texture upload to complete before returning
+    // Without this, rendering might start before texture data is ready
+    SDL_WaitForGPUIdle(m_device);
+
     SDL_ReleaseGPUTransferBuffer(m_device, transferBuffer);
 
+    // DEBUG: Check first pixel of texture
+    SDL_Surface* debugSurface = IMG_Load(path.c_str());
+    if (debugSurface && debugSurface->pixels) {
+        SDL_Surface* rgba = SDL_ConvertSurface(debugSurface, SDL_PIXELFORMAT_RGBA32);
+        if (rgba) {
+            uint8_t* pixels = (uint8_t*)rgba->pixels;
+            LOG_INFO("Loaded texture: {} ({}x{}) - First pixel RGBA: ({}, {}, {}, {})",
+                path, m_width, m_height, pixels[0], pixels[1], pixels[2], pixels[3]);
+            SDL_DestroySurface(rgba);
+        }
+        SDL_DestroySurface(debugSurface);
+    }
+
     SDL_DestroySurface(rgbaSurface);
-    LOG_INFO("Loaded texture: {} ({}x{})", path, m_width, m_height);
+    LOG_INFO("Texture uploaded to GPU: {}", path);
 }
 
 void Texture::createFromPixels(int width, int height, const void* pixelData) {
@@ -219,6 +237,9 @@ void Texture::createFromPixels(int width, int height, const void* pixelData) {
                         SDL_EndGPUCopyPass(copyPass);
                     }
                     SDL_SubmitGPUCommandBuffer(uploadCmd);
+
+                    // Wait for texture upload to complete
+                    SDL_WaitForGPUIdle(m_device);
                 }
                 SDL_ReleaseGPUTransferBuffer(m_device, transferBuffer);
             }

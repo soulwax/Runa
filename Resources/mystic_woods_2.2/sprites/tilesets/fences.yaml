@@ -1,3 +1,5 @@
+# File: Resources/mystic_woods_2.2/sprites/tilesets/fences.yaml
+
 - id: fence_end_south
   atlas_x: 0
   atlas_y: 0

@@ -70,6 +70,14 @@ set(SPDLOG_BUILD_SHARED OFF CACHE BOOL "" FORCE)
 set(SPDLOG_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 set(SPDLOG_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 
+# EnTT - Entity Component System
+FetchContent_Declare(
+    EnTT
+    GIT_REPOSITORY https://github.com/skypjack/entt.git
+    GIT_TAG v3.13.2
+    GIT_SHALLOW TRUE
+)
+
 # SDL3_ttf defaults to using *system* FreeType unless MSVC/Android. On MinGW this
 # commonly fails (no package manager integration), so force vendored deps.
 set(SDLTTF_VENDORED ON CACHE BOOL "" FORCE)
@@ -86,7 +94,7 @@ set(SDL3IMAGE_WEBP OFF CACHE BOOL "" FORCE)
 # their own default output directories. We avoid setting global CMAKE_*_OUTPUT_DIRECTORY
 # variables with FORCE here, as that would override dependency defaults and is unnecessary
 # since our own targets (Runa2Engine and Runa2) have explicit output directory settings.
-FetchContent_MakeAvailable(SDL3 SDL3_image SDL3_ttf yaml-cpp spdlog)
+FetchContent_MakeAvailable(SDL3 SDL3_image SDL3_ttf yaml-cpp spdlog EnTT)
 
 # ============================================================================
 # Engine Library (DLL)
@@ -113,6 +121,13 @@ add_library(Runa2Engine SHARED
     src/Core/PlayerController.h
     src/Core/Collision.cpp
     src/Core/Collision.h
+
+    # ECS
+    src/ECS/Components.h
+    src/ECS/Systems.cpp
+    src/ECS/Systems.h
+    src/ECS/Registry.cpp
+    src/ECS/Registry.h
 
     # Graphics
     src/Graphics/Window.cpp
@@ -144,7 +159,7 @@ target_compile_definitions(Runa2Engine PRIVATE
 )
 
 # Link libraries to engine
-# SDL3, SDL3_image, and SDL3_ttf are PUBLIC so executables can access headers
+# SDL3, SDL3_image, SDL3_ttf, and EnTT are PUBLIC so executables can access headers
 target_link_libraries(Runa2Engine PRIVATE
     yaml-cpp::yaml-cpp
     spdlog::spdlog
@@ -152,6 +167,7 @@ target_link_libraries(Runa2Engine PRIVATE
     SDL3::SDL3
     SDL3_image::SDL3_image
     SDL3_ttf::SDL3_ttf
+    EnTT::EnTT
 )
 
 # Include directories for engine (PUBLIC so executables linking to it get these includes)
@@ -175,8 +191,10 @@ set_target_properties(Runa2Engine PROPERTIES
 # ============================================================================
 
 # Add executable (only game logic)
+# Using grass_test.cpp for texture debugging
 add_executable(Runa2
-    src/main.cpp
+    src/grass_test.cpp
+    # src/main.cpp  # Disabled - uses ECS
 )
 
 # Link game executable to engine DLL

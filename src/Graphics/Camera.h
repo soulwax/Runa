@@ -3,8 +3,9 @@
 #ifndef RUNA_GRAPHICS_CAMERA_H
 #define RUNA_GRAPHICS_CAMERA_H
 
-#include "RunaAPI.h"
-#include "Core/Entity.h"
+#include "../RunaAPI.h"
+#include "../Core/Entity.h"
+#include <entt/fwd.hpp>
 
 namespace Runa {
 
@@ -20,9 +21,17 @@ public:
     void setPosition(float x, float y);
     void move(float dx, float dy);
 
-    // Follow an entity (smooth camera)
+    // Follow an entity (smooth camera) - legacy method
     void follow(const Entity& entity, float smoothing = 1.0f);
+
+    // Follow an entity via EnTT registry (new ECS method)
+    void followEntity(entt::registry& registry, entt::entity entity, float smoothing = 1.0f);
+
     void update(float dt);
+
+    // Manual camera controls
+    void handleInput(const Input& input, float dt, float moveSpeed = 300.0f);
+    void zoom(float delta);  // Zoom in/out by delta
 
     // World-to-screen coordinate transformation
     void worldToScreen(float worldX, float worldY, int& screenX, int& screenY) const;

@@ -1,4 +1,6 @@
+# File: Resources/mystic_woods_2.2/sprites/tilesets/waterN.yaml
 # Global animation info for this spritesheet
+
 meta:
   tile_size: 16
   frames: 6               # water1..water6

@@ -3,6 +3,8 @@
 #include "../runapch.h"
 #include "Camera.h"
 #include "Window.h"
+#include "../ECS/Components.h"
+#include <entt/entt.hpp>
 
 namespace Runa {
 
@@ -30,6 +32,19 @@ void Camera::follow(const Entity& entity, float smoothing) {
     m_targetX = entity.getX() + entity.getWidth() / 2.0f;
     m_targetY = entity.getY() + entity.getHeight() / 2.0f;
     m_smoothing = smoothing;
+}
+
+void Camera::followEntity(entt::registry& registry, entt::entity entity, float smoothing) {
+    if (!registry.valid(entity)) return;
+
+    auto* pos = registry.try_get<ECS::Position>(entity);
+    auto* size = registry.try_get<ECS::Size>(entity);
+
+    if (pos && size) {
+        m_targetX = pos->x + size->width / 2.0f;
+        m_targetY = pos->y + size->height / 2.0f;
+        m_smoothing = smoothing;
+    }
 }
 
 void Camera::update(float dt) {

@@ -1,4 +1,5 @@
-#version 450
+# File: Resources/shaders/sprite_color.vert
+# version 450
 
 // Minimal vertex shader - just position and color, no textures
 layout(location = 0) in vec2 inPosition;

@@ -1,3 +1,4 @@
+# File: Resources/manifests/resource_manifest.yaml
 # Tileset Manifest
 # Maps YAML definition files to their corresponding image files
 # All paths are relative to Resources/mystic_woods_2.2/sprites/tilesets/
@@ -38,3 +39,9 @@ tilesets:
     image: "../mystic_woods_2.2/sprites/tilesets/floors/carpet.png"
     format: "atlas_coords"
 
+fonts:
+  - name: "renogare"
+    path: "../Fonts/Renogare.ttf.yaml"
+    type: "true_type"
+    file: "../Fonts/Renogare.ttf"
+    
