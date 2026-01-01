@@ -92,4 +92,3 @@ void PostProcess::renderFullScreenQuad(SDL_GPUCommandBuffer* cmdBuffer, SDL_GPUT
 }
 
 } // namespace Runa
-

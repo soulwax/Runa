@@ -2,15 +2,16 @@
 
 **Generated:** 2024  
 **Project Type:** C++20 2D Game Engine  
-**License:** AGPLv3
+**License:** AGPLv3  
+**Author:** soulwax@github
 
 ---
 
 ## Executive Summary
 
-**Runa2** is a modern C++20 2D game engine built on SDL3's GPU API. It provides a modular, extensible foundation for 2D game development with hardware-accelerated rendering, sprite management, tilemaps, and a declarative resource system. The engine uses a DLL-based architecture separating engine code from game logic, enabling rapid iteration and code reuse.
+**Runa2** is a modern C++20 2D game engine built on SDL3's GPU API with a complete Entity-Component-System (ECS) architecture. The engine provides hardware-accelerated rendering, sprite management, tilemaps, camera systems, collision detection, and a declarative resource system. It uses a DLL-based architecture separating engine code from game logic, enabling rapid iteration and code reuse.
 
-**Current Status:** Core infrastructure is complete and functional. Rendering pipeline is ~90% complete with SpriteBatch needing final GPU pipeline integration. Game systems (input, audio, physics) are not yet implemented.
+**Current Status:** Core infrastructure is complete and functional. The engine features a fully implemented ECS system, working rendering pipeline, input management, collision detection, and camera system. The project is actively developed with both ECS-based and legacy entity-based systems available.
 
 ---
 
@@ -18,15 +19,17 @@
 
 ### Purpose
 A professional-grade 2D game engine framework designed for:
-- 2D sprite-based games
+- 2D sprite-based games (RPGs, platformers, top-down games)
 - Tilemap-based level rendering
 - Hardware-accelerated graphics (D3D12/Vulkan via SDL3 GPU)
 - Rapid game development with declarative resource management
+- Entity-Component-System architecture for scalable game logic
 
 ### Target Platform
 - **Primary:** Windows (MinGW/GCC)
 - **Graphics Backends:** Direct3D 12, Vulkan (via SDL3 GPU abstraction)
 - **Build System:** CMake 3.20+ with Ninja generator
+- **C++ Standard:** C++20 (strict, no extensions)
 
 ---
 
@@ -38,6 +41,7 @@ A professional-grade 2D game engine framework designed for:
 - **Build System:** CMake 3.20+ with Ninja generator
 - **Graphics API:** SDL3 GPU (abstraction over D3D12/Vulkan)
 - **Shaders:** GLSL 450 compiled to SPIR-V (offline compilation)
+- **ECS Framework:** EnTT v3.13.2 (header-only entity-component-system)
 
 ### Dependencies (via CMake FetchContent)
 
@@ -48,6 +52,7 @@ A professional-grade 2D game engine framework designed for:
 | **SDL3_ttf** | main branch | TrueType font rendering | ✅ Fully integrated |
 | **yaml-cpp** | master branch | YAML parsing for sprite manifests | ✅ Fully integrated |
 | **spdlog** | v1.15.0 | Fast logging library | ✅ Fully integrated |
+| **EnTT** | v3.13.2 | Entity-Component-System framework | ✅ Fully integrated |
 
 ### External Tools Required
 - **Vulkan SDK** - For shader compilation (`glslc` compiler)
@@ -66,6 +71,7 @@ The project uses a **modular DLL architecture** for separation of concerns:
 │  Runa2Engine (DLL)                 │
 │  - Core systems                     │
 │  - Graphics systems                 │
+│  - ECS systems                      │
 │  - Resource management              │
 │  - Exports via RUNA_API macro      │
 └─────────────────────────────────────┘
@@ -94,6 +100,7 @@ The engine follows a classic game loop pattern:
 Application (Core)
     ├── Window (Graphics) - SDL3 window & events
     ├── Renderer (Graphics) - SDL3 GPU device & rendering
+    ├── Input (Core) - Keyboard, mouse, gamepad input
     └── Game Loop
         ├── onInit() - One-time initialization
         ├── onUpdate(deltaTime) - Per-frame game logic
@@ -115,6 +122,10 @@ Application (Core)
 | **Application** | Main game loop, delta time, FPS tracking | ✅ Complete |
 | **ResourceManager** | Centralized resource loading, YAML parsing | ✅ Complete |
 | **Log** | spdlog wrapper (console + file logging) | ✅ Complete |
+| **Input** | Keyboard, mouse, gamepad input management | ✅ Complete |
+| **Entity** | Legacy entity class (pre-ECS) | ✅ Complete |
+| **PlayerController** | Input-to-velocity conversion | ✅ Complete |
+| **Collision** | AABB collision detection | ✅ Complete |
 
 #### 2. Graphics Module (`src/Graphics/`)
 
@@ -125,10 +136,35 @@ Application (Core)
 | **Shader** | SPIR-V shader loading from compiled GLSL | ✅ Complete |
 | **Texture** | Image loading via SDL3_image, GPU uploads | ✅ Complete |
 | **SpriteSheet** | Texture atlas with sprite/animation metadata | ✅ Complete |
-| **SpriteBatch** | 2D sprite batching system | 🚧 90% (needs GPU pipeline completion) |
+| **SpriteBatch** | 2D sprite batching system | ✅ Complete |
 | **TileMap** | Grid-based tilemap rendering | ✅ Complete |
 | **PostProcess** | Post-processing effects framework | 🚧 Partial |
 | **Font** | TrueType font rendering | ✅ Complete |
+| **Camera** | 2D camera with world-to-screen transforms | ✅ Complete |
+
+#### 3. ECS Module (`src/ECS/`)
+
+| Component/System | Purpose | Status |
+|------------------|---------|--------|
+| **Components.h** | Component definitions (Position, Velocity, Sprite, etc.) | ✅ Complete |
+| **Registry.h/cpp** | EnTT registry wrapper with helper functions | ✅ Complete |
+| **Systems.h/cpp** | ECS systems (input, physics, animation, collision, rendering) | ✅ Complete |
+
+**ECS Components:**
+- **Transform:** Position, Velocity, Size, Transform
+- **Rendering:** Sprite, Animation
+- **Collision:** AABB, CollisionLayer
+- **Input:** PlayerInput, CameraTarget
+- **Tags:** Player, Enemy, Projectile, Pickup, Static, Active
+
+**ECS Systems:**
+- `updatePlayerInput()` - Convert input to velocity
+- `updateMovement()` - Apply velocity to position
+- `updateAnimation()` - Update sprite animation frames
+- `updateTileCollisions()` - Resolve tilemap collisions
+- `updateEntityCollisions()` - Entity-to-entity collision detection
+- `renderSprites()` - Render all sprites with camera transform
+- `updateCameraFollow()` - Smooth camera following
 
 ---
 
@@ -137,37 +173,51 @@ Application (Core)
 ```
 Runa2/
 ├── src/
-│   ├── main.cpp              # Entry point, GameApp class
+│   ├── main.cpp              # Entry point, GameApp class (ECS version)
+│   ├── grass_test.cpp        # Texture rendering test
 │   ├── runapch.h/cpp         # Precompiled header (common includes)
 │   ├── RunaAPI.h             # DLL export/import macros
+│   │
 │   ├── Core/
 │   │   ├── Application.*     # Base application framework
 │   │   ├── ResourceManager.* # Resource loading & management
-│   │   └── Log.*             # Logging wrapper (spdlog)
-│   └── Graphics/
-│       ├── Window.*          # SDL3 window management
-│       ├── Renderer.*        # SDL3 GPU renderer
-│       ├── Shader.*          # SPIR-V shader loading
-│       ├── Texture.*         # Image loading & GPU textures
-│       ├── SpriteSheet.*     # Texture atlas & sprite metadata
-│       ├── SpriteBatch.*     # 2D sprite batching
-│       ├── TileMap.*         # Grid-based tilemap system
-│       ├── PostProcess.*     # Post-processing effects
-│       └── Font.*            # TrueType font rendering
+│   │   ├── Log.*             # Logging wrapper (spdlog)
+│   │   ├── Input.*           # Input management (keyboard, mouse)
+│   │   ├── Entity.*          # Legacy entity class
+│   │   ├── PlayerController.*# Input-to-velocity conversion
+│   │   └── Collision.*       # AABB collision detection
+│   │
+│   ├── Graphics/
+│   │   ├── Window.*          # SDL3 window management
+│   │   ├── Renderer.*        # SDL3 GPU renderer
+│   │   ├── Shader.*          # SPIR-V shader loading
+│   │   ├── Texture.*         # Image loading & GPU textures
+│   │   ├── SpriteSheet.*     # Texture atlas & sprite metadata
+│   │   ├── SpriteBatch.*     # 2D sprite batching
+│   │   ├── TileMap.*         # Grid-based tilemap system
+│   │   ├── PostProcess.*     # Post-processing effects
+│   │   ├── Font.*            # TrueType font rendering
+│   │   └── Camera.*          # 2D camera with transforms
+│   │
+│   └── ECS/
+│       ├── Components.h      # Component definitions
+│       ├── Registry.*        # EnTT registry wrapper
+│       └── Systems.*         # ECS system functions
 │
 ├── Resources/
-│   ├── Fonts/                # Font files (Renogare.otf)
-│   ├── manifests/            # YAML sprite definitions (12 files)
-│   │   ├── tilesets.yaml
-│   │   ├── plains.yaml
-│   │   ├── player.yaml
-│   │   ├── slime.yaml
-│   │   └── ... (8 more)
+│   ├── Fonts/                # Font files (Renogare.otf/ttf)
+│   ├── manifests/            # YAML sprite definitions
+│   │   └── resource_manifest.yaml
 │   ├── scenes/               # Scene data files
+│   │   └── sample_scene.txt
 │   └── mystic_woods_2.2/     # Game asset pack
 │       └── sprites/          # Character & tile sprites
+│           ├── characters/   # Character sprites
+│           ├── objects/      # Object sprites
+│           ├── particles/    # Particle sprites
+│           └── tilesets/    # Tile set sprites
 │
-├── shaders/                  # GLSL shaders (compile to SPIR-V)
+├── Resources/shaders/        # GLSL shaders (compile to SPIR-V)
 │   ├── sprite.vert/frag      # Sprite rendering shaders
 │   ├── basic.vert/frag       # Basic shaders
 │   ├── water.vert/frag       # Water effect shaders
@@ -176,6 +226,27 @@ Runa2/
 │   ├── pixelate.vert/frag    # Pixelation effect
 │   ├── psychedelic.vert/frag # Psychedelic effect
 │   ├── kaleidoscope.vert/frag# Kaleidoscope effect
+│   ├── outline.vert/frag     # Outline effect
+│   ├── glow.vert/frag        # Glow effect
+│   ├── dissolve.vert/frag    # Dissolve effect
+│   ├── freeze.vert/frag      # Freeze effect
+│   ├── poison.vert/frag      # Poison effect
+│   ├── damage_flash.vert/frag# Damage flash effect
+│   ├── shield.vert/frag      # Shield effect
+│   ├── portal.vert/frag      # Portal effect
+│   ├── lightning.vert/frag   # Lightning effect
+│   ├── heat_distortion.vert/frag # Heat distortion
+│   ├── ghost.vert/frag       # Ghost effect
+│   ├── grayscale.vert/frag   # Grayscale effect
+│   ├── sepia.vert/frag       # Sepia effect
+│   ├── vignette.vert/frag    # Vignette effect
+│   ├── fade.vert/frag        # Fade effect
+│   ├── day_night.vert/frag   # Day/night cycle
+│   ├── blur.vert/frag        # Blur effect
+│   ├── palette_swap.vert/frag# Palette swap
+│   ├── sprite_color.vert/frag# Color-only sprite shader
+│   ├── sprite_fixed.vert     # Fixed-size sprite shader
+│   ├── sprite_debug.frag    # Debug sprite shader
 │   └── compile_shaders.*     # Compilation scripts
 │
 ├── build/                    # Build output (gitignored)
@@ -186,12 +257,14 @@ Runa2/
 │   ├── SDL_image/            # SDL3_image source
 │   ├── SDL_ttf/              # SDL3_ttf source
 │   ├── yaml-cpp/             # yaml-cpp source
-│   └── spdlog/               # spdlog source
+│   ├── spdlog/               # spdlog source
+│   └── EnTT/                 # EnTT source (header-only)
 │
 ├── CMakeLists.txt            # Build configuration
 ├── README.md                 # Build instructions
 ├── ARCHITECTURE.md           # Engine architecture docs
 ├── REPOSITORY_ANALYSIS.md    # This file
+├── RENDERING_STATUS.md       # Rendering system status
 └── CLAUDE.md                 # AI assistant instructions
 ```
 
@@ -199,7 +272,44 @@ Runa2/
 
 ## Key Systems
 
-### 1. Resource Management System
+### 1. Entity-Component-System (ECS)
+
+**Framework:** EnTT v3.13.2 (header-only, high-performance ECS)
+
+**Architecture:**
+- **Components:** Plain data structures (Position, Velocity, Sprite, etc.)
+- **Systems:** Free functions that operate on component sets
+- **Registry:** EnTT registry wrapped in `EntityRegistry` class
+
+**Component Types:**
+- **Transform Components:** Position, Velocity, Size, Transform
+- **Rendering Components:** Sprite, Animation
+- **Collision Components:** AABB, CollisionLayer
+- **Input Components:** PlayerInput, CameraTarget
+- **Tag Components:** Player, Enemy, Projectile, Pickup, Static, Active
+
+**System Functions:**
+- `updatePlayerInput()` - Reads input and sets velocities
+- `updateMovement()` - Applies velocity to position
+- `updateAnimation()` - Updates sprite animation frames
+- `updateTileCollisions()` - Resolves collisions with tilemap
+- `updateEntityCollisions()` - Entity-to-entity collision detection
+- `renderSprites()` - Renders all sprites with camera transform
+- `updateCameraFollow()` - Smooth camera following
+
+**Usage Example:**
+```cpp
+// Create player entity
+auto player = registry->createPlayer(x, y, spriteSheet, "sprite_name", 120.0f);
+
+// In update loop
+Runa::ECS::Systems::updatePlayerInput(registry, input, dt);
+Runa::ECS::Systems::updateMovement(registry, dt);
+Runa::ECS::Systems::updateTileCollisions(registry, *tileMap, 16);
+Runa::ECS::Systems::renderSprites(registry, *spriteBatch, *camera);
+```
+
+### 2. Resource Management System
 
 **YAML-Based Manifest System:**
 - Declarative sprite definitions in YAML files
@@ -227,8 +337,9 @@ spritesheet:
 - ✅ Texture loading via SDL3_image
 - ✅ GPU texture uploads via transfer buffers
 - ✅ Sprite lookup by name
+- ✅ Tileset loading from atlas YAML files
 
-### 2. Rendering Pipeline
+### 3. Rendering Pipeline
 
 **Frame Rendering Flow:**
 ```
@@ -236,7 +347,7 @@ spritesheet:
 2. Renderer::clear()          - Set background color
 3. SpriteBatch::begin()       - Start batching
 4. SpriteBatch::draw()        - Queue draw calls
-5. SpriteBatch::end()         - Flush to GPU (🚧 needs completion)
+5. SpriteBatch::end()         - Flush to GPU
 6. Renderer::endFrame()       - Submit and present
 ```
 
@@ -246,34 +357,71 @@ spritesheet:
 - ✅ Clear operations
 - ✅ Draw call collection
 - ✅ Vertex buffer creation
-- 🚧 Graphics pipeline binding (missing)
-- 🚧 Texture descriptor sets (missing)
-- 🚧 Draw command execution (missing)
+- ✅ Graphics pipeline binding
+- ✅ Texture descriptor sets (fixed descriptor set 2 for samplers)
+- ✅ Draw command execution
+- ✅ Batch rendering (multiple sprites in one draw call)
+- ✅ Alpha blending
+- ✅ Textured sprite rendering
 
-### 3. Shader System
+**Shader System:**
+- GLSL 450 shaders compiled to SPIR-V offline
+- SDL3 GPU descriptor set layout:
+  - Vertex uniforms: `set = 1`
+  - Fragment samplers: `set = 2` (required)
+  - Fragment uniforms: `set = 3`
+- Multiple shader effects available (30+ shader pairs)
 
-**Workflow:**
-1. Write GLSL shaders (`.vert`, `.frag`) using GLSL 450
-2. Compile to SPIR-V (`.spv`) using `glslc` (Vulkan SDK)
-3. Load in engine via `Renderer::createShader()`
+### 4. Input System
 
-**Available Shaders:**
-- `sprite.vert/frag` - 2D sprite rendering (pixel-to-NDC, texture sampling)
-- `basic.vert/frag` - Basic shaders
-- `water.vert/frag` - Water effects
-- `bloom.vert/frag` - Bloom post-process
-- `crt.vert/frag` - CRT effect
-- `pixelate.vert/frag` - Pixelation
-- `psychedelic.vert/frag` - Psychedelic warping
-- `kaleidoscope.vert/frag` - Kaleidoscope effect
+**Features:**
+- ✅ Keyboard input (key down, pressed, released)
+- ✅ Mouse input (button states, position, wheel)
+- ✅ Frame-based input tracking (pressed/released events)
+- ✅ Integration with ECS player input system
 
-**Shader Features:**
-- Push constants for screen size
-- Texture sampling with descriptor sets
-- Color tinting support (RGBA per-vertex)
-- Automatic Y-axis flipping for 2D coordinates
+**Usage:**
+```cpp
+if (input.isKeyDown(SDLK_w)) {
+    // Move up while key held
+}
+if (input.isKeyPressed(SDLK_SPACE)) {
+    // Jump on space press
+}
+```
 
-### 4. Logging System
+### 5. Camera System
+
+**Features:**
+- ✅ World-to-screen coordinate transformation
+- ✅ Screen-to-world coordinate transformation
+- ✅ Smooth camera following (lerp-based)
+- ✅ Manual camera controls (WASD, mouse drag, mouse wheel zoom)
+- ✅ World bounds calculation for culling
+- ✅ Zoom support
+
+**Usage:**
+```cpp
+camera->setPosition(x, y);
+camera->followEntity(registry, playerEntity, 0.15f);
+camera->handleInput(input, dt, 300.0f);
+camera->worldToScreen(worldX, worldY, screenX, screenY);
+```
+
+### 6. Collision System
+
+**Features:**
+- ✅ AABB (Axis-Aligned Bounding Box) collision detection
+- ✅ Tilemap collision detection
+- ✅ Entity-to-entity collision detection
+- ✅ Collision layers and masks
+- ✅ Integration with ECS system
+
+**Components:**
+- `AABB` - Collision box with offset
+- `CollisionLayer` - Layer and mask for filtering
+
+### 7. Logging System
 
 **spdlog Integration:**
 - ✅ Console logging with colored output
@@ -281,25 +429,20 @@ spritesheet:
 - ✅ Multiple log levels (TRACE, DEBUG, INFO, WARN, ERROR, CRITICAL)
 - ✅ Auto-flush on warnings and above
 - ✅ Graceful fallback if file logging fails
-- ✅ 68+ LOG_* macro calls across 11 files
 
 **Log Patterns:**
 - Console: `[%^%l%$] %v` (colored level, message)
 - File: `[%Y-%m-%d %H:%M:%S.%e] [%l] %v` (timestamp, level, message)
 
-### 5. TileMap System
+### 8. TileMap System
 
 **Features:**
 - ✅ Grid-based tilemap (configurable dimensions)
 - ✅ Text file scene loading
 - ✅ Tile index management
 - ✅ SpriteSheet integration
-- ✅ Centered rendering with offsets
-
-**Current Demo:**
-- 40x30 tile map (640x480 pixels at 16px/tile)
-- Loads from `Resources/scenes/sample_scene.txt`
-- Falls back to generated pattern if file missing
+- ✅ Solid tile marking for collision
+- ✅ Efficient rendering with camera culling
 
 ---
 
@@ -320,14 +463,14 @@ spritesheet:
 
 ### Code Organization
 - **Namespace:** All engine code in `Runa` namespace
-- **Module separation:** Core vs Graphics modules
+- **Module separation:** Core vs Graphics vs ECS modules
 - **Include conventions:** Relative includes within modules, absolute from main
 - **Precompiled headers:** `runapch.h` for common includes
 
 ### API Design
 - **DLL exports:** `RUNA_API` macro for Windows DLL exports
 - **Virtual hooks:** Application class provides extensible game loop
-- **Getter methods:** Protected accessors for Window and Renderer
+- **Getter methods:** Protected accessors for Window, Renderer, Input
 - **Const correctness:** Const methods where appropriate
 
 ---
@@ -371,55 +514,52 @@ spritesheet:
 | **Shader Loading** | ✅ Complete | SPIR-V shader loading |
 | **Logging System** | ✅ Complete | spdlog integration (console + file) |
 | **Font Rendering** | ✅ Complete | TrueType font support |
+| **SpriteBatch** | ✅ Complete | GPU pipeline, batch rendering |
+| **Input System** | ✅ Complete | Keyboard, mouse, gamepad input |
+| **Camera System** | ✅ Complete | World-to-screen transforms, following |
+| **Collision System** | ✅ Complete | AABB, tilemap, entity collisions |
+| **ECS Framework** | ✅ Complete | EnTT integration, components, systems |
+| **Player Controller** | ✅ Complete | Input-to-velocity conversion |
 
 ### 🚧 Partially Implemented
 
 | System | Status | Notes |
 |--------|--------|-------|
-| **SpriteBatch** | 🚧 90% | Infrastructure complete, GPU pipeline needs completion |
-| **PostProcess** | 🚧 Partial | Framework exists, swapchain texture issues |
-
-**SpriteBatch Details:**
-- ✅ Draw call collection
-- ✅ Render pass setup
-- ✅ Vertex buffer creation
-- ✅ Shader loading
-- ❌ Graphics pipeline binding
-- ❌ Texture descriptor sets
-- ❌ Draw command execution
+| **PostProcess** | 🚧 Partial | Framework exists, needs testing |
 
 ### ❌ Not Yet Implemented
 
 | System | Status | Notes |
 |--------|--------|-------|
-| **Input Management** | ❌ Not started | Only ESC key and window close handled |
 | **Audio System** | ❌ Not started | No SDL3_audio integration |
-| **Camera/Viewport** | ❌ Not started | No viewport transformation |
-| **Animation Controller** | ❌ Not started | Sprite metadata exists, no timing logic |
-| **Physics** | ❌ Not started | No physics integration |
+| **Physics Engine** | ❌ Not started | No physics integration (beyond basic collision) |
 | **Scene Graph** | ❌ Not started | No hierarchical scene management |
-| **ECS** | ❌ Not started | No entity-component-system |
+| **Scripting** | ❌ Not started | No Lua or similar scripting support |
+| **Networking** | ❌ Not started | No multiplayer support |
 
 ---
 
 ## Notable Features
 
 ### Strengths
-1. **Clean Architecture** - Well-separated modules (Core vs Graphics)
-2. **Modern C++** - Smart pointers, RAII, move semantics
-3. **Extensible Design** - Virtual hooks in Application class
+1. **Clean Architecture** - Well-separated modules (Core, Graphics, ECS)
+2. **Modern C++** - Smart pointers, RAII, move semantics, C++20 features
+3. **Extensible Design** - Virtual hooks in Application class, ECS architecture
 4. **Comprehensive Logging** - spdlog integration throughout
 5. **Declarative Resources** - YAML-based sprite definitions
 6. **Professional Build System** - CMake with proper dependency management
 7. **DLL Architecture** - Separation of engine and game code
-8. **Documentation** - Well-documented architecture and workflows
+8. **ECS Integration** - Full EnTT-based entity-component-system
+9. **Complete Rendering** - Working sprite batching with GPU pipeline
+10. **Rich Shader Library** - 30+ shader effects available
+11. **Documentation** - Well-documented architecture and workflows
 
 ### Areas for Improvement
-1. **SpriteBatch GPU Pipeline** - Needs graphics pipeline binding and draw commands
-2. **Input Abstraction** - Currently minimal event handling
-3. **Animation System** - Metadata exists but no controller
-4. **Shader Integration** - Shaders loaded but not fully utilized in rendering
-5. **Error Recovery** - Some areas could benefit from more comprehensive error handling
+1. **Post-Processing** - Needs completion and testing
+2. **Audio System** - No audio support yet
+3. **Physics Engine** - Only basic collision, no physics simulation
+4. **Animation Controller** - Animation metadata exists but could be enhanced
+5. **Asset Pipeline** - Could benefit from automated asset processing
 
 ---
 
@@ -437,9 +577,15 @@ spritesheet:
 3. **Access sprites** via `ResourceManager::getSpriteSheet()`
 
 ### Shader Workflow
-1. **Edit GLSL** shaders in `shaders/`
+1. **Edit GLSL** shaders in `Resources/shaders/`
 2. **Compile** using `compile_shaders.bat` (requires Vulkan SDK)
 3. **Load** in engine via `Renderer::createShader()`
+
+### ECS Workflow
+1. **Create entities** via `EntityRegistry::createPlayer()`, `createSpriteEntity()`, etc.
+2. **Add components** via registry methods or direct component assignment
+3. **Run systems** in `onUpdate()` loop
+4. **Render** via `Systems::renderSprites()`
 
 ---
 
@@ -469,15 +615,21 @@ spritesheet:
 ### spdlog
 - **Purpose:** Fast logging
 - **Usage:** Logging throughout codebase
-- **Status:** ✅ Fully integrated (68+ macro calls)
+- **Status:** ✅ Fully integrated
 - **Features:** Console (colored) + file logging
+
+### EnTT
+- **Purpose:** Entity-Component-System framework
+- **Usage:** ECS architecture for game entities
+- **Status:** ✅ Fully integrated
+- **Version:** v3.13.2 (header-only)
 
 ---
 
 ## Code Quality Metrics
 
 ### Code Organization
-- ✅ Clear module separation (Core vs Graphics)
+- ✅ Clear module separation (Core, Graphics, ECS)
 - ✅ Consistent naming conventions
 - ✅ Proper use of namespaces
 - ✅ Precompiled headers for performance
@@ -488,10 +640,12 @@ spritesheet:
 - ✅ Move semantics enabled
 - ✅ Const correctness
 - ✅ No raw pointers for ownership
+- ✅ C++20 features (concepts, ranges where applicable)
 
 ### Documentation
 - ✅ Architecture documentation (ARCHITECTURE.md)
 - ✅ Build instructions (README.md)
+- ✅ Rendering status (RENDERING_STATUS.md)
 - ✅ Code comments where needed
 - ✅ AI assistant guidance (CLAUDE.md)
 
@@ -500,22 +654,22 @@ spritesheet:
 ## Future Development Directions
 
 ### High Priority
-1. **Complete SpriteBatch GPU Pipeline** - Enable actual sprite rendering
-2. **Input Management System** - Keyboard/mouse abstraction
-3. **Animation Controller** - Frame timing for sprite animations
-4. **Camera/Viewport System** - Viewport transformations
+1. **Audio System** - SDL3_audio integration for sound effects and music
+2. **Post-Processing Completion** - Finish and test post-processing effects
+3. **Animation Enhancements** - More sophisticated animation controllers
+4. **Physics Engine** - Integration with Box2D or similar
 
 ### Medium Priority
-5. **Shader Integration** - Full shader usage in rendering pipeline
-6. **Audio System** - SDL3_audio integration
-7. **Scene Management** - Scene graph or ECS architecture
-8. **Post-Processing Fix** - Resolve swapchain texture issues
+5. **Scene Management** - Scene graph or scene loading system
+6. **Asset Pipeline** - Automated asset processing and optimization
+7. **Scripting Support** - Lua or similar scripting integration
+8. **Performance Profiling** - Built-in profiling tools
 
 ### Low Priority
-9. **Physics Integration** - Physics engine integration
-10. **Asset Pipeline** - Automated asset processing
-11. **Scripting** - Lua or similar scripting support
-12. **Networking** - Multiplayer support
+9. **Networking** - Multiplayer support
+10. **Editor Tools** - Level editor, sprite editor
+11. **Platform Expansion** - Linux, macOS support
+12. **Mobile Support** - Android, iOS ports
 
 ---
 
@@ -524,19 +678,24 @@ spritesheet:
 **Runa2** is a **well-architected, modern C++20 game engine** with a solid foundation for 2D game development. The engine demonstrates:
 
 - ✅ **Professional code organization** with clear module separation
-- ✅ **Modern C++ best practices** (RAII, smart pointers, move semantics)
-- ✅ **Extensible design patterns** (virtual hooks, DLL architecture)
+- ✅ **Modern C++ best practices** (RAII, smart pointers, move semantics, C++20)
+- ✅ **Extensible design patterns** (virtual hooks, DLL architecture, ECS)
 - ✅ **Comprehensive documentation** (architecture, build, workflow)
 - ✅ **Active logging** throughout the codebase
 - ✅ **Declarative resource system** (YAML manifests)
+- ✅ **Complete ECS implementation** with EnTT
+- ✅ **Working rendering pipeline** with GPU acceleration
+- ✅ **Rich feature set** (input, camera, collision, tilemaps)
 
 **Current State:**
 - **Core Infrastructure:** ✅ Fully operational
 - **Resource Management:** ✅ Complete and working
-- **Rendering:** 🚧 90% complete - SpriteBatch needs final GPU pipeline integration
-- **Game Systems:** ❌ Not yet implemented
+- **Rendering:** ✅ Complete with GPU pipeline
+- **ECS System:** ✅ Fully implemented and functional
+- **Game Systems:** ✅ Input, collision, camera all working
+- **Audio:** ❌ Not yet implemented
 
-The architecture is designed for easy extension, making it an excellent foundation for continued development. The main remaining work is completing the SpriteBatch GPU rendering pipeline to enable actual sprite drawing, followed by implementing game systems (input, audio, etc.).
+The architecture is designed for easy extension, making it an excellent foundation for continued development. The main remaining work is adding audio support and potentially integrating a physics engine for more advanced game mechanics.
 
 ---
 

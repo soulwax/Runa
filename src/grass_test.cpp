@@ -1,4 +1,6 @@
+// File: src/grass_test.cpp
 // Minimal test to verify grass texture rendering
+
 #include "Core/Application.h"
 #include "Core/Log.h"
 #include "Graphics/SpriteBatch.h"

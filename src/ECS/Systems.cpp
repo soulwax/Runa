@@ -24,20 +24,20 @@ void updatePlayerInput(entt::registry& registry, Input& input, float dt) {
         auto& playerInput = view.get<PlayerInput>(entity);
         auto& velocity = view.get<Velocity>(entity);
 
-        // Read input for movement (WASD or Arrow keys)
+        // Read input for movement (Arrow keys only - WASD is for camera)
         float moveX = 0.0f;
         float moveY = 0.0f;
 
-        if (input.isKeyDown(SDLK_A) || input.isKeyDown(SDLK_LEFT)) {
+        if (input.isKeyDown(SDLK_LEFT)) {
             moveX -= 1.0f;
         }
-        if (input.isKeyDown(SDLK_D) || input.isKeyDown(SDLK_RIGHT)) {
+        if (input.isKeyDown(SDLK_RIGHT)) {
             moveX += 1.0f;
         }
-        if (input.isKeyDown(SDLK_W) || input.isKeyDown(SDLK_UP)) {
+        if (input.isKeyDown(SDLK_UP)) {
             moveY -= 1.0f;
         }
-        if (input.isKeyDown(SDLK_S) || input.isKeyDown(SDLK_DOWN)) {
+        if (input.isKeyDown(SDLK_DOWN)) {
             moveY += 1.0f;
         }
 

@@ -69,10 +69,11 @@ void Texture::loadFromFile(const std::string& path) {
     m_width = surface->w;
     m_height = surface->h;
 
-    // Convert surface to RGBA8888 format if needed
+    // Convert surface to ABGR8888 format to match GPU R8G8B8A8_UNORM
+    // On little-endian systems, ABGR8888 in memory is R,G,B,A byte order
     SDL_Surface* rgbaSurface = surface;
-    if (surface->format != SDL_PIXELFORMAT_RGBA32) {
-        rgbaSurface = SDL_ConvertSurface(surface, SDL_PIXELFORMAT_RGBA32);
+    if (surface->format != SDL_PIXELFORMAT_ABGR8888) {
+        rgbaSurface = SDL_ConvertSurface(surface, SDL_PIXELFORMAT_ABGR8888);
         SDL_DestroySurface(surface);
         if (!rgbaSurface) {
             throw std::runtime_error("Failed to convert surface format for: " + path);
@@ -162,7 +163,7 @@ void Texture::loadFromFile(const std::string& path) {
     // DEBUG: Check first pixel of texture
     SDL_Surface* debugSurface = IMG_Load(path.c_str());
     if (debugSurface && debugSurface->pixels) {
-        SDL_Surface* rgba = SDL_ConvertSurface(debugSurface, SDL_PIXELFORMAT_RGBA32);
+        SDL_Surface* rgba = SDL_ConvertSurface(debugSurface, SDL_PIXELFORMAT_ABGR8888);
         if (rgba) {
             uint8_t* pixels = (uint8_t*)rgba->pixels;
             LOG_INFO("Loaded texture: {} ({}x{}) - First pixel RGBA: ({}, {}, {}, {})",

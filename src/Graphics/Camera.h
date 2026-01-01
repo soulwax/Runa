@@ -10,6 +10,7 @@
 namespace Runa {
 
 class Window;
+class Input;
 
 // 2D camera for world-to-screen transformation
 class RUNA_API Camera {
@@ -59,6 +60,11 @@ private:
     float m_targetX = 0.0f;  // For smooth following
     float m_targetY = 0.0f;
     float m_smoothing = 1.0f; // 1.0 = instant, 0.1 = smooth
+
+    // Mouse panning state
+    bool m_isPanning = false;
+    int m_lastMouseX = 0;
+    int m_lastMouseY = 0;
 };
 
 } // namespace Runa

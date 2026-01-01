@@ -1,13 +1,19 @@
 Runa2
+├───.clangd
+├───.editorconfig
 ├───.gitignore
-├───.sconsign.dblite
 ├───ARCHITECTURE.md
+├───build_output.log
 ├───CLAUDE.md
+├───cmake_output.txt
 ├───CMakeLists.txt
+├───compile_shaders.bat
+├───compile_shaders.sh
 ├───LICENSE.md
 ├───README.md
+├───RENDERING_STATUS.md
 ├───REPOSITORY_ANALYSIS.md
-├───SConstruct
+├───test_run.log
 ├───tree.txt
 ├───.claude/
 │   └───settings.local.json
@@ -29,21 +35,22 @@ Runa2
 │   └───runa2.log
 ├───Resources/
 │   ├───Fonts/
-│   │   └───Renogare.otf
+│   │   ├───Renogare.otf
+│   │   └───Renogare.ttf
 │   ├───manifests/
-│   │   ├───player.yaml
 │   │   ├───README.md
-│   │   ├───slime.yaml
-│   │   └───tilesets.yaml
+│   │   └───resource_manifest.yaml
 │   ├───mystic_woods_2.2/
 │   │   ├───read_me.txt
 │   │   └───sprites/
 │   │       ├───characters/
 │   │       │   ├───player.png
+│   │       │   ├───player.yaml
 │   │       │   ├───README.txt
 │   │       │   ├───skeleton.png
 │   │       │   ├───skeleton_swordless.png
-│   │       │   └───slime.png
+│   │       │   ├───slime.png
+│   │       │   └───slime.yaml
 │   │       ├───objects/
 │   │       │   ├───chest_01.png
 │   │       │   ├───chest_02.png
@@ -59,10 +66,14 @@ Runa2
 │   │       │   └───dust_particles_01.png
 │   │       └───tilesets/
 │   │           ├───decor_16x16.png
+│   │           ├───decor_16x16.yaml
 │   │           ├───decor_8x8.png
+│   │           ├───decor_8x8.yaml
 │   │           ├───fences.png
+│   │           ├───fences.yaml
 │   │           ├───grass.png
 │   │           ├───plains.png
+│   │           ├───plains.yaml
 │   │           ├───water-sheet.png
 │   │           ├───water1.png
 │   │           ├───water2.png
@@ -72,63 +83,188 @@ Runa2
 │   │           ├───water6.png
 │   │           ├───water_decorations.png
 │   │           ├───water_lillies.png
+│   │           ├───waterN.yaml
 │   │           ├───floors/
 │   │           │   ├───carpet.png
+│   │           │   ├───carpet.yaml
 │   │           │   ├───flooring.png
 │   │           │   └───wooden.png
 │   │           └───walls/
 │   │               ├───walls.png
+│   │               ├───walls.yaml
 │   │               ├───wooden_door.png
 │   │               └───wooden_door_b.png
-│   └───scenes/
+│   ├───scenes/
+│   │   ├───README.md
+│   │   └───sample_scene.txt
+│   └───shaders/
+│       ├───basic.frag
+│       ├───basic.vert
+│       ├───bloom.frag
+│       ├───bloom.vert
+│       ├───blur.frag
+│       ├───blur.vert
+│       ├───crt.frag
+│       ├───crt.vert
+│       ├───damage_flash.frag
+│       ├───damage_flash.vert
+│       ├───day_night.frag
+│       ├───day_night.vert
+│       ├───dissolve.frag
+│       ├───dissolve.vert
+│       ├───fade.frag
+│       ├───fade.vert
+│       ├───freeze.frag
+│       ├───freeze.vert
+│       ├───ghost.frag
+│       ├───ghost.vert
+│       ├───glow.frag
+│       ├───glow.vert
+│       ├───grayscale.frag
+│       ├───grayscale.vert
+│       ├───heat_distortion.frag
+│       ├───heat_distortion.vert
+│       ├───kaleidoscope.frag
+│       ├───kaleidoscope.vert
+│       ├───lightning.frag
+│       ├───lightning.vert
+│       ├───outline.frag
+│       ├───outline.vert
+│       ├───palette_swap.frag
+│       ├───palette_swap.vert
+│       ├───pixelate.frag
+│       ├───pixelate.vert
+│       ├───poison.frag
+│       ├───poison.vert
+│       ├───portal.frag
+│       ├───portal.vert
+│       ├───psychedelic.frag
+│       ├───psychedelic.vert
 │       ├───README.md
-│       └───sample_scene.txt
-├───shaders/
-│   ├───basic.frag
-│   ├───basic.vert
-│   ├───compile_shaders.bat
-│   ├───compile_shaders.sh
-│   ├───README.md
-│   ├───sprite.frag
-│   └───sprite.vert
+│       ├───sepia.frag
+│       ├───sepia.vert
+│       ├───shield.frag
+│       ├───shield.vert
+│       ├───sprite.frag
+│       ├───sprite.vert
+│       ├───sprite_color.frag
+│       ├───sprite_color.vert
+│       ├───sprite_debug.frag
+│       ├───sprite_fixed.vert
+│       ├───sprite_simple.vert
+│       ├───vignette.frag
+│       ├───vignette.vert
+│       ├───water.frag
+│       ├───water.vert
+│       └───compiled/
+│           ├───basic.frag.spv
+│           ├───basic.vert.spv
+│           ├───bloom.frag.spv
+│           ├───bloom.vert.spv
+│           ├───blur.frag.spv
+│           ├───blur.vert.spv
+│           ├───crt.frag.spv
+│           ├───crt.vert.spv
+│           ├───damage_flash.frag.spv
+│           ├───damage_flash.vert.spv
+│           ├───day_night.frag.spv
+│           ├───day_night.vert.spv
+│           ├───dissolve.frag.spv
+│           ├───dissolve.vert.spv
+│           ├───fade.frag.spv
+│           ├───fade.vert.spv
+│           ├───freeze.frag.spv
+│           ├───freeze.vert.spv
+│           ├───ghost.frag.spv
+│           ├───ghost.vert.spv
+│           ├───glow.frag.spv
+│           ├───glow.vert.spv
+│           ├───grayscale.frag.spv
+│           ├───grayscale.vert.spv
+│           ├───heat_distortion.frag.spv
+│           ├───heat_distortion.vert.spv
+│           ├───kaleidoscope.frag.spv
+│           ├───kaleidoscope.vert.spv
+│           ├───lightning.frag.spv
+│           ├───lightning.vert.spv
+│           ├───outline.frag.spv
+│           ├───outline.vert.spv
+│           ├───palette_swap.frag.spv
+│           ├───palette_swap.vert.spv
+│           ├───pixelate.frag.spv
+│           ├───pixelate.vert.spv
+│           ├───poison.frag.spv
+│           ├───poison.vert.spv
+│           ├───portal.frag.spv
+│           ├───portal.vert.spv
+│           ├───psychedelic.frag.spv
+│           ├───psychedelic.vert.spv
+│           ├───sepia.frag.spv
+│           ├───sepia.vert.spv
+│           ├───shield.frag.spv
+│           ├───shield.vert.spv
+│           ├───sprite.frag.spv
+│           ├───sprite.vert.spv
+│           ├───sprite_color.frag.spv
+│           ├───sprite_color.vert.spv
+│           ├───sprite_fixed.vert.spv
+│           ├───sprite_simple.vert.spv
+│           ├───vignette.frag.spv
+│           ├───vignette.vert.spv
+│           ├───water.frag.spv
+│           └───water.vert.spv
 ├───src/
+│   ├───grass_test.cpp
 │   ├───main.cpp
 │   ├───RunaAPI.h
 │   ├───runapch.cpp
 │   ├───runapch.h
-│   ├───runapch.o
 │   ├───Core/
 │   │   ├───Application.cpp
 │   │   ├───Application.h
 │   │   ├───Application.o
+│   │   ├───Collision.cpp
+│   │   ├───Collision.h
+│   │   ├───Entity.cpp
+│   │   ├───Entity.h
+│   │   ├───Input.cpp
+│   │   ├───Input.h
 │   │   ├───Log.cpp
 │   │   ├───Log.h
 │   │   ├───Log.o
+│   │   ├───PlayerController.cpp
+│   │   ├───PlayerController.h
 │   │   ├───ResourceManager.cpp
 │   │   ├───ResourceManager.h
-│   │   └───ResourceManager.o
+│   │   ├───ResourceManager.o
+│   │   └───output/
+│   ├───ECS/
+│   │   ├───Components.h
+│   │   ├───Registry.cpp
+│   │   ├───Registry.h
+│   │   ├───Systems.cpp
+│   │   └───Systems.h
 │   └───Graphics/
+│       ├───Camera.cpp
+│       ├───Camera.h
+│       ├───Font.cpp
+│       ├───Font.h
+│       ├───PostProcess.cpp
+│       ├───PostProcess.h
 │       ├───Renderer.cpp
 │       ├───Renderer.h
-│       ├───Renderer.o
 │       ├───Shader.cpp
 │       ├───Shader.h
-│       ├───Shader.o
 │       ├───SpriteBatch.cpp
 │       ├───SpriteBatch.h
-│       ├───SpriteBatch.o
 │       ├───SpriteSheet.cpp
 │       ├───SpriteSheet.h
-│       ├───SpriteSheet.o
 │       ├───Texture.cpp
 │       ├───Texture.h
-│       ├───Texture.o
 │       ├───TileMap.cpp
 │       ├───TileMap.h
-│       ├───TileMap.o
 │       ├───Window.cpp
-│       ├───Window.h
-│       └───Window.o
+│       └───Window.h
 ├───toolchains/
 │   └───clang-mingw.cmake
 └───vendor/
@@ -655,6 +791,7 @@ Runa2
     │   │       ├───SDL_version.h
     │   │       ├───SDL_video.h
     │   │       └───SDL_vulkan.h
+    │   ├───install/
     │   ├───src/
     │   │   ├───SDL.c
     │   │   ├───SDL_assert.c

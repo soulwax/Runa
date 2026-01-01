@@ -107,4 +107,3 @@ std::unique_ptr<Texture> Font::renderText(const std::string& text, SDL_Color col
 }
 
 } // namespace Runa
-

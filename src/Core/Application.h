@@ -1,4 +1,5 @@
 // File: src/Core/Application.h
+
 #ifndef RUNA_CORE_APPLICATION_H
 #define RUNA_CORE_APPLICATION_H
 

@@ -27,7 +27,8 @@
       "Bash(cmd /c \"tasklist | findstr /i Runa2\")",
       "Bash(cmd /c \"build\\\\debug_new\\\\Runa2.exe\")",
       "Bash(echo:*)",
-      "Bash(findstr:*)"
+      "Bash(findstr:*)",
+      "Bash(grep:*)"
     ]
   }
 }
