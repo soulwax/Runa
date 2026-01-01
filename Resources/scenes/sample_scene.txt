@@ -1,9 +1,0 @@
-# File: Resources/scenes/sample_scene.txt
-# Sample scene using plains tileset (16x16 tiles, each tile is 16x16 pixels)
-# Tile indices from plains.png (6x12 grid = 72 tiles)
-# 0-5: Basic grass, 6-11: Grass with flowers, 36-47: Path tiles
-# 40x30 tile map (640x480 pixels at 16x16 per tile)
-
-0 1 2 0 1 2 0 1 2 0
-1 0 1 2 0 1 2 0 1 2
-2 1 0 1 2 0 1 2 0 0
