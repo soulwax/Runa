@@ -10,8 +10,8 @@
 #include "runapch.h"
 
 // NEW: Include ECS headers
-#include "ECS/Registry.h"
 #include "ECS/Components.h"
+#include "ECS/Registry.h"
 #include "ECS/Systems.h"
 
 class GameApp : public Runa::Application {
@@ -74,11 +74,12 @@ protected:
 
     auto *tileset = m_resources->getSpriteSheet("plains");
     if (tileset) {
-      m_playerEntity = m_registry->createPlayer(
-          startX, startY, tileset, "plains_grass_6", 120.0f);
+      m_playerEntity = m_registry->createPlayer(startX, startY, tileset,
+                                                "plains_grass_6", 120.0f);
 
       // Set reddish tint for visibility
-      auto& sprite = m_registry->getRegistry().get<Runa::ECS::Sprite>(m_playerEntity);
+      auto &sprite =
+          m_registry->getRegistry().get<Runa::ECS::Sprite>(m_playerEntity);
       sprite.tintR = 1.0f;
       sprite.tintG = 0.5f;
       sprite.tintB = 0.5f;
@@ -99,18 +100,22 @@ protected:
     }
 
     // Set initial camera position
-    if (auto* pos = m_registry->getRegistry().try_get<Runa::ECS::Position>(m_playerEntity)) {
+    if (auto *pos = m_registry->getRegistry().try_get<Runa::ECS::Position>(
+            m_playerEntity)) {
       m_camera->setPosition(pos->x, pos->y);
     }
 
     LOG_INFO("=== RPG Demo Ready ===");
     LOG_INFO("Controls:");
-    LOG_INFO("  WASD or Arrow Keys - Move");
+    LOG_INFO("  Arrow Keys - Move Player");
+    LOG_INFO("  WASD - Move Camera");
+    LOG_INFO("  Right/Middle Mouse - Pan Camera");
+    LOG_INFO("  Mouse Wheel - Zoom Camera");
     LOG_INFO("  ESC - Quit");
   }
 
   void onUpdate(float dt) override {
-    auto& registry = m_registry->getRegistry();
+    auto &registry = m_registry->getRegistry();
 
     // NEW: Run ECS systems
     // 1. Input system - read input and set velocities
@@ -125,7 +130,10 @@ protected:
     // 4. Collision system - resolve tile collisions
     Runa::ECS::Systems::updateTileCollisions(registry, *m_tileMap, 16);
 
-    // 5. Camera system - follow player
+    // 5. Manual camera controls (WASD, mouse drag, mouse wheel zoom)
+    m_camera->handleInput(getInput(), dt, 300.0f);
+
+    // 6. Camera system - follow player (unless manually controlled)
     Runa::ECS::Systems::updateCameraFollow(registry, *m_camera, dt);
     m_camera->update(dt);
   }
@@ -173,7 +181,8 @@ protected:
     }
 
     // NEW: Render all sprites using ECS system
-    Runa::ECS::Systems::renderSprites(m_registry->getRegistry(), *m_spriteBatch, *m_camera);
+    Runa::ECS::Systems::renderSprites(m_registry->getRegistry(), *m_spriteBatch,
+                                      *m_camera);
 
     // Render FPS counter
     if (m_font && m_font->isValid()) {
