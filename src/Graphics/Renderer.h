@@ -4,10 +4,9 @@
 #define RUNA_GRAPHICS_RENDERER_H
 
 #include "RunaAPI.h"
-#include "Shader.h"
 #include "Window.h"
+#include <VK2D/VK2D.h>
 #include <SDL3/SDL.h>
-#include <memory>
 
 namespace Runa {
 
@@ -20,39 +19,29 @@ public:
   Renderer(const Renderer &) = delete;
   Renderer &operator=(const Renderer &) = delete;
 
-  // Enable moving
-  Renderer(Renderer &&) noexcept = default;
-  Renderer &operator=(Renderer &&) noexcept = default;
+  // Disable moving (VK2DRenderer is not trivially movable)
+  Renderer(Renderer &&) noexcept = delete;
+  Renderer &operator=(Renderer &&) noexcept = delete;
 
-  SDL_GPUDevice *getDevice() const { return m_device; }
-  bool isValid() const { return m_device != nullptr; }
+  // Vulkan2D renderer access
+  VK2DRenderer getVK2DRenderer() const { return m_vk2dRenderer; }
+  bool isValid() const { return m_vk2dRenderer != nullptr; }
   Window &getWindow() { return m_window; }
-  SDL_GPUCommandBuffer *acquireCommandBuffer();
 
   void beginFrame();
   void endFrame();
   void clear(float r, float g, float b, float a);
 
-  // Shader management
-  std::shared_ptr<Shader> createShader(const std::string &vertexPath,
-                                       const std::string &fragmentPath);
-
-  // Get clear color (used by SpriteBatch)
+  // Get clear color (for API compatibility)
   struct ClearColor {
     float r = 0.0f, g = 0.0f, b = 0.0f, a = 1.0f;
   };
   ClearColor getClearColor() const { return m_clearColor; }
-  bool needsClear() const { return m_needsClear; }
-  void clearApplied() { m_needsClear = false; }
 
 private:
   Window &m_window;
-  SDL_GPUDevice *m_device = nullptr;
-  SDL_GPUTexture *m_swapchainTexture = nullptr;
+  VK2DRenderer m_vk2dRenderer = nullptr;
   ClearColor m_clearColor{0.05f, 0.05f, 0.1f, 1.0f};
-  bool m_needsClear = false;
-
-  void acquireSwapchainTexture();
 };
 
 } // namespace Runa

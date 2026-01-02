@@ -7,87 +7,54 @@
 namespace Runa {
 
 Renderer::Renderer(Window &window) : m_window(window) {
-  // Create GPU device
-  m_device = SDL_CreateGPUDevice(SDL_GPU_SHADERFORMAT_SPIRV,
-                                 true, // debugMode
-                                 nullptr);
+  // Configure Vulkan2D renderer
+  VK2DRendererConfig config = {};
+  config.msaa = VK2D_MSAA_1X;  // No MSAA for pixel-perfect rendering
+  config.screenMode = VK2D_SCREEN_MODE_VSYNC;  // VSync like original
+  config.filterMode = VK2D_FILTER_TYPE_NEAREST;  // Pixel-perfect filtering
 
-  if (!m_device) {
-    throw std::runtime_error(std::string("Failed to create GPU device: ") +
-                             SDL_GetError());
+  // Initialize Vulkan2D renderer
+  VK2DResult result = vk2dRendererInit(m_window.getHandle(), config, nullptr);
+
+  if (result != VK2D_SUCCESS) {
+    throw std::runtime_error("Failed to create Vulkan2D renderer");
   }
 
-  // Claim the window for GPU operations
-  if (!SDL_ClaimWindowForGPUDevice(m_device, m_window.getHandle())) {
-    SDL_DestroyGPUDevice(m_device);
-    throw std::runtime_error(std::string("Failed to claim window for GPU: ") +
-                             SDL_GetError());
+  m_vk2dRenderer = vk2dRendererGetPointer();
+
+  if (!m_vk2dRenderer) {
+    throw std::runtime_error("Failed to get Vulkan2D renderer pointer");
   }
 
-  // Configure swapchain to support sampling (needed for post-process effects)
-  SDL_GPUSwapchainComposition swapchainComposition =
-      SDL_GPU_SWAPCHAINCOMPOSITION_SDR;
-  SDL_GPUPresentMode presentMode = SDL_GPU_PRESENTMODE_VSYNC;
-
-  if (!SDL_SetGPUSwapchainParameters(m_device, m_window.getHandle(),
-                                     swapchainComposition, presentMode)) {
-    LOG_WARN("Failed to set swapchain parameters: {}", SDL_GetError());
-  }
-
-  LOG_INFO("Renderer initialized with SDL3 GPU backend");
-  LOG_INFO("GPU Driver: {}", SDL_GetGPUDeviceDriver(m_device));
+  LOG_INFO("Renderer initialized with Vulkan2D backend");
+  LOG_INFO("Vulkan2D Config - MSAA: OFF, ScreenMode: VSYNC, Filter: NEAREST");
 }
 
 Renderer::~Renderer() {
-  if (m_device) {
-    SDL_ReleaseWindowFromGPUDevice(m_device, m_window.getHandle());
-    SDL_DestroyGPUDevice(m_device);
+  if (m_vk2dRenderer) {
+    vk2dRendererWait();  // Ensure GPU is idle before cleanup
+    vk2dRendererQuit();
+    m_vk2dRenderer = nullptr;
     LOG_INFO("Renderer destroyed");
   }
 }
 
-void Renderer::beginFrame() { acquireSwapchainTexture(); }
+void Renderer::beginFrame() {
+  // Convert clear color to Vulkan2D format (vec4 = float[4])
+  vec4 clearColorArray = {m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a};
+  vk2dRendererStartFrame(clearColorArray);
+}
 
 void Renderer::endFrame() {
-  // Clear flag is managed by SpriteBatch::end() which calls clearApplied()
-  // If SpriteBatch wasn't used, we might need to clear here, but for now
-  // we assume SpriteBatch handles all clearing
-  // The flag will be reset by clearApplied() or set again next frame
+  vk2dRendererEndFrame();
 }
 
 void Renderer::clear(float r, float g, float b, float a) {
-  // Store clear color for later use in render pass
-  // The actual clearing will happen in the render pass with LOADOP_CLEAR
-  // Note: We don't check for swapchain here because it will be acquired in
-  // SpriteBatch::end()
+  // Store clear color for next frame (Vulkan2D clears at frame start)
   m_clearColor.r = r;
   m_clearColor.g = g;
   m_clearColor.b = b;
   m_clearColor.a = a;
-  m_needsClear = true;
-}
-
-std::shared_ptr<Shader>
-Renderer::createShader(const std::string &vertexPath,
-                       const std::string &fragmentPath) {
-  try {
-    return std::make_shared<Shader>(m_device, vertexPath, fragmentPath);
-  } catch (const std::exception &e) {
-    LOG_ERROR("Failed to create shader: {}", e.what());
-    return nullptr;
-  }
-}
-
-SDL_GPUCommandBuffer *Renderer::acquireCommandBuffer() {
-  return SDL_AcquireGPUCommandBuffer(m_device);
-}
-
-void Renderer::acquireSwapchainTexture() {
-  if (!m_swapchainTexture) {
-    // Don't acquire here - let SpriteBatch acquire it on its command buffer
-    // This ensures the swapchain is acquired on the same command buffer that
-    // uses it For now, we'll acquire it lazily when needed
-  }
 }
 
 } // namespace Runa
