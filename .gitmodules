@@ -1,0 +1,3 @@
+[submodule "vendor/Vulkan2D"]
+	path = vendor/Vulkan2D
+	url = https://github.com/PaoloMazzon/Vulkan2D.git

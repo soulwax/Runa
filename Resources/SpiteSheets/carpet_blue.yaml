@@ -40,6 +40,9 @@ tiles:
   concealment: 0.0
   editor_color: "#1565C0"
   editor_icon: carpet_vertical
+  connects_to:
+  - vertical_blue_carpet_center
+  - vertical_blue_carpet_south
 
 - id: 1
   type: "vertical_blue_carpet_center"
@@ -72,6 +75,9 @@ tiles:
   concealment: 0.0
   editor_color: "#1565C0"
   editor_icon: carpet_vertical
+  connects_to:
+  - vertical_blue_carpet_north
+  - vertical_blue_carpet_south
 
 - id: 2
   type: "vertical_blue_carpet_south"
@@ -104,6 +110,9 @@ tiles:
   concealment: 0.0
   editor_color: "#1565C0"
   editor_icon: carpet_vertical
+  connects_to:
+  - vertical_blue_carpet_center
+  - vertical_blue_carpet_north
 
 # Carpet Patch 3x3 (48x48)
 - id: 3
@@ -170,6 +179,11 @@ tiles:
   concealment: 0.0
   editor_color: "#1565C0"
   editor_icon: carpet_fill
+  connects_to:
+  - blue_carpet_edge_north
+  - blue_carpet_edge_south
+  - blue_carpet_edge_west
+  - blue_carpet_edge_east
 
 # Carpet Border 1‑tile Edges (replaces pit edges)
 - id: 5
@@ -203,6 +217,10 @@ tiles:
   concealment: 0.0
   editor_color: "#1565C0"
   editor_icon: carpet_edge
+  connects_to:
+  - blue_carpet_fill_center
+  - blue_carpet_edge_west
+  - blue_carpet_edge_east
 
 - id: 6
   type: "blue_carpet_edge_south"
@@ -235,6 +253,10 @@ tiles:
   concealment: 0.0
   editor_color: "#1565C0"
   editor_icon: carpet_edge
+  connects_to:
+  - blue_carpet_fill_center
+  - blue_carpet_edge_west
+  - blue_carpet_edge_east
 
 - id: 7
   type: "blue_carpet_edge_west"
@@ -267,6 +289,10 @@ tiles:
   concealment: 0.0
   editor_color: "#1565C0"
   editor_icon: carpet_edge
+  connects_to:
+  - blue_carpet_fill_center
+  - blue_carpet_edge_north
+  - blue_carpet_edge_south
 
 - id: 8
   type: "blue_carpet_edge_east"
@@ -299,6 +325,10 @@ tiles:
   concealment: 0.0
   editor_color: "#1565C0"
   editor_icon: carpet_edge
+  connects_to:
+  - blue_carpet_fill_center
+  - blue_carpet_edge_north
+  - blue_carpet_edge_south
 
 # Carpet Corners (replaces pit corners)
 - id: 9
@@ -332,6 +362,10 @@ tiles:
   concealment: 0.0
   editor_color: "#1565C0"
   editor_icon: carpet_corner
+  connects_to:
+  - blue_carpet_fill_center
+  - blue_carpet_edge_north
+  - blue_carpet_edge_west
 
 - id: 10
   type: "blue_carpet_corner_northeast"
@@ -364,6 +398,10 @@ tiles:
   concealment: 0.0
   editor_color: "#1565C0"
   editor_icon: carpet_corner
+  connects_to:
+  - blue_carpet_fill_center
+  - blue_carpet_edge_north
+  - blue_carpet_edge_east
 
 - id: 11
   type: "blue_carpet_corner_southeast"
@@ -396,6 +434,10 @@ tiles:
   concealment: 0.0
   editor_color: "#1565C0"
   editor_icon: carpet_corner
+  connects_to:
+  - blue_carpet_fill_center
+  - blue_carpet_edge_south
+  - blue_carpet_edge_east
 
 - id: 12
   type: "blue_carpet_corner_southwest"
@@ -428,6 +470,10 @@ tiles:
   concealment: 0.0
   editor_color: "#1565C0"
   editor_icon: carpet_corner
+  connects_to:
+  - blue_carpet_fill_center
+  - blue_carpet_edge_south
+  - blue_carpet_edge_west
 
 # Carpet Strip 3x1 (48x16) - Horizontal
 - id: 13
@@ -461,6 +507,9 @@ tiles:
   concealment: 0.0
   editor_color: "#1565C0"
   editor_icon: carpet_horizontal
+  connects_to:
+  - horizontal_blue_carpet_center
+  - horizontal_blue_carpet_east
 
 - id: 14
   type: "horizontal_blue_carpet_center"
@@ -493,6 +542,9 @@ tiles:
   concealment: 0.0
   editor_color: "#1565C0"
   editor_icon: carpet_horizontal
+  connects_to:
+  - horizontal_blue_carpet_west
+  - horizontal_blue_carpet_east
 
 - id: 15
   type: "horizontal_blue_carpet_east"
@@ -525,3 +577,6 @@ tiles:
   concealment: 0.0
   editor_color: "#1565C0"
   editor_icon: carpet_horizontal
+  connects_to:
+  - horizontal_blue_carpet_center
+  - horizontal_blue_carpet_west
