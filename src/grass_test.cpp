@@ -1,71 +1,113 @@
 // File: src/grass_test.cpp
-// Minimal test to verify grass texture rendering
+// Simple grass tile rendering test with Vulkan2D
 
 #include "Core/Application.h"
 #include "Core/Log.h"
 #include "Graphics/SpriteBatch.h"
 #include "Graphics/Texture.h"
 #include <memory>
+#include <string>
 
 class GrassTest : public Runa::Application {
 public:
-    GrassTest() : Application("Grass Texture Test", 1280, 720) {}
+  GrassTest() : Application("Grass Tiles - Vulkan2D", 1280, 720) {}
 
 protected:
-    void onInit() override {
-        LOG_INFO("=== Grass Texture Test ===");
+  void onInit() override {
+    LOG_INFO("=== Grass Tile Test ===");
 
-        m_spriteBatch = std::make_unique<Runa::SpriteBatch>(getRenderer());
+    m_spriteBatch = std::make_unique<Runa::SpriteBatch>(getRenderer());
 
-        try {
-            m_grassTexture = std::make_unique<Runa::Texture>(
-                getRenderer(), "Resources/mystic_woods_2.2/sprites/tilesets/grass.png");
-            LOG_INFO("Grass texture loaded!");
-        } catch (const std::exception& e) {
-            LOG_ERROR("Failed to load grass: {}", e.what());
-        }
+    try {
+      // Load grass texture
+      m_grassTexture = std::make_unique<Runa::Texture>(
+          getRenderer(), "Resources/SpiteSheets/decor-grass.png");
+      LOG_INFO("Grass texture loaded successfully! ({}x{})",
+               m_grassTexture->getWidth(), m_grassTexture->getHeight());
+
+      // Load dirt path texture
+      m_dirtTexture = std::make_unique<Runa::Texture>(
+          getRenderer(), "Resources/SpiteSheets/dirt-grass.png");
+      LOG_INFO("Dirt texture loaded successfully! ({}x{})",
+               m_dirtTexture->getWidth(), m_dirtTexture->getHeight());
+    } catch (const std::exception &e) {
+      LOG_ERROR("Failed to load textures: {}", e.what());
+    }
+  }
+
+  void onUpdate(float dt) override {}
+
+  void onRender() override {
+    // Note: beginFrame() and endFrame() are called by Application::mainLoop()
+    getRenderer().clear(0.05f, 0.1f, 0.05f, 1.0f);
+
+    if (!m_grassTexture || !m_dirtTexture) {
+      LOG_ERROR("Textures not loaded!");
+      return;
     }
 
-    void onUpdate(float dt) override {}
+    m_spriteBatch->begin();
 
-    void onRender() override {
-        getRenderer().clear(0.1f, 0.15f, 0.2f, 1.0f);
+    // Draw grass and dirt tiles across the screen
+    // decor-grass.png is a 64x80 sprite sheet (4x5 tiles of 16x16 each)
+    // dirt-grass.png is a 64x64 sprite sheet (4x4 tiles of 16x16 each)
+    const int tileSize = 16;
+    const int tilesX = 1280 / tileSize;  // 80 tiles wide
+    const int tilesY = 720 / tileSize;   // 45 tiles tall
 
-        if (!m_grassTexture)
-            return;
+    // Define dirt paths (vertical and horizontal)
+    const int pathX = tilesX / 2;  // Vertical path at center
+    const int pathY = tilesY / 2;  // Horizontal path at center
 
-        m_spriteBatch->begin();
+    for (int y = 0; y < tilesY; ++y) {
+      for (int x = 0; x < tilesX; ++x) {
+        bool isPath = (x == pathX || y == pathY);
 
-        // Draw grass texture tiled across screen
-        int tileSize = 16;
-        for (int y = 0; y < 720 / tileSize; ++y) {
-            for (int x = 0; x < 1280 / tileSize; ++x) {
-                m_spriteBatch->draw(*m_grassTexture, x * tileSize, y * tileSize);
-            }
+        if (isPath) {
+          // Draw dirt path tile from dirt-grass.png
+          // Use tile at (16, 0) - horizontal dirt path
+          m_spriteBatch->draw(*m_dirtTexture, x * tileSize, y * tileSize,
+                              16, 0, tileSize, tileSize);
+        } else {
+          // Draw grass tile from decor-grass.png
+          m_spriteBatch->draw(*m_grassTexture, x * tileSize, y * tileSize,
+                              0, 0, tileSize, tileSize);
         }
-
-        m_spriteBatch->end();
+      }
     }
 
-    void onShutdown() override {}
+    m_spriteBatch->end();
+
+    if (m_frameCount == 0) {
+      LOG_INFO("First frame rendered: {} tiles with dirt paths ({}x{})",
+               tilesX * tilesY, tilesX, tilesY);
+    }
+    m_frameCount++;
+  }
+
+  void onShutdown() override {
+    LOG_INFO("Shutting down grass test");
+  }
 
 private:
-    std::unique_ptr<Runa::SpriteBatch> m_spriteBatch;
-    std::unique_ptr<Runa::Texture> m_grassTexture;
+  std::unique_ptr<Runa::SpriteBatch> m_spriteBatch;
+  std::unique_ptr<Runa::Texture> m_grassTexture;
+  std::unique_ptr<Runa::Texture> m_dirtTexture;
+  int m_frameCount = 0;
 };
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
+  try {
+    Runa::Log::init();
+    auto app = std::make_unique<GrassTest>();
+    app->run();
+    return 0;
+  } catch (const std::exception &e) {
     try {
-        Runa::Log::init();
-        auto app = std::make_unique<GrassTest>();
-        app->run();
-        return 0;
-    } catch (const std::exception& e) {
-        try {
-            LOG_CRITICAL("Fatal error: {}", e.what());
-        } catch (...) {
-            std::cerr << "Fatal error: " << e.what() << std::endl;
-        }
-        return 1;
+      LOG_CRITICAL("Fatal error: {}", e.what());
+    } catch (...) {
+      std::cerr << "Fatal error: " << e.what() << std::endl;
     }
+    return 1;
+  }
 }

@@ -165,15 +165,15 @@ target_compile_definitions(Runa2Engine PRIVATE
 )
 
 # Link libraries to engine
-# SDL3, SDL3_image, SDL3_ttf, and EnTT are PUBLIC so executables can access headers
+# SDL3, SDL3_image, SDL3_ttf, Vulkan2D, and EnTT are PUBLIC so executables can access headers
 target_link_libraries(Runa2Engine PRIVATE
     yaml-cpp::yaml-cpp
     spdlog::spdlog
-    Vulkan2D
     PUBLIC
     SDL3::SDL3
     SDL3_image::SDL3_image
     SDL3_ttf::SDL3_ttf
+    Vulkan2D
     EnTT::EnTT
 )
 
@@ -198,10 +198,10 @@ set_target_properties(Runa2Engine PROPERTIES
 # ============================================================================
 
 # Add executable (only game logic)
-# Using grass_test.cpp for texture debugging
+# Using main.cpp for ECS-based game
 add_executable(Runa2
-    src/grass_test.cpp
-    # src/main.cpp  # Disabled - uses ECS
+    src/main.cpp
+    # src/grass_test.cpp  # Disabled - texture debugging
 )
 
 # Link game executable to engine DLL
@@ -241,7 +241,15 @@ function(copy_dlls_to_exe target)
             $<TARGET_FILE_DIR:${target}>
         COMMENT "Copying Runa2Engine.dll"
     )
-    
+
+    # Copy Vulkan2D DLL
+    add_custom_command(TARGET ${target} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:Vulkan2D>
+            $<TARGET_FILE_DIR:${target}>
+        COMMENT "Copying Vulkan2D.dll"
+    )
+
     # Copy SDL3 DLLs
     add_custom_command(TARGET ${target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
@@ -249,21 +257,21 @@ function(copy_dlls_to_exe target)
             $<TARGET_FILE_DIR:${target}>
         COMMENT "Copying SDL3.dll"
     )
-    
+
     add_custom_command(TARGET ${target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
             $<TARGET_FILE:SDL3_image::SDL3_image>
             $<TARGET_FILE_DIR:${target}>
         COMMENT "Copying SDL3_image.dll"
     )
-    
+
     add_custom_command(TARGET ${target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
             $<TARGET_FILE:SDL3_ttf::SDL3_ttf>
             $<TARGET_FILE_DIR:${target}>
         COMMENT "Copying SDL3_ttf.dll"
     )
-    
+
     # Copy spdlog DLL - check if it exists as a shared library
     # spdlog may be built as shared despite SPDLOG_BUILD_SHARED OFF in some cases
     if(TARGET spdlog::spdlog)

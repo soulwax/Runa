@@ -1,5 +1,506 @@
 [0/2] Re-checking globbed directories...
-[1/5] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/Camera.cpp.obj
-[2/5] Building CXX object CMakeFiles/Runa2Engine.dir/src/ECS/Systems.cpp.obj
-[3/5] Linking CXX shared library libRuna2Engine.dll
-[4/5] Linking CXX executable Runa2.exe; Copying Runa2Engine.dll; Copying SDL3.dll; Copying SDL3_image.dll; Copying SDL3_ttf.dll; Copying spdlog DLL
+[1/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftbdf.c.obj
+[2/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftbbox.c.obj
+[3/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftcid.c.obj
+[4/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftfstype.c.obj
+[5/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftgasp.c.obj
+[6/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftbitmap.c.obj
+[7/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftinit.c.obj
+[8/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftgxval.c.obj
+[9/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftpatent.c.obj
+[10/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftotval.c.obj
+[11/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftmm.c.obj
+[12/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftglyph.c.obj
+[13/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftpfr.c.obj
+[14/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftsynth.c.obj
+[15/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/base/fttype1.c.obj
+[16/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftwinfnt.c.obj
+[17/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/bzip2/ftbzip2.c.obj
+[18/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftstroke.c.obj
+[19/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/lzw/ftlzw.c.obj
+[20/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/bdf/bdf.c.obj
+[21/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/cache/ftcache.c.obj
+[22/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/cid/type1cid.c.obj
+[23/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/pcf/pcf.c.obj
+[24/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/gzip/ftgzip.c.obj
+[25/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/psnames/psnames.c.obj
+[26/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/svg/svg.c.obj
+[27/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/raster/raster.c.obj
+[28/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/autofit/autofit.c.obj
+[29/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/smooth/smooth.c.obj
+[30/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/sdf/sdf.c.obj
+[31/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/pfr/pfr.c.obj
+[32/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/pshinter/pshinter.c.obj
+[33/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/base/ftbase.c.obj
+[34/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/cff/cff.c.obj
+[35/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/builds/windows/ftdebug.c.obj
+[36/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/winfonts/winfnt.c.obj
+[37/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/type42/type42.c.obj
+[38/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/type1/type1.c.obj
+[39/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/psaux/psaux.c.obj
+[40/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/sfnt/sfnt.c.obj
+[41/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/src/truetype/truetype.c.obj
+[42/496] Building C object _deps/sdl3_ttf-build/external/freetype-build/CMakeFiles/freetype.dir/builds/windows/ftsystem.c.obj
+[43/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/e_atan2.c.obj
+[44/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/e_log.c.obj
+[45/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/e_exp.c.obj
+[46/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/e_pow.c.obj
+[47/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/e_log10.c.obj
+[48/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/e_fmod.c.obj
+[49/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/k_cos.c.obj
+[50/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/e_sqrt.c.obj
+[51/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/e_rem_pio2.c.obj
+[52/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/k_rem_pio2.c.obj
+[53/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/k_sin.c.obj
+[54/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/k_tan.c.obj
+[55/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_atan.c.obj
+[56/496] Building C object _deps/sdl3_ttf-build/external/plutovg-build/CMakeFiles/plutovg.dir/source/plutovg-blend.c.obj
+[57/496] Building C object _deps/sdl3_ttf-build/external/plutovg-build/CMakeFiles/plutovg.dir/source/plutovg-canvas.c.obj
+[58/496] Linking CXX static library _deps\sdl3_ttf-build\external\freetype-build\libfreetyped.a
+[59/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_copysign.c.obj
+[60/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_cos.c.obj
+[61/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_floor.c.obj
+[62/496] Building C object _deps/sdl3_ttf-build/external/plutovg-build/CMakeFiles/plutovg.dir/source/plutovg-matrix.c.obj
+[63/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_isinf.c.obj
+[64/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_isnanf.c.obj
+[65/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_fabs.c.obj
+[66/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_isinff.c.obj
+[67/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_modf.c.obj
+[68/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_isnan.c.obj
+[69/496] Building C object _deps/sdl3_ttf-build/external/plutovg-build/CMakeFiles/plutovg.dir/source/plutovg-paint.c.obj
+[70/496] Building C object _deps/sdl3_ttf-build/external/plutovg-build/CMakeFiles/plutovg.dir/source/plutovg-path.c.obj
+[71/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_scalbn.c.obj
+[72/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_sin.c.obj
+[73/496] Building C object _deps/sdl3_ttf-build/external/plutovg-build/CMakeFiles/plutovg.dir/source/plutovg-ft-math.c.obj
+[74/496] Building C object _deps/sdl3_ttf-build/external/plutovg-build/CMakeFiles/plutovg.dir/source/plutovg-rasterize.c.obj
+[75/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/cmake_pch.h.gch
+[76/496] Building C object _deps/sdl3-build/CMakeFiles/SDL_uclibc.dir/src/libm/s_tan.c.obj
+[77/496] Building C object _deps/sdl3_ttf-build/external/plutovg-build/CMakeFiles/plutovg.dir/source/plutovg-ft-raster.c.obj
+[78/496] Building C object _deps/sdl3_ttf-build/external/plutovg-build/CMakeFiles/plutovg.dir/source/plutovg-ft-stroker.c.obj
+[79/496] Building C object _deps/sdl3_ttf-build/external/plutovg-build/CMakeFiles/plutovg.dir/source/plutovg-font.c.obj
+[80/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/binary.cpp for CXX dependencies
+[81/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/directives.cpp for CXX dependencies
+[82/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/contrib/graphbuilderadapter.cpp for CXX dependencies
+[83/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/depthguard.cpp for CXX dependencies
+[84/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/contrib/graphbuilder.cpp for CXX dependencies
+[85/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/null.cpp for CXX dependencies
+[86/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/exceptions.cpp for CXX dependencies
+[87/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/emitfromevents.cpp for CXX dependencies
+[88/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/exp.cpp for CXX dependencies
+[89/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/convert.cpp for CXX dependencies
+[90/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/emitterstate.cpp for CXX dependencies
+[91/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/emit.cpp for CXX dependencies
+[92/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/emitter.cpp for CXX dependencies
+[93/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/fptostring.cpp for CXX dependencies
+[94/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/emitterutils.cpp for CXX dependencies
+[95/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/node.cpp for CXX dependencies
+[96/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/memory.cpp for CXX dependencies
+[97/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/nodebuilder.cpp for CXX dependencies
+[98/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/node_data.cpp for CXX dependencies
+[99/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/nodeevents.cpp for CXX dependencies
+[100/496] Building CXX object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/cmake_pch.hxx.gch
+[101/496] Building C object _deps/sdl3_ttf-build/external/plutovg-build/CMakeFiles/plutovg.dir/source/plutovg-surface.c.obj
+[102/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/ostream_wrapper.cpp for CXX dependencies
+[103/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/SDL_error.c.obj
+[104/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/regex_yaml.cpp for CXX dependencies
+[105/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/scantag.cpp for CXX dependencies
+[106/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/parser.cpp for CXX dependencies
+[107/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/scanscalar.cpp for CXX dependencies
+[108/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/parse.cpp for CXX dependencies
+[109/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/scanner.cpp for CXX dependencies
+[110/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/tag.cpp for CXX dependencies
+[111/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/stream.cpp for CXX dependencies
+[112/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/simplekey.cpp for CXX dependencies
+[113/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/SDL_guid.c.obj
+[114/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/scantoken.cpp for CXX dependencies
+[115/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/SDL_list.c.obj
+[116/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/SDL_hashtable.c.obj
+[117/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/SDL_hints.c.obj
+[118/496] Scanning D:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/src/singledocparser.cpp for CXX dependencies
+[119/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/audio/SDL_audiodev.c.obj
+[120/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/atomic/SDL_atomic.c.obj
+[121/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/SDL_assert.c.obj
+[122/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/SDL_utils.c.obj
+[123/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/SDL.c.obj
+[124/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/SDL_properties.c.obj
+[125/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/audio/SDL_mixer.c.obj
+[126/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/audio/SDL_audioqueue.c.obj
+[127/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/audio/SDL_audioresample.c.obj
+[128/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/core/SDL_core_unsupported.c.obj
+[129/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/SDL_log.c.obj
+[130/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/audio/SDL_audiotypecvt.c.obj
+[131/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/atomic/SDL_spinlock.c.obj
+[132/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/events/SDL_categories.c.obj
+[133/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/audio/SDL_wave.c.obj
+[134/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/events/SDL_clipboardevents.c.obj
+[135/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/events/SDL_dropevents.c.obj
+[136/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/events/SDL_displayevents.c.obj
+[137/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/audio/SDL_audiocvt.c.obj
+[138/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/events/SDL_eventwatch.c.obj
+[139/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/events/SDL_keysym_to_keycode.c.obj
+[140/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/cpuinfo/SDL_cpuinfo.c.obj
+[141/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/events/SDL_keyboard.c.obj
+[142/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/events/SDL_keysym_to_scancode.c.obj
+[143/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/events/SDL_keymap.c.obj
+[144/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/events/SDL_scancode_tables.c.obj
+[145/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/events/SDL_quit.c.obj
+[146/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/events/imKStoUCS.c.obj
+[147/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/events/SDL_pen.c.obj
+[148/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/camera/SDL_camera.c.obj
+[149/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/audio/SDL_audio.c.obj
+[150/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/events/SDL_windowevents.c.obj
+[151/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/events/SDL_touch.c.obj
+[152/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/filesystem/SDL_filesystem.c.obj
+[153/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/io/SDL_asyncio.c.obj
+[154/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/io/generic/SDL_asyncio_generic.c.obj
+[155/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/events/SDL_events.c.obj
+[156/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/controller_type.c.obj
+[157/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/haptic/SDL_haptic.c.obj
+[158/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/locale/SDL_locale.c.obj
+[159/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/main/SDL_main_callbacks.c.obj
+[160/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/main/SDL_runapp.c.obj
+[161/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/events/SDL_mouse.c.obj
+[162/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/misc/SDL_libusb.c.obj
+[163/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/power/SDL_power.c.obj
+[164/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/misc/SDL_url.c.obj
+[165/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/SDL_steam_virtual_gamepad.c.obj
+[166/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/SDL_render_unsupported.c.obj
+[167/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/gpu/SDL_gpu.c.obj
+[168/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/SDL_yuv_sw.c.obj
+[169/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/io/SDL_iostream.c.obj
+[170/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/gpu/SDL_pipeline_gpu.c.obj
+[171/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/gpu/SDL_shaders_gpu.c.obj
+[172/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/ngage/SDL_render_ngage.c.obj
+[173/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/hidapi/SDL_hidapi.c.obj
+[174/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/SDL_joystick.c.obj
+[175/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/SDL_gamepad.c.obj
+[176/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/gpu/SDL_render_gpu.c.obj
+[177/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/ps2/SDL_render_ps2.c.obj
+[178/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/psp/SDL_render_psp.c.obj
+[179/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/opengles2/SDL_shaders_gles2.c.obj
+[180/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/direct3d/SDL_shaders_d3d.c.obj
+[181/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/SDL_render.c.obj
+[182/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/opengles2/SDL_render_gles2.c.obj
+[183/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/opengl/SDL_shaders_gl.c.obj
+[184/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/software/SDL_drawpoint.c.obj
+[185/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/opengl/SDL_render_gl.c.obj
+[186/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/software/SDL_blendpoint.c.obj
+[187/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/software/SDL_drawline.c.obj
+[188/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/vitagxm/SDL_render_vita_gxm.c.obj
+[189/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/direct3d/SDL_render_d3d.c.obj
+[190/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/vitagxm/SDL_render_vita_gxm_memory.c.obj
+[191/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/software/SDL_render_sw.c.obj
+[192/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/software/SDL_blendfillrect.c.obj
+[193/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/software/SDL_triangle.c.obj
+[194/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/direct3d11/SDL_shaders_d3d11.c.obj
+[195/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/direct3d12/SDL_shaders_d3d12.c.obj
+[196/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/vitagxm/SDL_render_vita_gxm_tools.c.obj
+[197/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/sensor/SDL_sensor.c.obj
+[198/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/stdlib/SDL_crc16.c.obj
+[199/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/stdlib/SDL_crc32.c.obj
+[200/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/vulkan/SDL_shaders_vulkan.c.obj
+[201/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/stdlib/SDL_memcpy.c.obj
+[202/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/direct3d11/SDL_render_d3d11.c.obj
+[203/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/stdlib/SDL_iconv.c.obj
+[204/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/stdlib/SDL_malloc.c.obj
+[205/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/stdlib/SDL_memmove.c.obj
+[206/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/stdlib/SDL_memset.c.obj
+[207/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/stdlib/SDL_mslibc.c.obj
+[208/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/direct3d12/SDL_render_d3d12.c.obj
+[209/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/stdlib/SDL_random.c.obj
+[210/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/stdlib/SDL_murmur3.c.obj
+[211/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/stdlib/SDL_stdlib.c.obj
+[212/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/software/SDL_blendline.c.obj
+[213/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/stdlib/SDL_qsort.c.obj
+[214/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/time/SDL_time.c.obj
+[215/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/stdlib/SDL_strtokr.c.obj
+[216/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/stdlib/SDL_string.c.obj
+[217/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/stdlib/SDL_getenv.c.obj
+[218/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/storage/SDL_storage.c.obj
+[219/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_blit.c.obj
+[220/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_blit_copy.c.obj
+[221/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_RLEaccel.c.obj
+[222/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_bmp.c.obj
+[223/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/thread/SDL_thread.c.obj
+[224/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_blit_1.c.obj
+[225/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_blit_slow.c.obj
+[226/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_clipboard.c.obj
+[227/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/timer/SDL_timer.c.obj
+[228/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_blit_0.c.obj
+[229/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_fillrect.c.obj
+[230/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/render/vulkan/SDL_render_vulkan.c.obj
+[231/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_rect.c.obj
+[232/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_blit_N.c.obj
+[233/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_pixels.c.obj
+[234/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_rotate.c.obj
+[235/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_stretch.c.obj
+[236/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_video_unsupported.c.obj
+[237/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/yuv2rgb/yuv_rgb_lsx.c.obj
+[238/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_blit_A.c.obj
+[239/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_egl.c.obj
+[240/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/audio/disk/SDL_diskaudio.c.obj
+[241/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/camera/dummy/SDL_camera_dummy.c.obj
+[242/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/audio/dummy/SDL_dummyaudio.c.obj
+[243/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/dummy/SDL_nullevents.c.obj
+[244/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_surface.c.obj
+[245/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/yuv2rgb/yuv_rgb_std.c.obj
+[246/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/virtual/SDL_virtualjoystick.c.obj
+[247/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/dummy/SDL_nullframebuffer.c.obj
+[248/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/dummy/SDL_nullvideo.c.obj
+[249/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_vulkan_utils.c.obj
+[250/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_yuv.c.obj
+[251/496] Building CXX object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/core/windows/SDL_gameinput.cpp.obj
+[252/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/dynapi/SDL_dynapi.c.obj
+[253/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/core/windows/pch.c.obj
+[254/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/io/windows/SDL_asyncio_windows_ioring.c.obj
+[255/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_stb.c.obj
+[256/496] Building CXX object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/core/windows/pch_cpp.cpp.obj
+[257/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/core/windows/SDL_hid.c.obj
+[258/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/core/windows/SDL_xinput.c.obj
+[259/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/main/windows/SDL_sysmain_runapp.c.obj
+[260/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/misc/windows/SDL_sysurl.c.obj
+[261/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_blit_auto.c.obj
+[262/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/SDL_video.c.obj
+[263/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/core/windows/SDL_windows.c.obj
+[264/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/core/windows/SDL_immdevice.c.obj
+[265/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/audio/wasapi/SDL_wasapi.c.obj
+[266/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/windows/SDL_windowsclipboard.c.obj
+[267/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/audio/directsound/SDL_directsound.c.obj
+[268/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/windows/SDL_windowsframebuffer.c.obj
+[269/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/thread/generic/SDL_sysrwlock.c.obj
+[270/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/thread/generic/SDL_syscond.c.obj
+[271/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/windows/SDL_windowsmessagebox.c.obj
+[272/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/windows/SDL_windowsmouse.c.obj
+[273/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/windows/SDL_windowskeyboard.c.obj
+[274/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/windows/SDL_windowsopengles.c.obj
+[275/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/windows/SDL_windowsmodes.c.obj
+[276/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/windows/SDL_windowsrawinput.c.obj
+[277/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/yuv2rgb/yuv_rgb_sse.c.obj
+[278/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/windows/SDL_windowsopengl.c.obj
+[279/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/windows/SDL_windowsevents.c.obj
+[280/496] Building CXX object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/windows/SDL_windowsgameinput.cpp.obj
+[281/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/windows/SDL_windowsshape.c.obj
+[282/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/thread/windows/SDL_syscond_cv.c.obj
+[283/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/windows/SDL_windowsvulkan.c.obj
+[284/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/thread/windows/SDL_sysrwlock_srw.c.obj
+[285/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/thread/windows/SDL_sysmutex.c.obj
+[286/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/storage/generic/SDL_genericstorage.c.obj
+[287/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/thread/windows/SDL_systls.c.obj
+[288/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/thread/windows/SDL_syssem.c.obj
+[289/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/thread/windows/SDL_systhread.c.obj
+[290/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/storage/steam/SDL_steamstorage.c.obj
+[291/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/power/windows/SDL_syspower.c.obj
+[292/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/locale/windows/SDL_syslocale.c.obj
+[293/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/filesystem/windows/SDL_sysfsops.c.obj
+[294/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_8bitdo.c.obj
+[295/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_combined.c.obj
+[296/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/windows/SDL_windowsvideo.c.obj
+[297/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_flydigi.c.obj
+[298/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_lg4ff.c.obj
+[299/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_gamecube.c.obj
+[300/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/time/windows/SDL_systime.c.obj
+[301/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_luna.c.obj
+[302/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/loadso/windows/SDL_sysloadso.c.obj
+[303/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/timer/windows/SDL_systimer.c.obj
+[304/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_gip.c.obj
+[305/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/windows/SDL_windowswindow.c.obj
+[306/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/tray/windows/SDL_tray.c.obj
+[307/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_ps4.c.obj
+[308/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_ps3.c.obj
+[309/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_shield.c.obj
+[310/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_ps5.c.obj
+[311/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/sensor/windows/SDL_windowssensor.c.obj
+[312/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_steam_hori.c.obj
+[313/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_steam_triton.c.obj
+[314/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_steam.c.obj
+[315/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_sinput.c.obj
+[316/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_stadia.c.obj
+[317/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_switch2.c.obj
+[318/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_steamdeck.c.obj
+[319/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_rumble.c.obj
+[320/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_xbox360w.c.obj
+[321/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_zuiki.c.obj
+[322/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_xbox360.c.obj
+[323/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_report_descriptor.c.obj
+[324/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_wii.c.obj
+[325/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/haptic/hidapi/SDL_hidapihaptic.c.obj
+[326/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_xboxone.c.obj
+[327/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapi_switch.c.obj
+[328/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/filesystem/windows/SDL_sysfilesystem.c.obj
+[329/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/haptic/hidapi/SDL_hidapihaptic_lg4ff.c.obj
+[330/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/dialog/SDL_dialog_utils.c.obj
+[331/496] Building RC object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/core/windows/version.rc.obj
+[332/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/offscreen/SDL_offscreenevents.c.obj
+[333/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/hidapi/SDL_hidapijoystick.c.obj
+[334/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/dialog/SDL_dialog.c.obj
+[335/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/process/SDL_process.c.obj
+[336/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/offscreen/SDL_offscreenframebuffer.c.obj
+[337/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/process/windows/SDL_windowsprocess.c.obj
+[338/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/tray/SDL_tray_utils.c.obj
+[339/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/windows/SDL_windowsjoystick.c.obj
+[340/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/windows/SDL_dinputjoystick.c.obj
+[341/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/windows/SDL_xinputjoystick.c.obj
+[342/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/haptic/windows/SDL_windowshaptic.c.obj
+[343/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/haptic/windows/SDL_dinputhaptic.c.obj
+[344/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/main/generic/SDL_sysmain_callbacks.c.obj
+[345/496] Generating CXX dyndep file _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/CXX.dd
+[346/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/windows/SDL_windows_gaming_input.c.obj
+[347/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/offscreen/SDL_offscreenvideo.c.obj
+[348/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/offscreen/SDL_offscreenwindow.c.obj
+[349/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/joystick/windows/SDL_rawinputjoystick.c.obj
+[350/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/offscreen/SDL_offscreenopengles.c.obj
+[351/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_WIC.c.obj
+[352/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/video/offscreen/SDL_offscreenvulkan.c.obj
+[353/496] Linking C static library _deps\sdl3_ttf-build\external\plutovg-build\libplutovg.a
+[354/496] Linking C static library _deps\sdl3-build\libSDL_uclibc.a
+[355/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG.c.obj
+[356/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/camera/mediafoundation/SDL_camera_mediafoundation.c.obj
+[357/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_ani.c.obj
+[358/496] Building C object _deps/sdl3_ttf-build/external/plutosvg-guild/CMakeFiles/plutosvg.dir/source/plutosvg.c.obj
+[359/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_avif.c.obj
+[360/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_anim_decoder.c.obj
+[361/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_anim_encoder.c.obj
+[362/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_bmp.c.obj
+[363/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_jxl.c.obj
+[364/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_png.c.obj
+[365/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/dialog/windows/SDL_windowsdialog.c.obj
+[366/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_jpg.c.obj
+[367/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_pcx.c.obj
+[368/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_lbm.c.obj
+[369/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_pnm.c.obj
+[370/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_gif.c.obj
+[371/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_qoi.c.obj
+[372/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_tif.c.obj
+[373/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_webp.c.obj
+[374/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_libpng.c.obj
+[375/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_tga.c.obj
+[376/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_xv.c.obj
+[377/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_xpm.c.obj
+[378/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/xmlman.c.obj
+[379/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_xcf.c.obj
+[380/496] Building C object _deps/sdl3_ttf-build/CMakeFiles/SDL3_ttf-shared.dir/src/SDL_hashtable_ttf.c.obj
+[381/496] Building C object _deps/sdl3_ttf-build/CMakeFiles/SDL3_ttf-shared.dir/src/SDL_hashtable.c.obj
+[382/496] Building C object _deps/sdl3_ttf-build/CMakeFiles/SDL3_ttf-shared.dir/src/SDL_surface_textengine.c.obj
+[383/496] Building C object _deps/sdl3_ttf-build/CMakeFiles/SDL3_ttf-shared.dir/src/SDL_gpu_textengine.c.obj
+[384/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/gpu/vulkan/SDL_gpu_vulkan.c.obj
+[385/496] Building C object _deps/sdl3_ttf-build/CMakeFiles/SDL3_ttf-shared.dir/src/SDL_renderer_textengine.c.obj
+[386/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_svg.c.obj
+[387/496] Building C object _deps/sdl3_image-build/CMakeFiles/SDL3_image-shared.dir/src/IMG_stb.c.obj
+[388/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3-shared.dir/src/gpu/d3d12/SDL_gpu_d3d12.c.obj
+[389/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/directives.cpp.obj
+[390/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/binary.cpp.obj
+[391/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/depthguard.cpp.obj
+[392/496] Building C object _deps/sdl3_ttf-build/CMakeFiles/SDL3_ttf-shared.dir/src/SDL_ttf.c.obj
+[393/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/exceptions.cpp.obj
+[394/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/contrib/graphbuilderadapter.cpp.obj
+[395/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/contrib/graphbuilder.cpp.obj
+[396/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/null.cpp.obj
+[397/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/exp.cpp.obj
+[398/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/emit.cpp.obj
+[399/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/emitfromevents.cpp.obj
+[400/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/emitterstate.cpp.obj
+[401/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/emitter.cpp.obj
+[402/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/fptostring.cpp.obj
+[403/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/memory.cpp.obj
+[404/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/emitterutils.cpp.obj
+[405/496] Linking CXX shared library _deps\sdl3-build\SDL3.dll
+[406/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/node.cpp.obj
+[407/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/convert.cpp.obj
+[408/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/ostream_wrapper.cpp.obj
+[409/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/nodeevents.cpp.obj
+[410/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/regex_yaml.cpp.obj
+[411/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/node_data.cpp.obj
+[412/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/nodebuilder.cpp.obj
+[413/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/scantag.cpp.obj
+[414/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/parser.cpp.obj
+[415/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/scanscalar.cpp.obj
+[416/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/parse.cpp.obj
+[417/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/tag.cpp.obj
+[418/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/simplekey.cpp.obj
+[419/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/stream.cpp.obj
+[420/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/Constants.c.obj
+[421/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/scantoken.cpp.obj
+[422/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/Camera.c.obj
+[423/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/Buffer.c.obj
+[424/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/scanner.cpp.obj
+[425/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/DescriptorBuffer.c.obj
+[426/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/DescriptorControl.c.obj
+[427/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/Gui.c.obj
+[428/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/Initializers.c.obj
+[429/496] Building CXX object _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/src/singledocparser.cpp.obj
+[430/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/Logger.c.obj
+[431/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/LogicalDevice.c.obj
+[432/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/Model.c.obj
+[433/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/PhysicalDevice.c.obj
+[434/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/Pipeline.c.obj
+[435/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/Polygon.c.obj
+[436/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/Shader.c.obj
+[437/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/Image.c.obj
+[438/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/Texture.c.obj
+[439/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/ShadowEnvironment.c.obj
+[440/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/Renderer.c.obj
+[441/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/RendererMeta.c.obj
+[442/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/Util.c.obj
+[443/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/Validation.c.obj
+[444/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/VulkanInterface.c.obj
+[445/496] Building CXX object _deps/spdlog-build/CMakeFiles/spdlog.dir/src/file_sinks.cpp.obj
+[446/496] Building CXX object _deps/spdlog-build/CMakeFiles/spdlog.dir/src/cfg.cpp.obj
+[447/496] Building CXX object _deps/spdlog-build/CMakeFiles/spdlog.dir/src/async.cpp.obj
+[448/496] Building CXX object _deps/spdlog-build/CMakeFiles/spdlog.dir/src/bundled_fmtlib_format.cpp.obj
+[449/496] Building C object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/nuklear.c.obj
+[450/496] Building CXX object _deps/spdlog-build/CMakeFiles/spdlog.dir/src/color_sinks.cpp.obj
+[451/496] Building CXX object _deps/spdlog-build/CMakeFiles/spdlog.dir/src/stdout_sinks.cpp.obj
+[452/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/runapch.cpp.obj
+[453/496] Building CXX object vendor/Vulkan2D/CMakeFiles/Vulkan2D.dir/extern/VulkanMemoryAllocator/src/VmaUsage.cpp.obj
+[454/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/Input.cpp.obj
+[455/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/Entity.cpp.obj
+[456/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/Log.cpp.obj
+[457/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/Collision.cpp.obj
+[458/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/Application.cpp.obj
+[459/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/PlayerController.cpp.obj
+[460/496] Linking C shared library _deps\sdl3_image-build\SDL3_image.dll
+[461/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/Window.cpp.obj
+[462/496] Linking CXX shared library vendor\Vulkan2D\libVulkan2D.dll
+[463/496] Linking CXX static library _deps\yaml-cpp-build\libyaml-cppd.a
+[464/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/Renderer.cpp.obj
+[465/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3_test.dir/src/test/SDL_test_assert.c.obj
+[466/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3_test.dir/src/test/SDL_test_crc32.c.obj
+[467/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3_test.dir/src/test/SDL_test_compare.c.obj
+[468/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3_test.dir/src/test/SDL_test_common.c.obj
+[469/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3_test.dir/src/test/SDL_test_font.c.obj
+[470/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/ResourceManager.cpp.obj
+[471/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/Shader.cpp.obj
+[472/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3_test.dir/src/test/SDL_test_fuzzer.c.obj
+[473/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3_test.dir/src/test/SDL_test_harness.c.obj
+[474/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3_test.dir/src/test/SDL_test_md5.c.obj
+[475/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3_test.dir/src/test/SDL_test_log.c.obj
+[476/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/SpriteBatch.cpp.obj
+[477/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/Texture.cpp.obj
+[478/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/PostProcess.cpp.obj
+[479/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/TileMap.cpp.obj
+[480/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/SpriteSheet.cpp.obj
+[481/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/Font.cpp.obj
+[482/496] Building C object _deps/sdl3-build/CMakeFiles/SDL3_test.dir/src/test/SDL_test_memory.c.obj
+[483/496] Linking C static library _deps\sdl3-build\libSDL3_test.a
+[484/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/Camera.cpp.obj
+[485/496] Building CXX object _deps/spdlog-build/CMakeFiles/spdlog.dir/src/spdlog.cpp.obj
+[486/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/ECS/Registry.cpp.obj
+[487/496] Building CXX object CMakeFiles/Runa2Engine.dir/src/ECS/Systems.cpp.obj
+[488/496] Linking CXX shared library _deps\spdlog-build\libspdlogd.dll
+[489/496] Building CXX object CMakeFiles/Runa2.dir/src/main.cpp.obj
+[490/496] Building CXX object _deps/sdl3_ttf-build/external/harfbuzz-build/CMakeFiles/harfbuzz.dir/src/harfbuzz.cc.obj
+In file included from D:/Workspace/C++/Runa2/build/debug/_deps/sdl3_ttf-src/external/harfbuzz/src/harfbuzz.cc:5:
+D:/Workspace/C++/Runa2/build/debug/_deps/sdl3_ttf-src/external/harfbuzz/src/hb-buffer-verify.cc: In function 'void buffer_verify_error(hb_buffer_t*, hb_font_t*, const char*, ...)':
+D:/Workspace/C++/Runa2/build/debug/_deps/sdl3_ttf-src/external/harfbuzz/src/hb-buffer-verify.cc:56:14: warning: function 'void buffer_verify_error(hb_buffer_t*, hb_font_t*, const char*, ...)' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+   56 |     vfprintf (stderr, fmt, ap);
+      |     ~~~~~~~~~^~~~~~~~~~~~~~~~~
+In file included from D:/Workspace/C++/Runa2/build/debug/_deps/sdl3_ttf-src/external/harfbuzz/src/harfbuzz.cc:6:
+D:/Workspace/C++/Runa2/build/debug/_deps/sdl3_ttf-src/external/harfbuzz/src/hb-buffer.cc: In member function 'bool hb_buffer_t::message_impl(hb_font_t*, const char*, va_list)':
+D:/Workspace/C++/Runa2/build/debug/_deps/sdl3_ttf-src/external/harfbuzz/src/hb-buffer.cc:2259:13: warning: function 'bool hb_buffer_t::message_impl(hb_font_t*, const char*, va_list)' might be a candidate for 'gnu_printf' format attribute [-Wsuggest-attribute=format]
+ 2259 |   vsnprintf (buf, sizeof (buf), fmt, ap);
+      |   ~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[491/496] Linking C static library _deps\sdl3_ttf-build\external\harfbuzz-build\libharfbuzz.a
+[492/496] Linking CXX static library _deps\sdl3_ttf-build\external\plutosvg-guild\libplutosvg.a
+[493/496] Linking CXX shared library _deps\sdl3_ttf-build\SDL3_ttf.dll
+[494/496] Linking CXX shared library libRuna2Engine.dll
+[495/496] Linking CXX executable Runa2.exe; Copying Runa2Engine.dll; Copying Vulkan2D.dll; Copying SDL3.dll; Copying SDL3_image.dll; Copying SDL3_ttf.dll; Copying spdlog DLL
