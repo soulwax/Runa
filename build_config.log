@@ -1,3 +1,15 @@
+-- The CXX compiler identification is GNU 15.2.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Users/soulwax/scoop/apps/gcc/current/bin/g++.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- The C compiler identification is GNU 15.2.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: C:/Users/soulwax/scoop/apps/gcc/current/bin/gcc.exe - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
 -- Could NOT find PkgConfig (missing: PKG_CONFIG_EXECUTABLE) 
 -- Could NOT find LibUSB (missing: LibUSB_LIBRARY LibUSB_INCLUDE_PATH) (found version "LibUSB_VERSION-NOTFOUND")
 -- 
@@ -5,8 +17,8 @@
 -- 
 -- Platform: Windows-10.0.26200
 -- 64-bit:   TRUE
--- Compiler: C:/Users/soulwax/scoop/apps/mingw/current/bin/gcc.exe
--- Revision: SDL-3.5.0-release-3.4.0-8-g6247568a
+-- Compiler: C:/Users/soulwax/scoop/apps/gcc/current/bin/gcc.exe
+-- Revision: SDL-3.5.0-504041a1
 -- Vendor:   
 -- 
 -- Subsystems:
@@ -162,6 +174,6 @@ Building introspection files on Windows requires BUILD_SHARED_LIBS to be enabled
 -- - disabled: 
 -- Build spdlog: 1.15.0
 -- Build type: Debug
--- Configuring done (11.1s)
--- Generating done (0.2s)
+-- Configuring done (337.9s)
+-- Generating done (0.3s)
 -- Build files have been written to: D:/Workspace/C++/Runa2/build/debug

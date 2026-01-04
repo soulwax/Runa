@@ -35,7 +35,11 @@
       "Bash(cmd /c \"timeout 3 && build\\\\debug\\\\Runa2.exe 2>&1 | tee grass_test_output.log\")",
       "Bash(cmd /c \"timeout 3 build\\\\debug\\\\Runa2.exe 2>&1\")",
       "Bash(git config:*)",
-      "Bash(git rm:*)"
+      "Bash(git rm:*)",
+      "Bash(cmd /c \"rmdir /s /q build\\\\debug\")",
+      "Bash(cmd /c \"rmdir /s /q build\\\\release\")",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
     ]
   }
 }
