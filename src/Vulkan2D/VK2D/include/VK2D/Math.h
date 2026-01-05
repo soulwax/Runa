@@ -1,8 +1,7 @@
 // File: src/Vulkan2D/VK2D/include/VK2D/Math.h
 
 /// \file Math.h
-(Not really)
-/// \brief Defines some math things, only include once
+/// \brief Defines some math things, only include once (Not really)
 ///
 /// Paolo Mazzon added the C++ include guards and comments, otherwise this
 /// is as it was originally

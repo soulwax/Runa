@@ -6,6 +6,7 @@
 
 #pragma once
 
+#include <stdio.h>
 #include "VK2D/Structs.h"
 
 #ifdef __cplusplus

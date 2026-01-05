@@ -201,7 +201,6 @@ set_target_properties(Runa2Engine PROPERTIES
 # Using main.cpp for ECS-based game
 add_executable(Runa2
     src/main.cpp
-    # src/grass_test.cpp  # Disabled - texture debugging
 )
 
 # Link game executable to engine DLL
