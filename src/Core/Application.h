@@ -11,6 +11,9 @@
 
 namespace Runa {
 
+// Forward declarations
+class SceneManager;
+
 class RUNA_API Application {
 public:
   Application(const std::string &title, int width, int height);
@@ -18,23 +21,26 @@ public:
 
   void run();
 
+  // Public accessors
+  Window &getWindow() { return *m_window; }
+  Renderer &getRenderer() { return *m_renderer; }
+  Input &getInput() { return *m_input; }
+  SceneManager &getSceneManager();
+
+  // Get current FPS (updated every second)
+  int getFPS() const { return m_currentFPS; }
+
 protected:
   virtual void onInit() {}
   virtual void onUpdate(float deltaTime) {}
   virtual void onRender() {}
   virtual void onShutdown() {}
 
-  Window &getWindow() { return *m_window; }
-  Renderer &getRenderer() { return *m_renderer; }
-  Input &getInput() { return *m_input; }
-
-  // Get current FPS (updated every second)
-  int getFPS() const { return m_currentFPS; }
-
 private:
   std::unique_ptr<Window> m_window;
   std::unique_ptr<Renderer> m_renderer;
   std::unique_ptr<Input> m_input;
+  std::unique_ptr<SceneManager> m_sceneManager;
   bool m_running = false;
   int m_currentFPS = 0;
 

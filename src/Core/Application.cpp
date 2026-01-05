@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "../runapch.h"
 #include "Log.h"
+#include "SceneManager.h"
 
 namespace Runa {
 
@@ -34,6 +35,10 @@ Application::Application(const std::string &title, int width, int height) {
   m_input = std::make_unique<Input>(*m_window);
   m_window->setInput(m_input.get());
   LOG_INFO("Input system initialized");
+
+  // Create scene manager
+  m_sceneManager = std::make_unique<SceneManager>();
+  LOG_INFO("SceneManager initialized");
 }
 
 Application::~Application() {
@@ -50,6 +55,10 @@ Application::~Application() {
   SDL_Quit();
   LOG_INFO("Application shut down");
   Log::shutdown();
+}
+
+SceneManager &Application::getSceneManager() {
+  return *m_sceneManager;
 }
 
 void Application::run() {
@@ -106,12 +115,23 @@ void Application::mainLoop() {
     // Process events
     m_window->processEvents();
 
-    // Update game logic
-    onUpdate(deltaTime);
+    // Update input system (clear one-shot states)
+    m_input->beginFrame();
 
-    // Render
+    // Update game logic (either via scenes or legacy onUpdate)
+    if (m_sceneManager->hasScenes()) {
+      m_sceneManager->update(deltaTime);
+    } else {
+      onUpdate(deltaTime);
+    }
+
+    // Render (either via scenes or legacy onRender)
     m_renderer->beginFrame();
-    onRender();
+    if (m_sceneManager->hasScenes()) {
+      m_sceneManager->render();
+    } else {
+      onRender();
+    }
     m_renderer->endFrame();
 
     // Frame rate limiting: sleep to maintain 60 FPS

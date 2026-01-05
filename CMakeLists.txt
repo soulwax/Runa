@@ -127,6 +127,18 @@ add_library(Runa2Engine SHARED
     src/Core/PlayerController.h
     src/Core/Collision.cpp
     src/Core/Collision.h
+    src/Core/Scene.cpp
+    src/Core/Scene.h
+    src/Core/SceneManager.cpp
+    src/Core/SceneManager.h
+
+    # Scenes
+    src/Scenes/MenuScene.cpp
+    src/Scenes/MenuScene.h
+    src/Scenes/GameScene.cpp
+    src/Scenes/GameScene.h
+    src/Scenes/PauseScene.cpp
+    src/Scenes/PauseScene.h
 
     # ECS
     src/ECS/Components.h
@@ -198,9 +210,10 @@ set_target_properties(Runa2Engine PROPERTIES
 # ============================================================================
 
 # Add executable (only game logic)
-# Using main.cpp for ECS-based game
+# Using main_scene_demo.cpp for scene system demo
+# Alternative: src/main.cpp for ECS-based game
 add_executable(Runa2
-    src/main.cpp
+    src/main_scene_demo.cpp
 )
 
 # Link game executable to engine DLL

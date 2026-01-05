@@ -1,0 +1,294 @@
+[0/2] Re-checking globbed directories...
+[1/65] Generating CXX dyndep file _deps/yaml-cpp-build/CMakeFiles/yaml-cpp.dir/CXX.dd
+[2/32] Building C object src/Vulkan2D/CMakeFiles/Vulkan2D.dir/VK2D/src/RendererMeta.c.obj
+[3/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/runapch.cpp.obj
+[4/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/PlayerController.cpp.obj
+[5/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/Window.cpp.obj
+[6/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/Input.cpp.obj
+[7/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/Renderer.cpp.obj
+[8/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/Entity.cpp.obj
+[9/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/Scene.cpp.obj
+FAILED: [code=1] CMakeFiles/Runa2Engine.dir/src/Core/Scene.cpp.obj 
+C:\Users\soulwax\scoop\apps\gcc\current\bin\g++.exe -DFMT_SHARED -DRUNA2_ENGINE_EXPORTS -DRuna2Engine_EXPORTS -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_RUNTIME_CHECKS=0 -DSPDLOG_SHARED_LIB -DYAML_CPP_STATIC_DEFINE -ID:/Workspace/C++/Runa2/src -ID:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/spdlog-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3-build/include-revision -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3_image-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3_ttf-src/include -ID:/Workspace/C++/Runa2/src/Vulkan2D/VK2D/include -ID:/Workspace/C++/Runa2/build/debug/_deps/entt-src/src -isystem C:/VulkanSDK/1.4.335.0/include -g -std=c++20 -g -O0 -MD -MT CMakeFiles/Runa2Engine.dir/src/Core/Scene.cpp.obj -MF CMakeFiles\Runa2Engine.dir\src\Core\Scene.cpp.obj.d -o CMakeFiles/Runa2Engine.dir/src/Core/Scene.cpp.obj -c D:/Workspace/C++/Runa2/src/Core/Scene.cpp
+D:/Workspace/C++/Runa2/src/Core/Scene.cpp: In member function 'Runa::Renderer& Runa::Scene::getRenderer()':
+D:/Workspace/C++/Runa2/src/Core/Scene.cpp:19:41: error: 'Runa::Renderer& Runa::Application::getRenderer()' is protected within this context
+   19 |                 return m_app.getRenderer();
+      |                        ~~~~~~~~~~~~~~~~~^~
+In file included from D:/Workspace/C++/Runa2/src/Core/Scene.cpp:8:
+D:/Workspace/C++/Runa2/src/Core/Application.h:31:13: note: declared protected here
+   31 |   Renderer &getRenderer() { return *m_renderer; }
+      |             ^~~~~~~~~~~
+D:/Workspace/C++/Runa2/src/Core/Scene.cpp: In member function 'Runa::Input& Runa::Scene::getInput()':
+D:/Workspace/C++/Runa2/src/Core/Scene.cpp:23:38: error: 'Runa::Input& Runa::Application::getInput()' is protected within this context
+   23 |                 return m_app.getInput();
+      |                        ~~~~~~~~~~~~~~^~
+D:/Workspace/C++/Runa2/src/Core/Application.h:32:10: note: declared protected here
+   32 |   Input &getInput() { return *m_input; }
+      |          ^~~~~~~~
+[10/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/SceneManager.cpp.obj
+[11/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/Collision.cpp.obj
+[12/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/Log.cpp.obj
+[13/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/Application.cpp.obj
+[14/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Scenes/PauseScene.cpp.obj
+FAILED: [code=1] CMakeFiles/Runa2Engine.dir/src/Scenes/PauseScene.cpp.obj 
+C:\Users\soulwax\scoop\apps\gcc\current\bin\g++.exe -DFMT_SHARED -DRUNA2_ENGINE_EXPORTS -DRuna2Engine_EXPORTS -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_RUNTIME_CHECKS=0 -DSPDLOG_SHARED_LIB -DYAML_CPP_STATIC_DEFINE -ID:/Workspace/C++/Runa2/src -ID:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/spdlog-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3-build/include-revision -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3_image-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3_ttf-src/include -ID:/Workspace/C++/Runa2/src/Vulkan2D/VK2D/include -ID:/Workspace/C++/Runa2/build/debug/_deps/entt-src/src -isystem C:/VulkanSDK/1.4.335.0/include -g -std=c++20 -g -O0 -MD -MT CMakeFiles/Runa2Engine.dir/src/Scenes/PauseScene.cpp.obj -MF CMakeFiles\Runa2Engine.dir\src\Scenes\PauseScene.cpp.obj.d -o CMakeFiles/Runa2Engine.dir/src/Scenes/PauseScene.cpp.obj -c D:/Workspace/C++/Runa2/src/Scenes/PauseScene.cpp
+D:/Workspace/C++/Runa2/src/Scenes/PauseScene.cpp: In member function 'virtual void Runa::PauseScene::onUpdate(float)':
+D:/Workspace/C++/Runa2/src/Scenes/PauseScene.cpp:45:49: error: 'Runa::SceneManager& Runa::Application::getSceneManager()' is protected within this context
+   45 |                         getApp().getSceneManager().popScene();
+      |                         ~~~~~~~~~~~~~~~~~~~~~~~~^~
+In file included from D:/Workspace/C++/Runa2/src/Scenes/PauseScene.cpp:9:
+D:/Workspace/C++/Runa2/src/Core/Application.h:33:17: note: declared protected here
+   33 |   SceneManager &getSceneManager();
+      |                 ^~~~~~~~~~~~~~~
+In file included from D:/Workspace/C++/Runa2/build/debug/_deps/sdl3-src/include/SDL3/SDL.h:89,
+                 from D:/Workspace/C++/Runa2/src/runapch.h:70,
+                 from D:/Workspace/C++/Runa2/src/Scenes/PauseScene.cpp:6:
+D:/Workspace/C++/Runa2/build/debug/_deps/sdl3-src/include/SDL3/SDL_oldnames.h:1053:16: error: 'SDLK_q_renamed_SDLK_Q' was not declared in this scope
+ 1053 | #define SDLK_q SDLK_q_renamed_SDLK_Q
+      |                ^~~~~~~~~~~~~~~~~~~~~
+D:/Workspace/C++/Runa2/src/Scenes/PauseScene.cpp:49:45: note: in expansion of macro 'SDLK_q'
+   49 |                 if (getInput().isKeyPressed(SDLK_q)) {
+      |                                             ^~~~~~
+D:/Workspace/C++/Runa2/src/Scenes/PauseScene.cpp:51:49: error: 'Runa::SceneManager& Runa::Application::getSceneManager()' is protected within this context
+   51 |                         getApp().getSceneManager().changeScene(std::make_unique<MenuScene>(getApp()));
+      |                         ~~~~~~~~~~~~~~~~~~~~~~~~^~
+D:/Workspace/C++/Runa2/src/Core/Application.h:33:17: note: declared protected here
+   33 |   SceneManager &getSceneManager();
+      |                 ^~~~~~~~~~~~~~~
+D:/Workspace/C++/Runa2/src/Scenes/PauseScene.cpp: In member function 'virtual void Runa::PauseScene::onRender()':
+D:/Workspace/C++/Runa2/src/Scenes/PauseScene.cpp:61:50: error: 'Runa::Window& Runa::Application::getWindow()' is protected within this context
+   61 |                 int winWidth = getApp().getWindow().getWidth();
+      |                                ~~~~~~~~~~~~~~~~~~^~
+D:/Workspace/C++/Runa2/src/Core/Application.h:30:11: note: declared protected here
+   30 |   Window &getWindow() { return *m_window; }
+      |           ^~~~~~~~~
+D:/Workspace/C++/Runa2/src/Scenes/PauseScene.cpp:62:51: error: 'Runa::Window& Runa::Application::getWindow()' is protected within this context
+   62 |                 int winHeight = getApp().getWindow().getHeight();
+      |                                 ~~~~~~~~~~~~~~~~~~^~
+D:/Workspace/C++/Runa2/src/Core/Application.h:30:11: note: declared protected here
+   30 |   Window &getWindow() { return *m_window; }
+      |           ^~~~~~~~~
+[15/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/Shader.cpp.obj
+[16/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Scenes/MenuScene.cpp.obj
+FAILED: [code=1] CMakeFiles/Runa2Engine.dir/src/Scenes/MenuScene.cpp.obj 
+C:\Users\soulwax\scoop\apps\gcc\current\bin\g++.exe -DFMT_SHARED -DRUNA2_ENGINE_EXPORTS -DRuna2Engine_EXPORTS -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_RUNTIME_CHECKS=0 -DSPDLOG_SHARED_LIB -DYAML_CPP_STATIC_DEFINE -ID:/Workspace/C++/Runa2/src -ID:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/spdlog-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3-build/include-revision -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3_image-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3_ttf-src/include -ID:/Workspace/C++/Runa2/src/Vulkan2D/VK2D/include -ID:/Workspace/C++/Runa2/build/debug/_deps/entt-src/src -isystem C:/VulkanSDK/1.4.335.0/include -g -std=c++20 -g -O0 -MD -MT CMakeFiles/Runa2Engine.dir/src/Scenes/MenuScene.cpp.obj -MF CMakeFiles\Runa2Engine.dir\src\Scenes\MenuScene.cpp.obj.d -o CMakeFiles/Runa2Engine.dir/src/Scenes/MenuScene.cpp.obj -c D:/Workspace/C++/Runa2/src/Scenes/MenuScene.cpp
+In file included from D:/Workspace/C++/Runa2/src/Scenes/MenuScene.cpp:8:
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.h:36:33: error: 'EntityRegistry' was not declared in this scope; did you mean 'Runa::ECS::EntityRegistry'?
+   36 |                 std::unique_ptr<EntityRegistry> m_registry;
+      |                                 ^~~~~~~~~~~~~~
+      |                                 Runa::ECS::EntityRegistry
+In file included from D:/Workspace/C++/Runa2/src/Scenes/GameScene.h:13:
+D:/Workspace/C++/Runa2/src/ECS/Registry.h:19:16: note: 'Runa::ECS::EntityRegistry' declared here
+   19 | class RUNA_API EntityRegistry {
+      |                ^~~~~~~~~~~~~~
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.h:36:47: error: template argument 1 is invalid
+   36 |                 std::unique_ptr<EntityRegistry> m_registry;
+      |                                               ^
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.h:36:47: error: template argument 2 is invalid
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.h:36:22: error: '<expression error>' in namespace 'std' does not name a type
+   36 |                 std::unique_ptr<EntityRegistry> m_registry;
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+D:/Workspace/C++/Runa2/src/Scenes/MenuScene.cpp: In member function 'virtual void Runa::MenuScene::onUpdate(float)':
+D:/Workspace/C++/Runa2/src/Scenes/MenuScene.cpp:49:49: error: 'Runa::SceneManager& Runa::Application::getSceneManager()' is protected within this context
+   49 |                         getApp().getSceneManager().changeScene(std::make_unique<GameScene>(getApp()));
+      |                         ~~~~~~~~~~~~~~~~~~~~~~~~^~
+In file included from D:/Workspace/C++/Runa2/src/Scenes/MenuScene.cpp:9:
+D:/Workspace/C++/Runa2/src/Core/Application.h:33:17: note: declared protected here
+   33 |   SceneManager &getSceneManager();
+      |                 ^~~~~~~~~~~~~~~
+D:/Workspace/C++/Runa2/src/Scenes/MenuScene.cpp: In member function 'virtual void Runa::MenuScene::onRender()':
+D:/Workspace/C++/Runa2/src/Scenes/MenuScene.cpp:59:50: error: 'Runa::Window& Runa::Application::getWindow()' is protected within this context
+   59 |                 int winWidth = getApp().getWindow().getWidth();
+      |                                ~~~~~~~~~~~~~~~~~~^~
+D:/Workspace/C++/Runa2/src/Core/Application.h:30:11: note: declared protected here
+   30 |   Window &getWindow() { return *m_window; }
+      |           ^~~~~~~~~
+D:/Workspace/C++/Runa2/src/Scenes/MenuScene.cpp:60:51: error: 'Runa::Window& Runa::Application::getWindow()' is protected within this context
+   60 |                 int winHeight = getApp().getWindow().getHeight();
+      |                                 ~~~~~~~~~~~~~~~~~~^~
+D:/Workspace/C++/Runa2/src/Core/Application.h:30:11: note: declared protected here
+   30 |   Window &getWindow() { return *m_window; }
+      |           ^~~~~~~~~
+[17/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Scenes/GameScene.cpp.obj
+FAILED: [code=1] CMakeFiles/Runa2Engine.dir/src/Scenes/GameScene.cpp.obj 
+C:\Users\soulwax\scoop\apps\gcc\current\bin\g++.exe -DFMT_SHARED -DRUNA2_ENGINE_EXPORTS -DRuna2Engine_EXPORTS -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_RUNTIME_CHECKS=0 -DSPDLOG_SHARED_LIB -DYAML_CPP_STATIC_DEFINE -ID:/Workspace/C++/Runa2/src -ID:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/spdlog-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3-build/include-revision -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3_image-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3_ttf-src/include -ID:/Workspace/C++/Runa2/src/Vulkan2D/VK2D/include -ID:/Workspace/C++/Runa2/build/debug/_deps/entt-src/src -isystem C:/VulkanSDK/1.4.335.0/include -g -std=c++20 -g -O0 -MD -MT CMakeFiles/Runa2Engine.dir/src/Scenes/GameScene.cpp.obj -MF CMakeFiles\Runa2Engine.dir\src\Scenes\GameScene.cpp.obj.d -o CMakeFiles/Runa2Engine.dir/src/Scenes/GameScene.cpp.obj -c D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp
+In file included from D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:7:
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.h:36:33: error: 'EntityRegistry' was not declared in this scope; did you mean 'Runa::ECS::EntityRegistry'?
+   36 |                 std::unique_ptr<EntityRegistry> m_registry;
+      |                                 ^~~~~~~~~~~~~~
+      |                                 Runa::ECS::EntityRegistry
+In file included from D:/Workspace/C++/Runa2/src/Scenes/GameScene.h:13:
+D:/Workspace/C++/Runa2/src/ECS/Registry.h:19:16: note: 'Runa::ECS::EntityRegistry' declared here
+   19 | class RUNA_API EntityRegistry {
+      |                ^~~~~~~~~~~~~~
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.h:36:47: error: template argument 1 is invalid
+   36 |                 std::unique_ptr<EntityRegistry> m_registry;
+      |                                               ^
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.h:36:47: error: template argument 2 is invalid
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.h:36:22: error: '<expression error>' in namespace 'std' does not name a type
+   36 |                 std::unique_ptr<EntityRegistry> m_registry;
+      |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp: In member function 'virtual void Runa::GameScene::onEnter()':
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:28:71: error: 'Runa::Window& Runa::Application::getWindow()' is protected within this context
+   28 |                 m_camera = std::make_unique<Camera>(getApp().getWindow());
+      |                                                     ~~~~~~~~~~~~~~~~~~^~
+In file included from D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:9:
+D:/Workspace/C++/Runa2/src/Core/Application.h:30:11: note: declared protected here
+   30 |   Window &getWindow() { return *m_window; }
+      |           ^~~~~~~~~
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:29:17: error: 'm_registry' was not declared in this scope; did you mean 'register'?
+   29 |                 m_registry = std::make_unique<EntityRegistry>();
+      |                 ^~~~~~~~~~
+      |                 register
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:29:47: error: 'EntityRegistry' was not declared in this scope; did you mean 'Runa::ECS::EntityRegistry'?
+   29 |                 m_registry = std::make_unique<EntityRegistry>();
+      |                                               ^~~~~~~~~~~~~~
+      |                                               Runa::ECS::EntityRegistry
+D:/Workspace/C++/Runa2/src/ECS/Registry.h:19:16: note: 'Runa::ECS::EntityRegistry' declared here
+   19 | class RUNA_API EntityRegistry {
+      |                ^~~~~~~~~~~~~~
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:29:62: error: no matching function for call to 'make_unique<<expression error> >()'
+   29 |                 m_registry = std::make_unique<EntityRegistry>();
+      |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:29:62: note: there are 3 candidates
+In file included from C:/Users/soulwax/scoop/apps/gcc/15.2.0/include/c++/15.2.0/memory:80,
+                 from D:/Workspace/C++/Runa2/src/runapch.h:22,
+                 from D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:6:
+C:/Users/soulwax/scoop/apps/gcc/15.2.0/include/c++/15.2.0/bits/unique_ptr.h:1084:5: note: candidate 1: 'template<class _Tp, class ... _Args> std::__detail::__unique_ptr_t<_Tp> std::make_unique(_Args&& ...)'
+ 1084 |     make_unique(_Args&&... __args)
+      |     ^~~~~~~~~~~
+C:/Users/soulwax/scoop/apps/gcc/15.2.0/include/c++/15.2.0/bits/unique_ptr.h:1084:5: note: template argument deduction/substitution failed:
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:29:62: error: template argument 1 is invalid
+   29 |                 m_registry = std::make_unique<EntityRegistry>();
+      |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+C:/Users/soulwax/scoop/apps/gcc/15.2.0/include/c++/15.2.0/bits/unique_ptr.h:1099:5: note: candidate 2: 'template<class _Tp> std::__detail::__unique_ptr_array_t<_Tp> std::make_unique(size_t)'
+ 1099 |     make_unique(size_t __num)
+      |     ^~~~~~~~~~~
+C:/Users/soulwax/scoop/apps/gcc/15.2.0/include/c++/15.2.0/bits/unique_ptr.h:1099:5: note: candidate expects 1 argument, 0 provided
+C:/Users/soulwax/scoop/apps/gcc/15.2.0/include/c++/15.2.0/bits/unique_ptr.h:1109:5: note: candidate 3: 'template<class _Tp, class ... _Args> std::__detail::__invalid_make_unique_t<_Tp> std::make_unique(_Args&& ...)' (deleted)
+ 1109 |     make_unique(_Args&&...) = delete;
+      |     ^~~~~~~~~~~
+C:/Users/soulwax/scoop/apps/gcc/15.2.0/include/c++/15.2.0/bits/unique_ptr.h:1109:5: note: template argument deduction/substitution failed:
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:29:62: error: template argument 1 is invalid
+   29 |                 m_registry = std::make_unique<EntityRegistry>();
+      |                              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:41:57: error: expected primary-expression before '>' token
+   41 |                 m_registry->getRegistry().emplace<Sprite>(m_player, nullptr, "", SDL_Color{255, 100, 100, 255});
+      |                                                         ^
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:42:51: error: 'Size' was not declared in this scope; did you mean 'Runa::ECS::Size'?
+   42 |                 m_registry->getRegistry().emplace<Size>(m_player, 16.0f, 16.0f);
+      |                                                   ^~~~
+      |                                                   Runa::ECS::Size
+In file included from D:/Workspace/C++/Runa2/src/ECS/Registry.h:8:
+D:/Workspace/C++/Runa2/src/ECS/Components.h:33:17: note: 'Runa::ECS::Size' declared here
+   33 | struct RUNA_API Size {
+      |                 ^~~~
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:43:51: error: 'PlayerInput' was not declared in this scope; did you mean 'Runa::ECS::PlayerInput'?
+   43 |                 m_registry->getRegistry().emplace<PlayerInput>(m_player, 150.0f);
+      |                                                   ^~~~~~~~~~~
+      |                                                   Runa::ECS::PlayerInput
+D:/Workspace/C++/Runa2/src/ECS/Components.h:104:17: note: 'Runa::ECS::PlayerInput' declared here
+  104 | struct RUNA_API PlayerInput {
+      |                 ^~~~~~~~~~~
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:44:51: error: 'Player' was not declared in this scope; did you mean 'Runa::ECS::Player'?
+   44 |                 m_registry->getRegistry().emplace<Player>(m_player);
+      |                                                   ^~~~~~
+      |                                                   Runa::ECS::Player
+D:/Workspace/C++/Runa2/src/ECS/Components.h:121:17: note: 'Runa::ECS::Player' declared here
+  121 | struct RUNA_API Player {};
+      |                 ^~~~~~
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:45:51: error: 'CameraTarget' was not declared in this scope; did you mean 'Runa::ECS::CameraTarget'?
+   45 |                 m_registry->getRegistry().emplace<CameraTarget>(m_player);
+      |                                                   ^~~~~~~~~~~~
+      |                                                   Runa::ECS::CameraTarget
+D:/Workspace/C++/Runa2/src/ECS/Components.h:109:17: note: 'Runa::ECS::CameraTarget' declared here
+  109 | struct RUNA_API CameraTarget {
+      |                 ^~~~~~~~~~~~
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp: In member function 'virtual void Runa::GameScene::onUpdate(float)':
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:66:49: error: 'Runa::SceneManager& Runa::Application::getSceneManager()' is protected within this context
+   66 |                         getApp().getSceneManager().pushScene(std::make_unique<PauseScene>(getApp()));
+      |                         ~~~~~~~~~~~~~~~~~~~~~~~~^~
+D:/Workspace/C++/Runa2/src/Core/Application.h:33:17: note: declared protected here
+   33 |   SceneManager &getSceneManager();
+      |                 ^~~~~~~~~~~~~~~
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:71:31: error: 'updateInput' is not a member of 'Runa::ECS::Systems'; did you mean 'updatePlayerInput'?
+   71 |                 ECS::Systems::updateInput(m_registry->getRegistry(), getInput());
+      |                               ^~~~~~~~~~~
+      |                               updatePlayerInput
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:71:43: error: 'm_registry' was not declared in this scope; did you mean 'register'?
+   71 |                 ECS::Systems::updateInput(m_registry->getRegistry(), getInput());
+      |                                           ^~~~~~~~~~
+      |                                           register
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:75:59: error: 'Position' was not declared in this scope; did you mean 'Runa::ECS::Position'?
+   75 |                 auto& pos = m_registry->getRegistry().get<Position>(m_player);
+      |                                                           ^~~~~~~~
+      |                                                           Runa::ECS::Position
+D:/Workspace/C++/Runa2/src/ECS/Components.h:21:17: note: 'Runa::ECS::Position' declared here
+   21 | struct RUNA_API Position {
+      |                 ^~~~~~~~
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp: In member function 'virtual void Runa::GameScene::onRender()':
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:101:31: error: 'render' is not a member of 'Runa::ECS::Systems'
+  101 |                 ECS::Systems::render(m_registry->getRegistry(), *m_spriteBatch, *m_camera);
+      |                               ^~~~~~
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:101:38: error: 'm_registry' was not declared in this scope; did you mean 'register'?
+  101 |                 ECS::Systems::render(m_registry->getRegistry(), *m_spriteBatch, *m_camera);
+      |                                      ^~~~~~~~~~
+      |                                      register
+[18/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/ResourceManager.cpp.obj
+[19/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/PostProcess.cpp.obj
+[20/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/SpriteBatch.cpp.obj
+[21/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/Texture.cpp.obj
+[22/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/Font.cpp.obj
+[23/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/TileMap.cpp.obj
+[24/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/SpriteSheet.cpp.obj
+[25/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/ECS/Systems.cpp.obj
+[26/32] Building CXX object CMakeFiles/Runa2Engine.dir/src/ECS/Registry.cpp.obj
+ninja: build stopped: subcommand failed.
+[0/2] Re-checking globbed directories...
+[1/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/runapch.cpp.obj
+[2/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/Shader.cpp.obj
+[3/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/PlayerController.cpp.obj
+[4/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/Input.cpp.obj
+[5/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/SceneManager.cpp.obj
+[6/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/Window.cpp.obj
+[7/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/Scene.cpp.obj
+[8/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/Entity.cpp.obj
+[9/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/Collision.cpp.obj
+[10/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/Log.cpp.obj
+[11/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/Application.cpp.obj
+[12/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/Renderer.cpp.obj
+[13/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Scenes/PauseScene.cpp.obj
+[14/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Core/ResourceManager.cpp.obj
+[15/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Scenes/MenuScene.cpp.obj
+[16/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Scenes/GameScene.cpp.obj
+FAILED: [code=1] CMakeFiles/Runa2Engine.dir/src/Scenes/GameScene.cpp.obj 
+C:\Users\soulwax\scoop\apps\gcc\current\bin\g++.exe -DFMT_SHARED -DRUNA2_ENGINE_EXPORTS -DRuna2Engine_EXPORTS -DSPDLOG_COMPILED_LIB -DSPDLOG_FMT_RUNTIME_CHECKS=0 -DSPDLOG_SHARED_LIB -DYAML_CPP_STATIC_DEFINE -ID:/Workspace/C++/Runa2/src -ID:/Workspace/C++/Runa2/build/debug/_deps/yaml-cpp-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/spdlog-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3-build/include-revision -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3_image-src/include -ID:/Workspace/C++/Runa2/build/debug/_deps/sdl3_ttf-src/include -ID:/Workspace/C++/Runa2/src/Vulkan2D/VK2D/include -ID:/Workspace/C++/Runa2/build/debug/_deps/entt-src/src -isystem C:/VulkanSDK/1.4.335.0/include -g -std=c++20 -g -O0 -MD -MT CMakeFiles/Runa2Engine.dir/src/Scenes/GameScene.cpp.obj -MF CMakeFiles\Runa2Engine.dir\src\Scenes\GameScene.cpp.obj.d -o CMakeFiles/Runa2Engine.dir/src/Scenes/GameScene.cpp.obj -c D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp
+In file included from D:/Workspace/C++/Runa2/build/debug/_deps/entt-src/src/entt/entity/group.hpp:15,
+                 from D:/Workspace/C++/Runa2/build/debug/_deps/entt-src/src/entt/entt.hpp:24,
+                 from D:/Workspace/C++/Runa2/src/ECS/Registry.h:9,
+                 from D:/Workspace/C++/Runa2/src/Scenes/GameScene.h:13,
+                 from D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:7:
+D:/Workspace/C++/Runa2/build/debug/_deps/entt-src/src/entt/entity/storage.hpp: In instantiation of 'entt::basic_storage<Type, <template-parameter-1-2>, <template-parameter-1-3>, <template-parameter-1-4> >::value_type& entt::basic_storage<Type, <template-parameter-1-2>, <template-parameter-1-3>, <template-parameter-1-4> >::emplace(entity_type, Args&& ...) [with Args = {std::nullptr_t, const char (&)[1], SDL_Color}; Type = Runa::ECS::Sprite; Entity = entt::entity; Allocator = std::allocator<Runa::ECS::Sprite>; <template-parameter-1-4> = void; value_type = Runa::ECS::Sprite; entity_type = entt::entity]':
+D:/Workspace/C++/Runa2/build/debug/_deps/entt-src/src/entt/entity/mixin.hpp:239:37:   required from 'decltype(auto) entt::basic_sigh_mixin< <template-parameter-1-1>, <template-parameter-1-2> >::emplace(entity_type, Args&& ...) [with Args = {std::nullptr_t, const char (&)[1], SDL_Color}; Type = entt::basic_storage<Runa::ECS::Sprite, entt::entity, std::allocator<Runa::ECS::Sprite>, void>; Registry = entt::basic_registry<>; entity_type = entt::entity]'
+  239 |             underlying_type::emplace(hint, std::forward<Args>(args)...);
+      |             ~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:/Workspace/C++/Runa2/build/debug/_deps/entt-src/src/entt/entity/registry.hpp:588:38:   required from 'decltype(auto) entt::basic_registry<Entity, <template-parameter-1-2> >::emplace(entity_type, Args&& ...) [with Type = Runa::ECS::Sprite; Args = {std::nullptr_t, const char (&)[1], SDL_Color}; Entity = entt::entity; Allocator = std::allocator<entt::entity>; entity_type = entt::entity]'
+  588 |         return assure<Type>().emplace(entt, std::forward<Args>(args)...);
+      |                ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:/Workspace/C++/Runa2/src/Scenes/GameScene.cpp:41:49:   required from here
+   41 |                 m_registry->getRegistry().emplace<ECS::Sprite>(m_player, nullptr, "", SDL_Color{255, 100, 100, 255});
+      |                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+D:/Workspace/C++/Runa2/build/debug/_deps/entt-src/src/entt/entity/storage.hpp:665:44: error: cannot convert 'SDL_Color' to 'float' in initialization
+  665 |             const auto it = emplace_element(entt, false, Type{std::forward<Args>(args)...});
+      |                             ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[17/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/PostProcess.cpp.obj
+[18/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/SpriteBatch.cpp.obj
+[19/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/Texture.cpp.obj
+[20/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/Font.cpp.obj
+[21/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/TileMap.cpp.obj
+[22/29] Building CXX object CMakeFiles/Runa2.dir/src/main_scene_demo.cpp.obj
+[23/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/SpriteSheet.cpp.obj
+[24/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/Graphics/Camera.cpp.obj
+[25/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/ECS/Systems.cpp.obj
+[26/29] Building CXX object CMakeFiles/Runa2Engine.dir/src/ECS/Registry.cpp.obj
+ninja: build stopped: subcommand failed.
