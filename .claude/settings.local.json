@@ -39,7 +39,8 @@
       "Bash(cmd /c \"rmdir /s /q build\\\\debug\")",
       "Bash(cmd /c \"rmdir /s /q build\\\\release\")",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git mv:*)"
     ]
   }
 }

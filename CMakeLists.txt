@@ -97,10 +97,10 @@ set(SDL3IMAGE_WEBP OFF CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(SDL3 SDL3_image SDL3_ttf yaml-cpp spdlog EnTT)
 
 # Vulkan2D - 2D renderer using Vulkan
-# Use our SDL3 instead of building Vulkan2D's bundled SDL
+# Integrated as part of the engine's source code
 set(VK2D_BUILD_SDL OFF CACHE BOOL "" FORCE)
 set(VK2D_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-add_subdirectory(vendor/Vulkan2D)
+add_subdirectory(src/Vulkan2D)
 
 # ============================================================================
 # Engine Library (DLL)
