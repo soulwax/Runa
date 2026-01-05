@@ -1,8 +1,11 @@
+// File: src/Vulkan2D/VK2D/src/Constants.c
+
 /// \file Constants.c
-/// \author Paolo Mazzon
+
+#include "VK2D/Structs.h"
 #include <math.h>
 #include <vulkan/vulkan.h>
-#include "VK2D/Structs.h"
+
 
 const uint32_t VK2D_VERSION_MAJOR = 0;
 
@@ -13,14 +16,13 @@ const uint32_t VK2D_VERSION_PATCH = 0;
 const int32_t VK2D_DEVICE_BEST_FIT = -1;
 
 const VkApplicationInfo VK2D_DEFAULT_CONFIG = {
-		VK_STRUCTURE_TYPE_APPLICATION_INFO,
-		VK_NULL_HANDLE,
-		"VK2D",
-		VK_MAKE_VERSION(1, 0, 0),
-		"VK2D Renderer",
-		VK_MAKE_VERSION(1, 0, 0),
-		VK_MAKE_VERSION(1, 2, 0)
-};
+    VK_STRUCTURE_TYPE_APPLICATION_INFO,
+    VK_NULL_HANDLE,
+    "VK2D",
+    VK_MAKE_VERSION(1, 0, 0),
+    "VK2D Renderer",
+    VK_MAKE_VERSION(1, 0, 0),
+    VK_MAKE_VERSION(1, 2, 0)};
 
 const float VK2D_FULL_TEXTURE = HUGE_VALF;
 

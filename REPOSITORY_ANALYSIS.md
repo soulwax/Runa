@@ -1,6 +1,6 @@
 # Runa2 Repository Analysis
 
-**Generated:** 2024  
+**Generated:** 2025-01-03  
 **Project Type:** C++20 2D Game Engine  
 **License:** AGPLv3  
 **Author:** soulwax@github
@@ -9,9 +9,9 @@
 
 ## Executive Summary
 
-**Runa2** is a modern C++20 2D game engine built on SDL3's GPU API with a complete Entity-Component-System (ECS) architecture. The engine provides hardware-accelerated rendering, sprite management, tilemaps, camera systems, collision detection, and a declarative resource system. It uses a DLL-based architecture separating engine code from game logic, enabling rapid iteration and code reuse.
+**Runa2** is a modern C++20 2D game engine built on SDL3's GPU API with Vulkan2D backend for hardware-accelerated rendering. The engine features a complete Entity-Component-System (ECS) architecture using EnTT, comprehensive resource management, sprite batching, tilemap rendering, camera systems, and collision detection. It uses a DLL-based architecture separating engine code from game logic, enabling rapid iteration and code reuse.
 
-**Current Status:** Core infrastructure is complete and functional. The engine features a fully implemented ECS system, working rendering pipeline, input management, collision detection, and camera system. The project is actively developed with both ECS-based and legacy entity-based systems available.
+**Current Status:** Core infrastructure is complete and functional. The engine features a fully implemented ECS system, working rendering pipeline with Vulkan2D, input management, collision detection, and camera system. The project is actively developed with both ECS-based and legacy entity-based systems available.
 
 ---
 
@@ -21,13 +21,13 @@
 A professional-grade 2D game engine framework designed for:
 - 2D sprite-based games (RPGs, platformers, top-down games)
 - Tilemap-based level rendering
-- Hardware-accelerated graphics (D3D12/Vulkan via SDL3 GPU)
+- Hardware-accelerated graphics (Vulkan via Vulkan2D)
 - Rapid game development with declarative resource management
 - Entity-Component-System architecture for scalable game logic
 
 ### Target Platform
 - **Primary:** Windows (MinGW/GCC)
-- **Graphics Backends:** Direct3D 12, Vulkan (via SDL3 GPU abstraction)
+- **Graphics Backends:** Vulkan (via Vulkan2D abstraction)
 - **Build System:** CMake 3.20+ with Ninja generator
 - **C++ Standard:** C++20 (strict, no extensions)
 
@@ -39,7 +39,7 @@ A professional-grade 2D game engine framework designed for:
 - **Language:** C++20 (strict standard, no extensions)
 - **Compiler:** GCC/G++ (MinGW) on Windows
 - **Build System:** CMake 3.20+ with Ninja generator
-- **Graphics API:** SDL3 GPU (abstraction over D3D12/Vulkan)
+- **Graphics API:** Vulkan2D (2D Vulkan renderer) with SDL3 window management
 - **Shaders:** GLSL 450 compiled to SPIR-V (offline compilation)
 - **ECS Framework:** EnTT v3.13.2 (header-only entity-component-system)
 
@@ -47,10 +47,11 @@ A professional-grade 2D game engine framework designed for:
 
 | Dependency | Version | Purpose | Status |
 |------------|---------|---------|--------|
-| **SDL3** | main branch | Window management, events, GPU abstraction | ✅ Fully integrated |
-| **SDL3_image** | main branch | Image loading (PNG support) | ✅ Fully integrated |
+| **SDL3** | main branch | Window management, events | ✅ Fully integrated |
+| **SDL3_image** | main branch | Image loading (PNG/JPG support) | ✅ Fully integrated |
 | **SDL3_ttf** | main branch | TrueType font rendering | ✅ Fully integrated |
-| **yaml-cpp** | master branch | YAML parsing for sprite manifests | ✅ Fully integrated |
+| **Vulkan2D** | Git submodule | 2D Vulkan renderer backend | ✅ Fully integrated |
+| **yaml-cpp** | master branch | YAML parsing for resource manifests | ✅ Fully integrated |
 | **spdlog** | v1.15.0 | Fast logging library | ✅ Fully integrated |
 | **EnTT** | v3.13.2 | Entity-Component-System framework | ✅ Fully integrated |
 
@@ -99,7 +100,7 @@ The engine follows a classic game loop pattern:
 ```
 Application (Core)
     ├── Window (Graphics) - SDL3 window & events
-    ├── Renderer (Graphics) - SDL3 GPU device & rendering
+    ├── Renderer (Graphics) - Vulkan2D renderer
     ├── Input (Core) - Keyboard, mouse, gamepad input
     └── Game Loop
         ├── onInit() - One-time initialization
@@ -132,11 +133,11 @@ Application (Core)
 | Class | Purpose | Status |
 |-------|---------|--------|
 | **Window** | SDL3 window creation, event processing | ✅ Complete |
-| **Renderer** | SDL3 GPU device, swapchain, frame rendering | ✅ Complete |
+| **Renderer** | Vulkan2D renderer, frame rendering | ✅ Complete |
 | **Shader** | SPIR-V shader loading from compiled GLSL | ✅ Complete |
 | **Texture** | Image loading via SDL3_image, GPU uploads | ✅ Complete |
 | **SpriteSheet** | Texture atlas with sprite/animation metadata | ✅ Complete |
-| **SpriteBatch** | 2D sprite batching system | ✅ Complete |
+| **SpriteBatch** | 2D sprite batching system (Vulkan2D automatic batching) | ✅ Complete |
 | **TileMap** | Grid-based tilemap rendering | ✅ Complete |
 | **PostProcess** | Post-processing effects framework | 🚧 Partial |
 | **Font** | TrueType font rendering | ✅ Complete |
@@ -174,7 +175,7 @@ Application (Core)
 Runa2/
 ├── src/
 │   ├── main.cpp              # Entry point, GameApp class (ECS version)
-│   ├── grass_test.cpp        # Texture rendering test
+│   ├── grass_test.cpp        # Texture rendering test (disabled)
 │   ├── runapch.h/cpp         # Precompiled header (common includes)
 │   ├── RunaAPI.h             # DLL export/import macros
 │   │
@@ -189,7 +190,7 @@ Runa2/
 │   │
 │   ├── Graphics/
 │   │   ├── Window.*          # SDL3 window management
-│   │   ├── Renderer.*        # SDL3 GPU renderer
+│   │   ├── Renderer.*        # Vulkan2D renderer
 │   │   ├── Shader.*          # SPIR-V shader loading
 │   │   ├── Texture.*         # Image loading & GPU textures
 │   │   ├── SpriteSheet.*     # Texture atlas & sprite metadata
@@ -199,61 +200,32 @@ Runa2/
 │   │   ├── Font.*            # TrueType font rendering
 │   │   └── Camera.*          # 2D camera with transforms
 │   │
+│   ├── Vulkan2D/             # Vulkan2D submodule integration
+│   │   └── VK2D/             # Vulkan2D headers and source
+│   │
 │   └── ECS/
 │       ├── Components.h      # Component definitions
-│       ├── Registry.*        # EnTT registry wrapper
-│       └── Systems.*         # ECS system functions
+│       ├── Registry.*       # EnTT registry wrapper
+│       └── Systems.*        # ECS system functions
 │
 ├── Resources/
 │   ├── Fonts/                # Font files (Renogare.otf/ttf)
-│   ├── manifests/            # YAML sprite definitions
+│   ├── manifests/            # YAML resource definitions
 │   │   └── resource_manifest.yaml
-│   ├── scenes/               # Scene data files
-│   │   └── sample_scene.txt
-│   └── mystic_woods_2.2/     # Game asset pack
-│       └── sprites/          # Character & tile sprites
-│           ├── characters/   # Character sprites
-│           ├── objects/      # Object sprites
-│           ├── particles/    # Particle sprites
-│           └── tilesets/    # Tile set sprites
-│
-├── Resources/shaders/        # GLSL shaders (compile to SPIR-V)
-│   ├── sprite.vert/frag      # Sprite rendering shaders
-│   ├── basic.vert/frag       # Basic shaders
-│   ├── water.vert/frag       # Water effect shaders
-│   ├── bloom.vert/frag       # Bloom post-process
-│   ├── crt.vert/frag         # CRT effect
-│   ├── pixelate.vert/frag    # Pixelation effect
-│   ├── psychedelic.vert/frag # Psychedelic effect
-│   ├── kaleidoscope.vert/frag# Kaleidoscope effect
-│   ├── outline.vert/frag     # Outline effect
-│   ├── glow.vert/frag        # Glow effect
-│   ├── dissolve.vert/frag    # Dissolve effect
-│   ├── freeze.vert/frag      # Freeze effect
-│   ├── poison.vert/frag      # Poison effect
-│   ├── damage_flash.vert/frag# Damage flash effect
-│   ├── shield.vert/frag      # Shield effect
-│   ├── portal.vert/frag      # Portal effect
-│   ├── lightning.vert/frag   # Lightning effect
-│   ├── heat_distortion.vert/frag # Heat distortion
-│   ├── ghost.vert/frag       # Ghost effect
-│   ├── grayscale.vert/frag   # Grayscale effect
-│   ├── sepia.vert/frag       # Sepia effect
-│   ├── vignette.vert/frag    # Vignette effect
-│   ├── fade.vert/frag        # Fade effect
-│   ├── day_night.vert/frag   # Day/night cycle
-│   ├── blur.vert/frag        # Blur effect
-│   ├── palette_swap.vert/frag# Palette swap
-│   ├── sprite_color.vert/frag# Color-only sprite shader
-│   ├── sprite_fixed.vert     # Fixed-size sprite shader
-│   ├── sprite_debug.frag    # Debug sprite shader
-│   └── compile_shaders.*     # Compilation scripts
+│   ├── shaders/              # GLSL shaders (30+ shader pairs)
+│   │   ├── *.vert/frag       # Vertex/fragment shaders
+│   │   ├── compiled/         # Compiled SPIR-V files
+│   │   └── compile_shaders.*# Compilation scripts
+│   └── SpiteSheets/          # Sprite sheet images and YAML
+│       ├── *.png             # Sprite sheet images
+│       ├── *.yaml            # Sprite definitions
+│       └── characters/       # Character sprites
 │
 ├── build/                    # Build output (gitignored)
 │   └── debug/                # Debug builds with symbols
 │
-├── vendor/                   # Third-party libraries (SDL3, etc.)
-│   ├── SDL/                  # SDL3 source (fetched by CMake)
+├── vendor/                   # Third-party libraries (fetched by CMake)
+│   ├── SDL/                  # SDL3 source
 │   ├── SDL_image/            # SDL3_image source
 │   ├── SDL_ttf/              # SDL3_ttf source
 │   ├── yaml-cpp/             # yaml-cpp source
@@ -265,6 +237,7 @@ Runa2/
 ├── ARCHITECTURE.md           # Engine architecture docs
 ├── REPOSITORY_ANALYSIS.md    # This file
 ├── RENDERING_STATUS.md       # Rendering system status
+├── CHANGELOG.md              # Version history
 └── CLAUDE.md                 # AI assistant instructions
 ```
 
@@ -309,7 +282,35 @@ Runa::ECS::Systems::updateTileCollisions(registry, *tileMap, 16);
 Runa::ECS::Systems::renderSprites(registry, *spriteBatch, *camera);
 ```
 
-### 2. Resource Management System
+### 2. Rendering Pipeline (Vulkan2D)
+
+**Frame Rendering Flow:**
+```
+1. Renderer::beginFrame()     - Acquire swapchain texture
+2. Renderer::clear()          - Set background color
+3. SpriteBatch::begin()       - Start batching
+4. SpriteBatch::draw()        - Queue draw calls
+5. SpriteBatch::end()         - Flush to GPU (Vulkan2D automatic batching)
+6. Renderer::endFrame()       - Submit and present
+```
+
+**Current Status:**
+- ✅ Vulkan2D integration with SDL3 window
+- ✅ Swapchain management
+- ✅ Frame begin/end
+- ✅ Clear operations
+- ✅ Automatic sprite batching (Vulkan2D handles batching)
+- ✅ Texture loading and binding
+- ✅ Alpha blending
+- ✅ Textured sprite rendering
+- ✅ Performance: 59-61 FPS (VSYNC-limited) on RTX 3070 Ti
+
+**Shader System:**
+- GLSL 450 shaders compiled to SPIR-V offline
+- 30+ shader effects available (bloom, crt, pixelate, water, etc.)
+- Shader compilation via `glslc` (Vulkan SDK)
+
+### 3. Resource Management System
 
 **YAML-Based Manifest System:**
 - Declarative sprite definitions in YAML files
@@ -319,58 +320,24 @@ Runa::ECS::Systems::renderSprites(registry, *spriteBatch, *camera);
 
 **Example Manifest:**
 ```yaml
-spritesheet:
-  name: "plains_tileset"
-  texture: "../mystic_woods_2.2/sprites/tilesets/plains.png"
-  sprites:
-    - name: "plains_tile"
-      type: "grid"
-      tile_width: 16
-      tile_height: 16
-      columns: 6
-      rows: 12
+tilesets:
+  - name: "plains"
+    yaml: "../mystic_woods_2.2/sprites/tilesets/plains.yaml"
+    image: "../mystic_woods_2.2/sprites/tilesets/plains.png"
+    format: "atlas_coords"
 ```
 
 **Features:**
 - ✅ YAML parsing via yaml-cpp
 - ✅ Sprite metadata (frames, animations, durations)
 - ✅ Texture loading via SDL3_image
-- ✅ GPU texture uploads via transfer buffers
+- ✅ GPU texture uploads
 - ✅ Sprite lookup by name
 - ✅ Tileset loading from atlas YAML files
 
-### 3. Rendering Pipeline
-
-**Frame Rendering Flow:**
-```
-1. Renderer::beginFrame()     - Acquire swapchain texture
-2. Renderer::clear()          - Set background color
-3. SpriteBatch::begin()       - Start batching
-4. SpriteBatch::draw()        - Queue draw calls
-5. SpriteBatch::end()         - Flush to GPU
-6. Renderer::endFrame()       - Submit and present
-```
-
-**Current Status:**
-- ✅ Swapchain management
-- ✅ Frame begin/end
-- ✅ Clear operations
-- ✅ Draw call collection
-- ✅ Vertex buffer creation
-- ✅ Graphics pipeline binding
-- ✅ Texture descriptor sets (fixed descriptor set 2 for samplers)
-- ✅ Draw command execution
-- ✅ Batch rendering (multiple sprites in one draw call)
-- ✅ Alpha blending
-- ✅ Textured sprite rendering
-
-**Shader System:**
-- GLSL 450 shaders compiled to SPIR-V offline
-- SDL3 GPU descriptor set layout:
-  - Vertex uniforms: `set = 1`
-  - Fragment samplers: `set = 2` (required)
-  - Fragment uniforms: `set = 3`
-- Multiple shader effects available (30+ shader pairs)
+**Known Issues:**
+- ⚠️ ResourceManager YAML sprite sheet loading causes silent crashes
+- Workaround: Use direct Texture loading for now
 
 ### 4. Input System
 
@@ -485,7 +452,7 @@ camera->worldToScreen(worldX, worldY, screenX, screenY);
 
 ### Build Process
 1. CMake configures project and fetches dependencies
-2. First build compiles SDL3 from source (5-15 minutes)
+2. First build compiles SDL3, Vulkan2D, and dependencies from source (5-15 minutes)
 3. Subsequent builds are incremental
 4. Generates `compile_commands.json` for IntelliSense
 5. DLLs automatically copied to output directory
@@ -506,7 +473,7 @@ camera->worldToScreen(worldX, worldY, screenX, screenY);
 |--------|--------|-------|
 | **Application Framework** | ✅ Complete | Game loop, delta time, FPS tracking |
 | **Window Management** | ✅ Complete | SDL3 window, events, resize handling |
-| **GPU Renderer** | ✅ Complete | D3D12/Vulkan backend, swapchain |
+| **Vulkan2D Renderer** | ✅ Complete | Vulkan backend, swapchain, automatic batching |
 | **Texture Loading** | ✅ Complete | SDL3_image integration, GPU uploads |
 | **SpriteSheet System** | ✅ Complete | YAML parsing, sprite metadata |
 | **ResourceManager** | ✅ Complete | Centralized resource loading |
@@ -514,7 +481,7 @@ camera->worldToScreen(worldX, worldY, screenX, screenY);
 | **Shader Loading** | ✅ Complete | SPIR-V shader loading |
 | **Logging System** | ✅ Complete | spdlog integration (console + file) |
 | **Font Rendering** | ✅ Complete | TrueType font support |
-| **SpriteBatch** | ✅ Complete | GPU pipeline, batch rendering |
+| **SpriteBatch** | ✅ Complete | Vulkan2D automatic batching |
 | **Input System** | ✅ Complete | Keyboard, mouse, gamepad input |
 | **Camera System** | ✅ Complete | World-to-screen transforms, following |
 | **Collision System** | ✅ Complete | AABB, tilemap, entity collisions |
@@ -526,6 +493,7 @@ camera->worldToScreen(worldX, worldY, screenX, screenY);
 | System | Status | Notes |
 |--------|--------|-------|
 | **PostProcess** | 🚧 Partial | Framework exists, needs testing |
+| **ResourceManager YAML** | 🚧 Partial | Complex YAML loading causes crashes, workaround available |
 
 ### ❌ Not Yet Implemented
 
@@ -550,7 +518,7 @@ camera->worldToScreen(worldX, worldY, screenX, screenY);
 6. **Professional Build System** - CMake with proper dependency management
 7. **DLL Architecture** - Separation of engine and game code
 8. **ECS Integration** - Full EnTT-based entity-component-system
-9. **Complete Rendering** - Working sprite batching with GPU pipeline
+9. **Complete Rendering** - Working sprite batching with Vulkan2D GPU pipeline
 10. **Rich Shader Library** - 30+ shader effects available
 11. **Documentation** - Well-documented architecture and workflows
 
@@ -560,6 +528,7 @@ camera->worldToScreen(worldX, worldY, screenX, screenY);
 3. **Physics Engine** - Only basic collision, no physics simulation
 4. **Animation Controller** - Animation metadata exists but could be enhanced
 5. **Asset Pipeline** - Could benefit from automated asset processing
+6. **ResourceManager YAML** - Fix complex YAML loading crashes
 
 ---
 
@@ -573,7 +542,7 @@ camera->worldToScreen(worldX, worldY, screenX, screenY);
 
 ### Resource Workflow
 1. **Create YAML manifest** in `Resources/manifests/`
-2. **Load in game** via `ResourceManager::loadSpriteSheetFromYAML()`
+2. **Load in game** via `ResourceManager::loadSpriteSheetFromYAML()` (or direct Texture loading as workaround)
 3. **Access sprites** via `ResourceManager::getSpriteSheet()`
 
 ### Shader Workflow
@@ -589,65 +558,26 @@ camera->worldToScreen(worldX, worldY, screenX, screenY);
 
 ---
 
-## Dependencies Analysis
+## Performance Metrics
 
-### SDL3
-- **Purpose:** Window, events, GPU abstraction
-- **Usage:** Core graphics and window management
-- **Status:** ✅ Fully integrated
-- **Backends:** D3D12 (Windows), Vulkan (Windows/Linux)
-
-### SDL3_image
-- **Purpose:** Image loading (PNG)
-- **Usage:** Texture loading in ResourceManager
-- **Status:** ✅ Fully integrated
-
-### SDL3_ttf
-- **Purpose:** TrueType font rendering
-- **Usage:** Font class for text rendering
-- **Status:** ✅ Fully integrated
-
-### yaml-cpp
-- **Purpose:** YAML parsing
-- **Usage:** Sprite manifest loading
-- **Status:** ✅ Fully integrated
-
-### spdlog
-- **Purpose:** Fast logging
-- **Usage:** Logging throughout codebase
-- **Status:** ✅ Fully integrated
-- **Features:** Console (colored) + file logging
-
-### EnTT
-- **Purpose:** Entity-Component-System framework
-- **Usage:** ECS architecture for game entities
-- **Status:** ✅ Fully integrated
-- **Version:** v3.13.2 (header-only)
+**Current Performance:**
+- **FPS:** Consistent 59-61 FPS (VSYNC-limited)
+- **Tile Rendering:** 3,600 tiles per frame with no performance impact
+- **Resolution:** 1280x720 window
+- **GPU:** NVIDIA GeForce RTX 3070 Ti, Vulkan 1.4.325
+- **CPU:** 16 logical cores, 31.93GB RAM
+- **OS:** Windows (SDL 3.5.0)
 
 ---
 
-## Code Quality Metrics
+## Known Issues
 
-### Code Organization
-- ✅ Clear module separation (Core, Graphics, ECS)
-- ✅ Consistent naming conventions
-- ✅ Proper use of namespaces
-- ✅ Precompiled headers for performance
+1. **ResourceManager YAML Loading** - Complex YAML files (decor-grass.yaml, dirt-grass.yaml) crash on `loadTilesetFromAtlasYAML()`
+   - **Workaround:** Use direct Texture loading for now
+   - **Status:** Investigation needed for YAML parsing issue
 
-### Modern C++ Practices
-- ✅ Smart pointers (unique_ptr, shared_ptr)
-- ✅ RAII for resource management
-- ✅ Move semantics enabled
-- ✅ Const correctness
-- ✅ No raw pointers for ownership
-- ✅ C++20 features (concepts, ranges where applicable)
-
-### Documentation
-- ✅ Architecture documentation (ARCHITECTURE.md)
-- ✅ Build instructions (README.md)
-- ✅ Rendering status (RENDERING_STATUS.md)
-- ✅ Code comments where needed
-- ✅ AI assistant guidance (CLAUDE.md)
+2. **Plains Tileset Missing** - Original demo required non-existent `Resources/mystic_woods_2.2/sprites/tilesets/plains.yaml`
+   - **Workaround:** Using decor-grass/dirt-grass sprite sheets as replacement
 
 ---
 
@@ -656,20 +586,20 @@ camera->worldToScreen(worldX, worldY, screenX, screenY);
 ### High Priority
 1. **Audio System** - SDL3_audio integration for sound effects and music
 2. **Post-Processing Completion** - Finish and test post-processing effects
-3. **Animation Enhancements** - More sophisticated animation controllers
-4. **Physics Engine** - Integration with Box2D or similar
+3. **ResourceManager YAML Fix** - Fix complex YAML loading crashes
+4. **Animation Enhancements** - More sophisticated animation controllers
 
 ### Medium Priority
-5. **Scene Management** - Scene graph or scene loading system
-6. **Asset Pipeline** - Automated asset processing and optimization
-7. **Scripting Support** - Lua or similar scripting integration
+5. **Physics Engine** - Integration with Box2D or similar
+6. **Scene Management** - Scene graph or scene loading system
+7. **Asset Pipeline** - Automated asset processing and optimization
 8. **Performance Profiling** - Built-in profiling tools
 
 ### Low Priority
-9. **Networking** - Multiplayer support
-10. **Editor Tools** - Level editor, sprite editor
-11. **Platform Expansion** - Linux, macOS support
-12. **Mobile Support** - Android, iOS ports
+9. **Scripting Support** - Lua or similar scripting integration
+10. **Networking** - Multiplayer support
+11. **Editor Tools** - Level editor, sprite editor
+12. **Platform Expansion** - Linux, macOS support
 
 ---
 
@@ -684,22 +614,22 @@ camera->worldToScreen(worldX, worldY, screenX, screenY);
 - ✅ **Active logging** throughout the codebase
 - ✅ **Declarative resource system** (YAML manifests)
 - ✅ **Complete ECS implementation** with EnTT
-- ✅ **Working rendering pipeline** with GPU acceleration
+- ✅ **Working rendering pipeline** with Vulkan2D GPU acceleration
 - ✅ **Rich feature set** (input, camera, collision, tilemaps)
 
 **Current State:**
 - **Core Infrastructure:** ✅ Fully operational
-- **Resource Management:** ✅ Complete and working
-- **Rendering:** ✅ Complete with GPU pipeline
+- **Resource Management:** ✅ Complete (with YAML workaround)
+- **Rendering:** ✅ Complete with Vulkan2D GPU pipeline
 - **ECS System:** ✅ Fully implemented and functional
 - **Game Systems:** ✅ Input, collision, camera all working
 - **Audio:** ❌ Not yet implemented
 
-The architecture is designed for easy extension, making it an excellent foundation for continued development. The main remaining work is adding audio support and potentially integrating a physics engine for more advanced game mechanics.
+The architecture is designed for easy extension, making it an excellent foundation for continued development. The main remaining work is adding audio support, fixing YAML resource loading, and potentially integrating a physics engine for more advanced game mechanics.
 
 ---
 
-**Analysis Date:** 2024  
+**Analysis Date:** 2025-01-03  
 **Repository:** Runa2  
 **Author:** soulwax@github  
 **License:** AGPLv3

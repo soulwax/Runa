@@ -1,3 +1,5 @@
+// File: src/Vulkan2D/extern/VulkanMemoryAllocator/include/vk_mem_alloc.h
+
 //
 // Copyright (c) 2017-2025 Advanced Micro Devices, Inc. All rights reserved.
 //

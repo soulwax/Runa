@@ -52,12 +52,12 @@ protected:
     // decor-grass.png is a 64x80 sprite sheet (4x5 tiles of 16x16 each)
     // dirt-grass.png is a 64x64 sprite sheet (4x4 tiles of 16x16 each)
     const int tileSize = 16;
-    const int tilesX = 1280 / tileSize;  // 80 tiles wide
-    const int tilesY = 720 / tileSize;   // 45 tiles tall
+    const int tilesX = 1280 / tileSize; // 80 tiles wide
+    const int tilesY = 720 / tileSize;  // 45 tiles tall
 
     // Define dirt paths (vertical and horizontal)
-    const int pathX = tilesX / 2;  // Vertical path at center
-    const int pathY = tilesY / 2;  // Horizontal path at center
+    const int pathX = tilesX / 2; // Vertical path at center
+    const int pathY = tilesY / 2; // Horizontal path at center
 
     for (int y = 0; y < tilesY; ++y) {
       for (int x = 0; x < tilesX; ++x) {
@@ -66,12 +66,12 @@ protected:
         if (isPath) {
           // Draw dirt path tile from dirt-grass.png
           // Use tile at (16, 0) - horizontal dirt path
-          m_spriteBatch->draw(*m_dirtTexture, x * tileSize, y * tileSize,
-                              16, 0, tileSize, tileSize);
+          m_spriteBatch->draw(*m_dirtTexture, x * tileSize, y * tileSize, 16, 0,
+                              tileSize, tileSize);
         } else {
           // Draw grass tile from decor-grass.png
-          m_spriteBatch->draw(*m_grassTexture, x * tileSize, y * tileSize,
-                              0, 0, tileSize, tileSize);
+          m_spriteBatch->draw(*m_grassTexture, x * tileSize, y * tileSize, 0, 0,
+                              tileSize, tileSize);
         }
       }
     }
@@ -79,15 +79,17 @@ protected:
     m_spriteBatch->end();
 
     if (m_frameCount == 0) {
-      LOG_INFO("First frame rendered: {} tiles with dirt paths ({}x{})",
-               tilesX * tilesY, tilesX, tilesY);
+      const int totalTiles = tilesX * tilesY;
+      const std::string message =
+          "First frame rendered: " + std::to_string(totalTiles) +
+          " tiles with dirt paths (" + std::to_string(tilesX) + "x" +
+          std::to_string(tilesY) + ")";
+      LOG_INFO(message.c_str());
     }
     m_frameCount++;
   }
 
-  void onShutdown() override {
-    LOG_INFO("Shutting down grass test");
-  }
+  void onShutdown() override { LOG_INFO("Shutting down grass test"); }
 
 private:
   std::unique_ptr<Runa::SpriteBatch> m_spriteBatch;

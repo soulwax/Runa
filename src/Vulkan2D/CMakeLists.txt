@@ -1,3 +1,5 @@
+# File: src/Vulkan2D/CMakeLists.txt
+
 cmake_minimum_required(VERSION 3.17)
 project(Vulkan2D LANGUAGES C CXX)
 

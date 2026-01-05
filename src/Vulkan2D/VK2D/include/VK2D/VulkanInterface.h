@@ -1,5 +1,7 @@
+// File: src/Vulkan2D/VK2D/include/VK2D/VulkanInterface.h
+
 /// \file VulkanInterface.h
-/// \author Paolo Mazzon
+
 /// \brief Tools to allow the user to mess with vulkan themselves
 #pragma once
 #include "VK2D/Structs.h"
@@ -14,41 +16,59 @@ extern "C" {
 /// \return Returns a new command buffer in the recording state
 VkCommandBuffer vk2dVulkanGetSingleUseBuffer();
 
-/// \brief Submits a command buffer previously acquired with vk2dVulkanGetSingleUseBuffer and waits for the queue to finish
-/// \param buffer Command buffer previously acquired with vk2dVulkanGetSingleUseBuffer
+/// \brief Submits a command buffer previously acquired with
+/// vk2dVulkanGetSingleUseBuffer and waits for the queue to finish
+/// \param buffer Command buffer previously acquired with
+/// vk2dVulkanGetSingleUseBuffer
 void vk2dVulkanSubmitSingleUseBuffer(VkCommandBuffer buffer);
 
 /// \brief Returns the command buffer being used to draw the active frame
 /// \return Returns a command buffer in the recording state
-/// \warning This is only valid until the next time another VK2D function is called
-/// \warning The draw buffer is guaranteed to be in a render pass but there is no guarantee on which one
-/// \note Each frame contains three command buffers: Copy, compute and draw. Their execution starts in that order
-/// with automatic barriers on important resources.
+/// \warning This is only valid until the next time another VK2D function is
+/// called
+/// \warning The draw buffer is guaranteed to be in a render pass but there is
+/// no guarantee on which one
+/// \note Each frame contains three command buffers: Copy, compute and draw.
+/// Their execution starts in that order with automatic barriers on important
+/// resources.
 VkCommandBuffer vk2dVulkanGetDrawBuffer();
 
-/// \brief Returns the command buffer being used for compute commands. You may use this buffer for whatever.
+/// \brief Returns the command buffer being used for compute commands. You may
+/// use this buffer for whatever.
 /// \return Returns a command buffer in the recording state
-/// \warning This is only valid until the next time another VK2D function is called
-/// \note Each frame contains three command buffers: Copy, compute and draw. Their execution starts in that order
-/// with automatic barriers on important resources.
+/// \warning This is only valid until the next time another VK2D function is
+/// called
+/// \note Each frame contains three command buffers: Copy, compute and draw.
+/// Their execution starts in that order with automatic barriers on important
+/// resources.
 VkCommandBuffer vk2dVulkanGetComputeBuffer();
 
 /// \brief Returns the command buffer being used for copy commands
 /// \return Returns a command buffer in the recording state
-/// \warning This is only valid until the next time another VK2D function is called
-/// \note Each frame contains three command buffers: Copy, compute and draw. Their execution starts in that order
-/// with automatic barriers on important resources.
+/// \warning This is only valid until the next time another VK2D function is
+/// called
+/// \note Each frame contains three command buffers: Copy, compute and draw.
+/// Their execution starts in that order with automatic barriers on important
+/// resources.
 VkCommandBuffer vk2dVulkanGetCopyBuffer();
 
-/// \brief Copies arbitrary data into a device-local buffer that can then be accessed from command buffers
+/// \brief Copies arbitrary data into a device-local buffer that can then be
+/// accessed from command buffers
 /// \param data Data to copy to the gpu
 /// \param size Size of the data in bytes
-/// \param outBuffer Device-local Vulkan buffer that the data will be available on
-/// \param bufferOffset Offset in outBuffer data can be accessed from, will follow uniform buffer alignment rules
-/// \warning You may not pass data of size larger than the vramPageSize specified when you initialized the renderer
-/// \warning The buffer the data is copied into is only intended for uniform buffers and vertex buffers
-/// \warning Data copied into a buffer like this is only valid for a single frame; you must use this every frame
-void vk2dVulkanCopyDataIntoBuffer(void *data, VkDeviceSize size, VkBuffer *outBuffer, VkDeviceSize *bufferOffset);
+/// \param outBuffer Device-local Vulkan buffer that the data will be available
+/// on
+/// \param bufferOffset Offset in outBuffer data can be accessed from, will
+/// follow uniform buffer alignment rules
+/// \warning You may not pass data of size larger than the vramPageSize
+/// specified when you initialized the renderer
+/// \warning The buffer the data is copied into is only intended for uniform
+/// buffers and vertex buffers
+/// \warning Data copied into a buffer like this is only valid for a single
+/// frame; you must use this every frame
+void vk2dVulkanCopyDataIntoBuffer(void *data, VkDeviceSize size,
+                                  VkBuffer *outBuffer,
+                                  VkDeviceSize *bufferOffset);
 
 /// \brief Returns the current frame being rendered
 /// \return Returns the current frame being rendered

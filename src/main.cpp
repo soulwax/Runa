@@ -41,8 +41,8 @@ protected:
     }
 
     // Create player entity at screen center
-    float playerX = 640.0f;  // Center of 1280px screen
-    float playerY = 360.0f;  // Center of 720px screen
+    float playerX = 640.0f; // Center of 1280px screen
+    float playerY = 360.0f; // Center of 720px screen
 
     auto &reg = m_registry->getRegistry();
     m_playerEntity = reg.create();
@@ -50,7 +50,8 @@ protected:
     reg.emplace<Runa::ECS::Position>(m_playerEntity, playerX, playerY);
     reg.emplace<Runa::ECS::Velocity>(m_playerEntity, 0.0f, 0.0f);
     reg.emplace<Runa::ECS::Size>(m_playerEntity, 16.0f, 16.0f);
-    reg.emplace<Runa::ECS::PlayerInput>(m_playerEntity, 200.0f);  // 200 pixels/sec
+    reg.emplace<Runa::ECS::PlayerInput>(m_playerEntity,
+                                        200.0f); // 200 pixels/sec
     reg.emplace<Runa::ECS::Player>(m_playerEntity);
 
     LOG_INFO("Player entity created at ({}, {})", playerX, playerY);
@@ -87,27 +88,26 @@ protected:
 
     for (int y = 0; y < tilesY; ++y) {
       for (int x = 0; x < tilesX; ++x) {
-        m_spriteBatch->draw(*m_grassTexture, x * tileSize, y * tileSize,
-                            0, 0, tileSize, tileSize);
+        m_spriteBatch->draw(*m_grassTexture, x * tileSize, y * tileSize, 0, 0,
+                            tileSize, tileSize);
       }
     }
 
     // Render player
     auto &reg = m_registry->getRegistry();
-    auto view = reg.view<Runa::ECS::Position, Runa::ECS::Size, Runa::ECS::Player>();
+    auto view =
+        reg.view<Runa::ECS::Position, Runa::ECS::Size, Runa::ECS::Player>();
 
     for (auto entity : view) {
       auto &pos = view.get<Runa::ECS::Position>(entity);
       auto &size = view.get<Runa::ECS::Size>(entity);
 
       // Draw player as a dirt tile (for visibility)
-      m_spriteBatch->draw(*m_dirtTexture,
-                          static_cast<int>(pos.x),
-                          static_cast<int>(pos.y),
-                          16, 0,  // Source rect: dirt tile
-                          static_cast<int>(size.width),
-                          static_cast<int>(size.height),
-                          1.0f, 0.5f, 0.5f, 1.0f);  // Reddish tint
+      m_spriteBatch->draw(
+          *m_dirtTexture, static_cast<int>(pos.x), static_cast<int>(pos.y), 16,
+          0, // Source rect: dirt tile
+          static_cast<int>(size.width), static_cast<int>(size.height), 1.0f,
+          0.5f, 0.5f, 1.0f); // Reddish tint
     }
 
     m_spriteBatch->end();
@@ -133,7 +133,7 @@ private:
   int m_frameCount = 0;
 };
 
-int main(int argc, char *argv[]) {
+int main(int /*argc*/, char * /*argv*/[]) {
   try {
     Runa::Log::init();
     auto app = std::make_unique<GameApp>();
