@@ -217,10 +217,6 @@ The project is configured for rapid iteration with:
 
 ## License
 
-[Specify your license here]
-
-## Contributing
-
 [AGPLv3 License](LICENSE.md)
 
 ## Authors

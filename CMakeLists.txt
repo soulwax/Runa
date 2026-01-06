@@ -163,6 +163,9 @@ add_library(Runa2Engine SHARED
     src/ECS/Systems.h
     src/ECS/Registry.cpp
     src/ECS/Registry.h
+    src/ECS/RPGComponents.h
+    src/ECS/RPGSystems.cpp
+    src/ECS/RPGSystems.h
 
     # Graphics
     src/Graphics/Window.cpp
@@ -228,10 +231,10 @@ set_target_properties(Runa2Engine PROPERTIES
 # ============================================================================
 
 # Add executable (only game logic)
-# Using main_input_demo.cpp for input manager demo
-# Alternatives: src/main_scene_demo.cpp for scene system, src/main.cpp for ECS game
+# Using main_rpg.cpp for The Slime Hunter RPG demo
+# Alternatives: src/main_input_demo.cpp for input demo, src/main_scene_demo.cpp for scenes, src/main.cpp for ECS
 add_executable(Runa2
-    src/main_input_demo.cpp
+    src/main_rpg.cpp
 )
 
 # Link game executable to engine DLL
