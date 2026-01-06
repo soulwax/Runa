@@ -66,7 +66,7 @@
               "type": "Keyboard"
             },
             {
-              "code": 106,
+              "code": 32,
               "deadZone": 0.15000000596046448,
               "deviceIndex": 0,
               "scale": 1.0,
@@ -245,7 +245,7 @@
           "action": "Jump",
           "sources": [
             {
-              "code": 106,
+              "code": 32,
               "deadZone": 0.15000000596046448,
               "deviceIndex": 0,
               "scale": 1.0,
