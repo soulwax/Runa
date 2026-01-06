@@ -3,13 +3,13 @@
  * Implementation of the pause menu overlay scene.
  */
 
+#include "../runapch.h"
 #include "PauseScene.h"
 #include "../Core/Application.h"
 #include "../Core/Log.h"
 #include "../Core/SceneManager.h"
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Window.h"
-#include "../runapch.h"
 #include "MenuScene.h"
 
 namespace Runa {
