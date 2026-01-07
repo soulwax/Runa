@@ -118,8 +118,6 @@ struct RUNA_API CameraTarget {
 struct RUNA_API Active {};
 
 // Tag components (zero-sized)
-struct RUNA_API Player {};
-struct RUNA_API Enemy {};
 struct RUNA_API Projectile {};
 struct RUNA_API Pickup {};
 struct RUNA_API Static {};  // For non-moving objects

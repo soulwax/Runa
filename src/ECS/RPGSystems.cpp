@@ -26,7 +26,7 @@ static float distance(float x1, float y1, float x2, float y2) {
 void updateCombat(entt::registry& registry, float dt, float gameTime) {
 	// Find player
 	auto playerView = registry.view<Player, Position, Combat, Health>();
-	if (playerView.empty()) return;
+	if (playerView.size_hint() == 0) return;
 
 	auto playerEntity = playerView.front();
 	auto& playerPos = playerView.get<Position>(playerEntity);
@@ -118,7 +118,7 @@ void updateCombat(entt::registry& registry, float dt, float gameTime) {
 void updateAI(entt::registry& registry, float dt) {
 	// Find player position
 	auto playerView = registry.view<Player, Position>();
-	if (playerView.empty()) return;
+	if (playerView.size_hint() == 0) return;
 
 	auto playerEntity = playerView.front();
 	auto& playerPos = playerView.get<Position>(playerEntity);
@@ -241,7 +241,7 @@ void updateAI(entt::registry& registry, float dt) {
 void updateItemCollection(entt::registry& registry) {
 	// Find player
 	auto playerView = registry.view<Player, Position, Inventory>();
-	if (playerView.empty()) return;
+	if (playerView.size_hint() == 0) return;
 
 	auto playerEntity = playerView.front();
 	auto& playerPos = playerView.get<Position>(playerEntity);
@@ -284,7 +284,7 @@ void updateQuests(entt::registry& registry) {
 
 				// Give rewards to player
 				auto playerView = registry.view<Player, Experience, Inventory>();
-				if (!playerView.empty()) {
+				if (playerView.size_hint() != 0) {
 					auto playerEntity = playerView.front();
 					auto& playerXP = playerView.get<Experience>(playerEntity);
 					auto& playerInv = playerView.get<Inventory>(playerEntity);
@@ -361,7 +361,7 @@ void renderHealthBars(entt::registry& registry, SpriteBatch& batch, Camera& came
 
 void renderPlayerUI(entt::registry& registry, SpriteBatch& batch, Font& font, int screenWidth, int screenHeight) {
 	auto playerView = registry.view<Player, Health, Experience, Inventory>();
-	if (playerView.empty()) return;
+	if (playerView.size_hint() == 0) return;
 
 	auto playerEntity = playerView.front();
 	auto& health = playerView.get<Health>(playerEntity);

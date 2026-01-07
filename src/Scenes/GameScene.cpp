@@ -12,7 +12,9 @@
 #include "../Graphics/Renderer.h"
 #include "../Graphics/Window.h"
 #include "../ECS/Components.h"
+#include "../ECS/RPGComponents.h"
 #include "../ECS/Systems.h"
+#include "../ECS/RPGComponents.h"
 
 namespace Runa {
 

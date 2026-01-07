@@ -149,6 +149,9 @@ protected:
 		inv.gold = 0;
 		inv.maxSlots = 20;
 
+		// Velocity component for movement
+		reg.emplace<Runa::ECS::Velocity>(m_player, 0.0f, 0.0f);
+
 		// PlayerInput for movement
 		reg.emplace<Runa::ECS::PlayerInput>(m_player, 150.0f);
 	}
@@ -162,6 +165,7 @@ protected:
 		auto& reg = m_registry->getRegistry();
 
 		reg.emplace<Runa::ECS::Enemy>(slime);
+		reg.emplace<Runa::ECS::Velocity>(slime, 0.0f, 0.0f);
 		reg.emplace<Runa::ECS::Size>(slime, 28.0f, 28.0f);
 		reg.emplace<Runa::ECS::AABB>(slime, 28.0f, 28.0f);
 
@@ -307,7 +311,7 @@ protected:
 			auto questView = reg.view<Runa::ECS::QuestGiver, Runa::ECS::Position>();
 			auto playerView = reg.view<Runa::ECS::Player, Runa::ECS::Position>();
 
-			if (!playerView.empty()) {
+			if (playerView.size_hint() != 0) {
 				auto playerPos = playerView.get<Runa::ECS::Position>(playerView.front());
 
 				for (auto npc : questView) {
@@ -346,7 +350,7 @@ protected:
 
 		// Update ECS systems
 		Runa::ECS::Systems::updateMovement(reg, dt);
-		Runa::ECS::Systems::updateAnimations(reg, dt);
+		Runa::ECS::Systems::updateAnimation(reg, dt);
 		Runa::ECS::RPGSystems::updateAI(reg, dt);
 		Runa::ECS::RPGSystems::updateCombat(reg, dt, m_gameTime);
 		Runa::ECS::RPGSystems::updateItemCollection(reg);
@@ -355,8 +359,7 @@ protected:
 
 		// Update camera to follow player
 		if (reg.valid(m_player)) {
-			auto& playerPos = reg.get<Runa::ECS::Position>(m_player);
-			m_camera->follow(playerPos.x, playerPos.y, 0.1f);
+			m_camera->followEntity(reg, m_player, 0.1f);
 		}
 		m_camera->update(dt);
 
@@ -447,7 +450,7 @@ protected:
 	void renderInventory() {
 		auto& reg = m_registry->getRegistry();
 		auto playerView = reg.view<Runa::ECS::Player, Runa::ECS::Inventory>();
-		if (playerView.empty()) return;
+		if (playerView.size_hint() == 0) return;
 
 		auto& inv = playerView.get<Runa::ECS::Inventory>(playerView.front());
 

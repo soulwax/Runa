@@ -75,7 +75,16 @@
     {
       "label": "Run (Debug)",
       "type": "shell",
-      "command": "${workspaceFolder}/build/debug_new/Runa2.exe",
+      "command": "${workspaceFolder}/build/debug_new/Runa2${command:cmake.launchTargetFileExtension}",
+      "windows": {
+        "command": "${workspaceFolder}/build/debug_new/Runa2.exe"
+      },
+      "linux": {
+        "command": "${workspaceFolder}/build/debug_new/Runa2"
+      },
+      "osx": {
+        "command": "${workspaceFolder}/build/debug_new/Runa2"
+      },
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -84,7 +93,16 @@
     {
       "label": "Run (Release)",
       "type": "shell",
-      "command": "${workspaceFolder}/build/release/Runa2.exe",
+      "command": "${workspaceFolder}/build/release/Runa2${command:cmake.launchTargetFileExtension}",
+      "windows": {
+        "command": "${workspaceFolder}/build/release/Runa2.exe"
+      },
+      "linux": {
+        "command": "${workspaceFolder}/build/release/Runa2"
+      },
+      "osx": {
+        "command": "${workspaceFolder}/build/release/Runa2"
+      },
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -99,11 +117,27 @@
     {
       "label": "Build and Launch GDB (Debug)",
       "type": "shell",
-      "command": "pwsh.exe",
-      "args": [
-        "-Command",
-        "cmake --build build/debug_new; if ($LASTEXITCODE -eq 0) { Start-Process pwsh.exe -ArgumentList '-NoExit', '-Command', 'cd ${workspaceFolder}; C:\\Users\\soulwax\\scoop\\apps\\mingw\\current\\bin\\gdb.exe build/debug_new/Runa2.exe' }"
-      ],
+      "windows": {
+        "command": "pwsh.exe",
+        "args": [
+          "-Command",
+          "cmake --build build/debug_new; if ($LASTEXITCODE -eq 0) { Start-Process pwsh.exe -ArgumentList '-NoExit', '-Command', 'cd ${workspaceFolder}; gdb build/debug_new/Runa2.exe' }"
+        ]
+      },
+      "linux": {
+        "command": "bash",
+        "args": [
+          "-c",
+          "cmake --build build/debug_new && gdb build/debug_new/Runa2"
+        ]
+      },
+      "osx": {
+        "command": "bash",
+        "args": [
+          "-c",
+          "cmake --build build/debug_new && lldb build/debug_new/Runa2"
+        ]
+      },
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -147,15 +181,31 @@
     {
       "label": "Clean All (Remove Build Directories)",
       "type": "shell",
-      "command": "Remove-Item",
-      "args": [
-        "-Recurse", "-Force", "build"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}",
-        "shell": {
-          "executable": "pwsh.exe"
+      "windows": {
+        "command": "Remove-Item",
+        "args": [
+          "-Recurse", "-Force", "build"
+        ],
+        "options": {
+          "shell": {
+            "executable": "pwsh.exe"
+          }
         }
+      },
+      "linux": {
+        "command": "rm",
+        "args": [
+          "-rf", "build"
+        ]
+      },
+      "osx": {
+        "command": "rm",
+        "args": [
+          "-rf", "build"
+        ]
+      },
+      "options": {
+        "cwd": "${workspaceFolder}"
       },
       "problemMatcher": []
     }

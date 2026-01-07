@@ -114,7 +114,7 @@ set(VK2D_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(src/Vulkan2D)
 
 # ============================================================================
-# Engine Library (DLL)
+# Engine Library (Shared)
 # ============================================================================
 
 # Add shared library for engine
@@ -190,7 +190,7 @@ add_library(Runa2Engine SHARED
     src/Graphics/Camera.h
 )
 
-# Define export macro for engine DLL
+# Define export macro for engine shared library
 target_compile_definitions(Runa2Engine PRIVATE
     RUNA2_ENGINE_EXPORTS
     SPDLOG_FMT_RUNTIME_CHECKS=0  # Disable compile-time format string checking
@@ -219,7 +219,7 @@ target_compile_options(Runa2Engine PRIVATE
     $<$<CONFIG:Release>:-O3>
 )
 
-# Set output directory for DLL (so executable can find it)
+# Set output directory for shared library (so executable can find it)
 set_target_properties(Runa2Engine PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}"
     RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_BINARY_DIR}"
@@ -237,7 +237,7 @@ add_executable(Runa2
     src/main_rpg.cpp
 )
 
-# Link game executable to engine DLL
+# Link game executable to engine shared library
 # Also link spdlog since Log.h includes runapch.h which needs spdlog
 target_link_libraries(Runa2 PRIVATE
     Runa2Engine
@@ -265,47 +265,47 @@ set_target_properties(Runa2 PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_BINARY_DIR}"
 )
 
-# Function to copy DLLs to executable directory
-function(copy_dlls_to_exe target)
-    # Copy engine DLL
+# Function to copy shared libraries to executable directory
+function(copy_shared_libs_to_exe target)
+    # Copy engine shared library
     add_custom_command(TARGET ${target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
             $<TARGET_FILE:Runa2Engine>
             $<TARGET_FILE_DIR:${target}>
-        COMMENT "Copying Runa2Engine.dll"
+        COMMENT "Copying Runa2Engine shared library"
     )
 
-    # Copy Vulkan2D DLL
+    # Copy Vulkan2D shared library
     add_custom_command(TARGET ${target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
             $<TARGET_FILE:Vulkan2D>
             $<TARGET_FILE_DIR:${target}>
-        COMMENT "Copying Vulkan2D.dll"
+        COMMENT "Copying Vulkan2D shared library"
     )
 
-    # Copy SDL3 DLLs
+    # Copy SDL3 shared libraries
     add_custom_command(TARGET ${target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
             $<TARGET_FILE:SDL3::SDL3>
             $<TARGET_FILE_DIR:${target}>
-        COMMENT "Copying SDL3.dll"
+        COMMENT "Copying SDL3 shared library"
     )
 
     add_custom_command(TARGET ${target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
             $<TARGET_FILE:SDL3_image::SDL3_image>
             $<TARGET_FILE_DIR:${target}>
-        COMMENT "Copying SDL3_image.dll"
+        COMMENT "Copying SDL3_image shared library"
     )
 
     add_custom_command(TARGET ${target} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
             $<TARGET_FILE:SDL3_ttf::SDL3_ttf>
             $<TARGET_FILE_DIR:${target}>
-        COMMENT "Copying SDL3_ttf.dll"
+        COMMENT "Copying SDL3_ttf shared library"
     )
 
-    # Copy spdlog DLL - check if it exists as a shared library
+    # Copy spdlog shared library - check if it exists as a shared library
     # spdlog may be built as shared despite SPDLOG_BUILD_SHARED OFF in some cases
     if(TARGET spdlog::spdlog)
         get_target_property(spdlog_type spdlog::spdlog TYPE)
@@ -314,11 +314,11 @@ function(copy_dlls_to_exe target)
                 COMMAND ${CMAKE_COMMAND} -E copy_if_different
                     $<TARGET_FILE:spdlog::spdlog>
                     $<TARGET_FILE_DIR:${target}>
-                COMMENT "Copying spdlog DLL"
+                COMMENT "Copying spdlog shared library"
             )
         endif()
     endif()
 endfunction()
 
-# Copy all required DLLs
-copy_dlls_to_exe(Runa2)
+# Copy all required shared libraries
+copy_shared_libs_to_exe(Runa2)

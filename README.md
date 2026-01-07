@@ -1,37 +1,56 @@
 # Runa2
 
-A C++20 project using SDL3 for window and graphics management, built with CMake, Ninja, and GCC/MinGW on Windows.
+A cross-platform C++20 game engine using SDL3 and Vulkan2D for graphics, built with CMake, Ninja, and GCC.
 
 ## Overview
 
-Runa2 is a basic SDL3 application that creates a resizable window with an event loop. This serves as a foundation for game development or graphical applications.
+Runa2 is a cross-platform 2D game engine built on SDL3 and Vulkan2D. It features an Entity Component System (ECS), scene management, resource loading, input handling, and hardware-accelerated rendering.
 
 ## Prerequisites
 
-Before building this project on Windows, you need the following tools installed:
+Before building this project, you need the following tools installed:
 
 ### Required Tools
 
 1. **CMake** (version 3.20 or higher)
    - Download from [cmake.org](https://cmake.org/download/)
-   - Or install via Scoop: `scoop install cmake`
+   - Or use your package manager (see platform-specific instructions below)
 
 2. **Ninja Build System**
    - Download from [ninja-build.org](https://ninja-build.org/)
-   - Or install via Scoop: `scoop install ninja`
+   - Or use your package manager
 
-3. **GCC/G++ (MinGW)**
-   - Install via Scoop: `scoop install gcc`
-   - Or download MinGW-w64 from [winlibs.com](https://winlibs.com/) or [mingw-w64.org](https://www.mingw-w64.org/)
+3. **GCC/G++** (C++20 compatible)
+   - Linux: Usually pre-installed, or install via package manager
+   - macOS: Install via Homebrew or use Clang
+   - Windows: Install MinGW-w64 from [winlibs.com](https://winlibs.com/)
 
 4. **Git**
-   - Required for fetching SDL3 dependency
-   - Download from [git-scm.com](https://git-scm.com/)
-   - Or install via Scoop: `scoop install git`
+   - Required for fetching dependencies via CMake FetchContent
+   - Install via your system's package manager
 
-### Recommended: Scoop Package Manager
+5. **Vulkan SDK** (usually included with GPU drivers)
+   - Download from [vulkan.lunarg.com](https://vulkan.lunarg.com/) if needed
+   - Most modern systems have Vulkan support built-in
 
-The easiest way to install all prerequisites on Windows:
+### Platform-Specific Installation
+
+#### Linux (Ubuntu/Debian)
+
+```bash
+sudo apt update
+sudo apt install cmake ninja-build g++ git vulkan-tools
+```
+
+#### macOS (Homebrew)
+
+```bash
+brew install cmake ninja gcc git
+# Vulkan support via MoltenVK (included with Vulkan SDK or install separately)
+brew install --cask vulkan-sdk
+```
+
+#### Windows (Scoop)
 
 ```powershell
 # Install Scoop (if not already installed)
@@ -40,6 +59,13 @@ irm get.scoop.sh | iex
 # Install all required tools
 scoop install cmake ninja gcc git
 ```
+
+#### Windows (Manual)
+
+- CMake: Download from [cmake.org](https://cmake.org/download/)
+- Ninja: Download from [ninja-build.org](https://ninja-build.org/)
+- GCC: Download MinGW-w64 from [winlibs.com](https://winlibs.com/)
+- Git: Download from [git-scm.com](https://git-scm.com/)
 
 ### Optional: VSCode
 
@@ -64,7 +90,9 @@ cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPI
 cmake --build build/debug
 
 # Run
-./build/debug/Runa2.exe
+./build/debug/Runa2        # Linux/macOS
+# or
+./build/debug/Runa2.exe    # Windows
 ```
 
 #### Release Build
@@ -77,7 +105,9 @@ cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COM
 cmake --build build/release
 
 # Run
-./build/release/Runa2.exe
+./build/release/Runa2      # Linux/macOS
+# or
+./build/release/Runa2.exe  # Windows
 ```
 
 ### VSCode Build
@@ -123,20 +153,32 @@ Runa2/
 
 ## Dependencies
 
-Dependencies are automatically managed by CMake:
+All dependencies are automatically fetched and built by CMake via FetchContent:
 
-- **SDL3** - Fetched automatically from GitHub during CMake configuration
-- **nlohmann/json** - Included in `vendor/JSON/` directory (currently not used in main.cpp)
+- **SDL3** - Core windowing, events, and input
+- **SDL3_image** - Image loading (PNG, JPG, etc.)
+- **SDL3_ttf** - TrueType font rendering
+- **Vulkan2D** - 2D renderer using Vulkan (integrated in `src/Vulkan2D/`)
+- **EnTT** - Entity Component System library (v3.13.2)
+- **yaml-cpp** - YAML parsing for resource manifests
+- **spdlog** - Fast C++ logging library (v1.15.0)
+- **nlohmann/json** - JSON library
 
-The first build will take longer as CMake downloads and builds SDL3. Subsequent builds will be much faster.
+The first build will take 5-15 minutes as CMake downloads and compiles all dependencies. Subsequent builds are incremental and much faster.
 
 ## Compiler Configuration
 
 - **C++ Standard**: C++20 (required, no extensions)
-- **Compiler**: GCC/G++ (MinGW)
+- **Compiler**: GCC/G++ (or Clang on macOS)
 - **Debug Flags**: `-g -O0` (full debug symbols, no optimization)
 - **Release Flags**: `-O3` (maximum optimization)
 - **Build System**: CMake 3.20+ with Ninja generator
+- **Architecture**: Shared library engine + executable game
+
+The project uses a shared library architecture:
+
+- `Runa2Engine` - Shared library containing all engine code
+- `Runa2` - Game executable that links to the engine
 
 ## Cleaning Build Files
 
@@ -192,15 +234,17 @@ The project generates `build/debug/compile_commands.json` for IntelliSense:
 
 ## Running the Application
 
-When you run the executable, you should see:
+When you run the executable, you'll see the current demo (RPG demo by default) which includes:
 
-1. A console window displaying "SDL3 initialized successfully!"
-2. An 800x600 resizable window titled "Runa2 - SDL3 Test"
+- Player character with WASD movement
+- Tile-based world with collisions
+- Camera following the player
+- ECS-based entity management
 
 To exit:
 
 - Close the window by clicking the X button
-- Or press `Ctrl+C` in the console
+- Or press ESC (depending on the scene)
 
 ## Development Workflow
 

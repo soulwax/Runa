@@ -3,6 +3,7 @@
 
 #include "../runapch.h"
 #include "Registry.h"
+#include "RPGComponents.h"
 #include "../Graphics/SpriteSheet.h"
 
 namespace Runa::ECS {

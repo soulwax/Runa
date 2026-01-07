@@ -5,14 +5,26 @@
       "name": "Debug (Build and Run)",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/debug_new/Runa2.exe",
+      "program": "${workspaceFolder}/build/debug_new/Runa2${command:cmake.launchTargetFileExtension}",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],
       "externalConsole": false,
-      "MIMode": "gdb",
-      "miDebuggerPath": "gdb.exe",
+      "windows": {
+        "program": "${workspaceFolder}/build/debug_new/Runa2.exe",
+        "MIMode": "gdb",
+        "miDebuggerPath": "gdb.exe"
+      },
+      "linux": {
+        "program": "${workspaceFolder}/build/debug_new/Runa2",
+        "MIMode": "gdb",
+        "miDebuggerPath": "gdb"
+      },
+      "osx": {
+        "program": "${workspaceFolder}/build/debug_new/Runa2",
+        "MIMode": "lldb"
+      },
       "setupCommands": [
         {
           "description": "Enable pretty-printing for gdb",
@@ -38,14 +50,26 @@
       "name": "Debug (Run Only)",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/debug_new/Runa2.exe",
+      "program": "${workspaceFolder}/build/debug_new/Runa2${command:cmake.launchTargetFileExtension}",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],
       "externalConsole": false,
-      "MIMode": "gdb",
-      "miDebuggerPath": "gdb.exe",
+      "windows": {
+        "program": "${workspaceFolder}/build/debug_new/Runa2.exe",
+        "MIMode": "gdb",
+        "miDebuggerPath": "gdb.exe"
+      },
+      "linux": {
+        "program": "${workspaceFolder}/build/debug_new/Runa2",
+        "MIMode": "gdb",
+        "miDebuggerPath": "gdb"
+      },
+      "osx": {
+        "program": "${workspaceFolder}/build/debug_new/Runa2",
+        "MIMode": "lldb"
+      },
       "setupCommands": [
         {
           "description": "Enable pretty-printing for gdb",
@@ -70,14 +94,26 @@
       "name": "Release (Build and Run)",
       "type": "cppdbg",
       "request": "launch",
-      "program": "${workspaceFolder}/build/release/Runa2.exe",
+      "program": "${workspaceFolder}/build/release/Runa2${command:cmake.launchTargetFileExtension}",
       "args": [],
       "stopAtEntry": false,
       "cwd": "${workspaceFolder}",
       "environment": [],
       "externalConsole": false,
-      "MIMode": "gdb",
-      "miDebuggerPath": "gdb.exe",
+      "windows": {
+        "program": "${workspaceFolder}/build/release/Runa2.exe",
+        "MIMode": "gdb",
+        "miDebuggerPath": "gdb.exe"
+      },
+      "linux": {
+        "program": "${workspaceFolder}/build/release/Runa2",
+        "MIMode": "gdb",
+        "miDebuggerPath": "gdb"
+      },
+      "osx": {
+        "program": "${workspaceFolder}/build/release/Runa2",
+        "MIMode": "lldb"
+      },
       "setupCommands": [
         {
           "description": "Enable pretty-printing for gdb",
