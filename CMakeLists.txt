@@ -3,7 +3,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 project(Runa2
-    VERSION 1.0.0
+    VERSION 1.0.3
     LANGUAGES CXX
 )
 
@@ -88,6 +88,14 @@ FetchContent_Declare(
 set(JSON_BuildTests OFF CACHE BOOL "" FORCE)
 set(JSON_Install OFF CACHE BOOL "" FORCE)
 
+# Dear ImGui - Immediate mode GUI library
+# Using latest version for better SDL3 compatibility
+FetchContent_Declare(
+    imgui
+    GIT_REPOSITORY https://github.com/ocornut/imgui.git
+    GIT_TAG v1.90.9
+    GIT_SHALLOW TRUE
+)
 
 # SDL3_ttf defaults to using *system* FreeType unless MSVC/Android. On MinGW this
 # commonly fails (no package manager integration), so force vendored deps.
@@ -105,13 +113,16 @@ set(SDL3IMAGE_WEBP OFF CACHE BOOL "" FORCE)
 # their own default output directories. We avoid setting global CMAKE_*_OUTPUT_DIRECTORY
 # variables with FORCE here, as that would override dependency defaults and is unnecessary
 # since our own targets (Runa2Engine and Runa2) have explicit output directory settings.
-FetchContent_MakeAvailable(SDL3 SDL3_image SDL3_ttf yaml-cpp spdlog EnTT nlohmann_json)
+FetchContent_MakeAvailable(SDL3 SDL3_image SDL3_ttf yaml-cpp spdlog EnTT nlohmann_json imgui)
+
+# Find Vulkan (needed for both Vulkan2D and ImGui)
+find_package(Vulkan REQUIRED)
 
 # Vulkan2D - 2D renderer using Vulkan
 # Integrated as part of the engine's source code
 set(VK2D_BUILD_SDL OFF CACHE BOOL "" FORCE)
 set(VK2D_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-add_subdirectory(src/Vulkan2D)
+add_subdirectory(src/Vulkan)
 
 # ============================================================================
 # Engine Library (Shared)
@@ -188,6 +199,8 @@ add_library(Runa2Engine SHARED
     src/Graphics/Font.h
     src/Graphics/Camera.cpp
     src/Graphics/Camera.h
+    src/Graphics/ImGui.cpp
+    src/Graphics/ImGui.h
 )
 
 # Define export macro for engine shared library
@@ -196,12 +209,48 @@ target_compile_definitions(Runa2Engine PRIVATE
     SPDLOG_FMT_RUNTIME_CHECKS=0  # Disable compile-time format string checking
 )
 
+# Create ImGui library target (ImGui doesn't have a standard CMake setup)
+# Note: This must be created after Vulkan2D subdirectory so Vulkan::Vulkan target is available
+# Note: SDL3 backend is excluded due to API compatibility issues - we'll handle input manually
+add_library(imgui STATIC
+    ${imgui_SOURCE_DIR}/imgui.cpp
+    ${imgui_SOURCE_DIR}/imgui_demo.cpp
+    ${imgui_SOURCE_DIR}/imgui_draw.cpp
+    ${imgui_SOURCE_DIR}/imgui_tables.cpp
+    ${imgui_SOURCE_DIR}/imgui_widgets.cpp
+    # ${imgui_SOURCE_DIR}/backends/imgui_impl_sdl3.cpp  # Disabled: SDL3 API incompatibility
+    ${imgui_SOURCE_DIR}/backends/imgui_impl_vulkan.cpp
+)
+
+target_include_directories(imgui PUBLIC
+    ${imgui_SOURCE_DIR}
+    ${imgui_SOURCE_DIR}/backends
+)
+
+# Link SDL3 and Vulkan to imgui (needed for backend implementations)
+# SDL3::SDL3 provides SDL3 headers
+target_link_libraries(imgui PUBLIC SDL3::SDL3)
+
+# Add Vulkan includes (Vulkan::Vulkan target may not be available in all CMake versions)
+if(Vulkan_FOUND)
+    target_include_directories(imgui PUBLIC ${Vulkan_INCLUDE_DIRS})
+    # Try to link Vulkan::Vulkan if available, otherwise just use headers
+    if(TARGET Vulkan::Vulkan)
+        target_link_libraries(imgui PUBLIC Vulkan::Vulkan)
+    elseif(TARGET Vulkan::Headers)
+        target_link_libraries(imgui PUBLIC Vulkan::Headers)
+    endif()
+else()
+    message(FATAL_ERROR "Vulkan not found - required for ImGui Vulkan backend")
+endif()
+
 # Link libraries to engine
 # SDL3, SDL3_image, SDL3_ttf, Vulkan2D, and EnTT are PUBLIC so executables can access headers
 target_link_libraries(Runa2Engine PRIVATE
     yaml-cpp::yaml-cpp
     nlohmann_json::nlohmann_json
     spdlog::spdlog
+    imgui
     PUBLIC
     SDL3::SDL3
     SDL3_image::SDL3_image
@@ -227,14 +276,14 @@ set_target_properties(Runa2Engine PROPERTIES
 )
 
 # ============================================================================
-# Game Executable
+# Sandbox (Game Implementation)
 # ============================================================================
 
-# Add executable (only game logic)
-# Using main_rpg.cpp for The Slime Hunter RPG demo
-# Alternatives: src/main_input_demo.cpp for input demo, src/main_scene_demo.cpp for scenes, src/main.cpp for ECS
+# Add executable (only game logic - Sandbox contains game implementation)
+# Using main_game.cpp for clean game implementation
+# Alternatives: Sandbox/main_rpg.cpp for RPG demo, Sandbox/main_input_demo.cpp for input demo, Sandbox/main_scene_demo.cpp for scenes, Sandbox/main.cpp for ECS
 add_executable(Runa2
-    src/main_rpg.cpp
+    Sandbox/main_game.cpp
 )
 
 # Link game executable to engine shared library

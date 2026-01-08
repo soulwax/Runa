@@ -100,7 +100,15 @@ void Texture::createFromPixels(int width, int height, const void* pixelData) {
         }
     }
 
-    LOG_DEBUG("Created texture from pixels ({}x{})", width, height);
+    // Throttle debug message to once per second
+    static auto lastLogTime = std::chrono::steady_clock::now();
+    auto now = std::chrono::steady_clock::now();
+    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - lastLogTime);
+    
+    if (elapsed.count() >= 1) {
+        LOG_DEBUG("Created texture from pixels ({}x{})", width, height);
+        lastLogTime = now;
+    }
 }
 
 } // namespace Runa

@@ -3,7 +3,8 @@
  * Manages a stack of scenes with transitions and lifecycle management.
  */
 
-#pragma once
+#ifndef RUNA_CORE_SCENEMANAGER_H
+#define RUNA_CORE_SCENEMANAGER_H
 
 #include "../RunaAPI.h"
 #include "Scene.h"
@@ -42,3 +43,5 @@ namespace Runa {
 	};
 
 }  // namespace Runa
+
+#endif // RUNA_CORE_SCENEMANAGER_H

@@ -66,8 +66,16 @@ public:
     // Utility
     // ========================================================================
 
-    // Get entity count
-    size_t getEntityCount() const { return 0; /* TODO: Fix for EnTT version */ }
+    // Get entity count (counts entities with Active component, which all created entities have)
+    // Note: EnTT doesn't provide direct entity count, so we count via Active component view
+    size_t getEntityCount() const { 
+        size_t count = 0;
+        for (auto entity : m_registry.view<Active>()) {
+            (void)entity;  // Suppress unused variable warning
+            ++count;
+        }
+        return count;
+    }
 
     // Clear all entities
     void clear() { m_registry.clear(); }

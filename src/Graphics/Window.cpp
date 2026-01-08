@@ -36,11 +36,8 @@ namespace Runa
 
     void Window::processEvents()
     {
-        // Clear per-frame input state
-        if (m_input)
-        {
-            m_input->beginFrame();
-        }
+        // Note: beginFrame() is called by Application::mainLoop() to avoid double-clearing
+        // input states. Do not call it here.
 
         SDL_Event event;
         while (SDL_PollEvent(&event))

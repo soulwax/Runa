@@ -57,6 +57,11 @@ int vk2dVulkanGetSwapchainImageIndex() {
   return gRenderer->scImageIndex;
 }
 
+VkInstance vk2dVulkanGetInstance() {
+  VK2DRenderer gRenderer = vk2dRendererGetPointer();
+  return gRenderer->vk;
+}
+
 VkDevice vk2dVulkanGetDevice() {
   VK2DRenderer gRenderer = vk2dRendererGetPointer();
   return gRenderer->ld->dev;

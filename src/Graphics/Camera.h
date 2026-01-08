@@ -45,7 +45,11 @@ public:
     Bounds getWorldBounds() const;
 
     // Zoom (for future)
-    void setZoom(float zoom) { m_zoom = zoom; }
+    void setZoom(float zoom) { 
+        m_zoom = (zoom > 0.001f) ? zoom : 0.001f;  // Prevent division by zero
+        if (m_zoom < 0.25f) m_zoom = 0.25f;
+        if (m_zoom > 4.0f) m_zoom = 4.0f;
+    }
     float getZoom() const { return m_zoom; }
 
     // Getters

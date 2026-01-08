@@ -8,6 +8,7 @@
 #include "../Graphics/SpriteBatch.h"
 #include "../Graphics/Camera.h"
 #include "../Graphics/TileMap.h"
+#include "../Graphics/Texture.h"
 #include "../Core/Log.h"
 #include <cmath>
 
@@ -238,41 +239,63 @@ void updateEntityCollisions(entt::registry& registry) {
 // Rendering System
 // ============================================================================
 
-void renderSprites(entt::registry& registry, SpriteBatch& batch, Camera& camera) {
+void renderSprites(entt::registry& registry, SpriteBatch& batch, Camera& camera, Texture* whitePixelTexture) {
     auto view = registry.view<Position, Sprite, Active>();
 
     for (auto entity : view) {
         auto& pos = view.get<Position>(entity);
         auto& sprite = view.get<Sprite>(entity);
 
-        // Skip if no sprite sheet
-        if (!sprite.spriteSheet || sprite.spriteName.empty()) {
-            continue;
-        }
-
-        const auto* spriteData = sprite.spriteSheet->getSprite(sprite.spriteName);
-        if (!spriteData || spriteData->frames.empty()) {
-            continue;
-        }
-
-        // Get current frame
-        int frameIndex = 0;
-        if (auto* anim = registry.try_get<Animation>(entity)) {
-            frameIndex = anim->currentFrame;
-            if (frameIndex >= static_cast<int>(spriteData->frames.size())) {
-                frameIndex = 0;
-            }
-        }
-
-        const SpriteFrame& frame = spriteData->frames[frameIndex];
-
-        // Transform to screen coordinates
+        // Transform to screen coordinates (center of entity)
         int screenX, screenY;
         camera.worldToScreen(pos.x, pos.y, screenX, screenY);
 
-        // Draw sprite with tint
-        batch.draw(sprite.spriteSheet->getTexture(), screenX, screenY, frame,
-                   sprite.tintR, sprite.tintG, sprite.tintB, sprite.tintA);
+        // Get entity size for rendering
+        float width = 32.0f;
+        float height = 32.0f;
+        if (auto* size = registry.try_get<Size>(entity)) {
+            width = size->width;
+            height = size->height;
+        }
+
+        // If entity has a sprite sheet, render it
+        if (sprite.spriteSheet && !sprite.spriteName.empty()) {
+            const auto* spriteData = sprite.spriteSheet->getSprite(sprite.spriteName);
+            if (spriteData && !spriteData->frames.empty()) {
+                // Get current frame
+                int frameIndex = 0;
+                if (auto* anim = registry.try_get<Animation>(entity)) {
+                    frameIndex = anim->currentFrame;
+                    if (frameIndex >= static_cast<int>(spriteData->frames.size())) {
+                        frameIndex = 0;
+                    }
+                }
+
+                const SpriteFrame& frame = spriteData->frames[frameIndex];
+
+                // Adjust position from center to top-left (worldToScreen returns center coordinates,
+                // but SpriteBatch::draw() expects top-left coordinates)
+                int drawX = screenX - static_cast<int>(frame.width / 2.0f);
+                int drawY = screenY - static_cast<int>(frame.height / 2.0f);
+
+                // Draw sprite with tint
+                batch.draw(sprite.spriteSheet->getTexture(), drawX, drawY, frame,
+                           sprite.tintR, sprite.tintG, sprite.tintB, sprite.tintA);
+                continue;
+            }
+        }
+
+        // If no sprite sheet, render as colored rectangle using white pixel texture
+        if (whitePixelTexture && whitePixelTexture->isValid()) {
+            // Adjust position to top-left corner (worldToScreen gives center)
+            int drawX = screenX - static_cast<int>(width / 2.0f);
+            int drawY = screenY - static_cast<int>(height / 2.0f);
+
+            // Draw white pixel scaled to entity size with tint color
+            batch.draw(*whitePixelTexture, drawX, drawY,
+                       sprite.tintR, sprite.tintG, sprite.tintB, sprite.tintA,
+                       width, height);
+        }
     }
 }
 

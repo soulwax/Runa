@@ -11,14 +11,16 @@ namespace {
     // Helper function to find project root (where Resources/ folder is)
     std::filesystem::path findProjectRoot() {
         // Start from executable directory
+        // SDL3: SDL_GetBasePath() returns const char* to internally-managed memory
+        // The memory is automatically freed by SDL - DO NOT call SDL_free() on it
         const char* basePath = SDL_GetBasePath();
         std::filesystem::path currentPath = basePath ? basePath : std::filesystem::current_path();
-        SDL_free(const_cast<char*>(basePath));
+        // No need to free basePath - SDL3 manages it internally
 
         // Walk up the directory tree looking for Resources folder or CMakeLists.txt
         std::filesystem::path checkPath = currentPath;
         for (int i = 0; i < 10; ++i) { // Limit search depth
-            if (std::filesystem::exists(checkPath / "Resources") || 
+            if (std::filesystem::exists(checkPath / "Resources") ||
                 std::filesystem::exists(checkPath / "CMakeLists.txt")) {
                 return checkPath;
             }
@@ -28,7 +30,7 @@ namespace {
                 break;
             }
         }
-        
+
         // Fallback: use current working directory
         return std::filesystem::current_path();
     }
@@ -46,21 +48,21 @@ void ResourceManager::loadSpriteSheetFromYAML(const std::string& yamlPath) {
         // Find project root and resolve path relative to it
         std::filesystem::path projectRoot = findProjectRoot();
         std::filesystem::path path(yamlPath);
-        
+
         if (path.is_relative()) {
             // Try project root first
             path = projectRoot / path;
-            
+
             // If not found, try current working directory as fallback
             if (!std::filesystem::exists(path)) {
                 path = std::filesystem::absolute(yamlPath);
             }
         }
-        
+
         if (!std::filesystem::exists(path)) {
             throw std::runtime_error("YAML file does not exist: " + path.string());
         }
-        
+
         LOG_DEBUG("Loading YAML from: {}", path.string());
         YAML::Node config = YAML::LoadFile(path.string());
 
@@ -77,7 +79,7 @@ void ResourceManager::loadSpriteSheetFromYAML(const std::string& yamlPath) {
         std::string texturePath = sheetNode["texture"].as<std::string>();
         std::filesystem::path yamlDir = path.parent_path();
         std::filesystem::path texturePathObj(texturePath);
-        
+
         // If texture path is relative, resolve relative to YAML file location
         if (texturePathObj.is_relative()) {
             std::string fullTexturePath = (yamlDir / texturePath).string();
@@ -153,7 +155,7 @@ void ResourceManager::loadSpriteSheetFromYAML(const std::string& yamlPath) {
 
         // Store spritesheet
         m_spriteSheets[name] = std::move(spriteSheet);
-        LOG_INFO("Loaded spritesheet '{}' with {} sprites/animations", 
+        LOG_INFO("Loaded spritesheet '{}' with {} sprites/animations",
                  name, m_spriteSheets[name]->getSpriteNames().size());
 
     } catch (const YAML::Exception& e) {
@@ -171,7 +173,7 @@ void ResourceManager::loadTilesetFromAtlasYAML(const std::string& yamlPath, cons
         std::filesystem::path projectRoot = findProjectRoot();
         std::filesystem::path yamlPathObj(yamlPath);
         std::filesystem::path imagePathObj(imagePath);
-        
+
         // Resolve YAML path
         if (yamlPathObj.is_relative()) {
             yamlPathObj = projectRoot / yamlPathObj;
@@ -179,7 +181,7 @@ void ResourceManager::loadTilesetFromAtlasYAML(const std::string& yamlPath, cons
                 yamlPathObj = std::filesystem::absolute(yamlPath);
             }
         }
-        
+
         // Resolve image path (relative to YAML file location first, then project root)
         if (imagePathObj.is_relative()) {
             std::filesystem::path yamlDir = yamlPathObj.parent_path();
@@ -189,14 +191,14 @@ void ResourceManager::loadTilesetFromAtlasYAML(const std::string& yamlPath, cons
             }
             imagePathObj = fullImagePath;
         }
-        
+
         if (!std::filesystem::exists(yamlPathObj)) {
             throw std::runtime_error("YAML file does not exist: " + yamlPathObj.string());
         }
         if (!std::filesystem::exists(imagePathObj)) {
             throw std::runtime_error("Image file does not exist: " + imagePathObj.string());
         }
-        
+
         LOG_DEBUG("Loading atlas YAML from: {} (image: {})", yamlPathObj.string(), imagePathObj.string());
         YAML::Node config = YAML::LoadFile(yamlPathObj.string());
 
@@ -216,17 +218,17 @@ void ResourceManager::loadTilesetFromAtlasYAML(const std::string& yamlPath, cons
         // Parse tiles
         YAML::Node tilesNode = config["tiles"];
         int tileCount = 0;
-        
+
         for (const auto& tileNode : tilesNode) {
             if (!tileNode["id"]) {
                 continue; // Skip tiles without id
             }
-            
+
             std::string tileId = tileNode["id"].as<std::string>();
             int atlasX = tileNode["atlas_x"] ? tileNode["atlas_x"].as<int>() : 0;
             int atlasY = tileNode["atlas_y"] ? tileNode["atlas_y"].as<int>() : 0;
             int tileSizeOverride = tileNode["tile_size"] ? tileNode["tile_size"].as<int>() : tileSize;
-            
+
             // Add sprite using atlas coordinates
             spriteSheet->addSprite(tileId, atlasX, atlasY, tileSizeOverride, tileSizeOverride);
             tileCount++;

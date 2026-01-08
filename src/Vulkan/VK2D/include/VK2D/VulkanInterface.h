@@ -78,6 +78,10 @@ int vk2dVulkanGetFrame();
 /// \return Returns the current swapchain image being used this frame
 int vk2dVulkanGetSwapchainImageIndex();
 
+/// \brief Returns the Vulkan instance
+/// \return Returns the Vulkan instance
+VkInstance vk2dVulkanGetInstance();
+
 /// \brief Returns the logical device
 /// \return Returns the logical device
 VkDevice vk2dVulkanGetDevice();

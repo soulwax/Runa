@@ -1,5 +1,9 @@
 # Runa2
 
+The repository is called Runa, but the project is called Runa2. Why? Because my first attempt at creating a solid vulkan backend was not very successful.
+
+For the sake of simplicity, this is "Runa2".
+
 A cross-platform C++20 game engine using SDL3 and Vulkan2D for graphics, built with CMake, Ninja, and GCC.
 
 ## Overview
@@ -135,19 +139,26 @@ If you're using VSCode, the project includes pre-configured tasks and launch con
 
 ```sh
 Runa2/
-├── src/
-│   └── main.cpp          # Entry point - SDL3 window creation and event loop
+├── src/                  # Engine code (Runa2Engine DLL)
+│   ├── Core/             # Core engine systems
+│   ├── Graphics/          # Rendering systems
+│   ├── ECS/              # Entity Component System
+│   ├── Scenes/           # Scene base classes
+│   └── Vulkan/           # Vulkan2D renderer
+├── Sandbox/              # Game implementation (uses engine)
+│   ├── main_rpg.cpp      # RPG demo (PRIMARY)
+│   ├── main.cpp          # Basic ECS demo
+│   ├── main_input_demo.cpp
+│   └── main_scene_demo.cpp
 ├── build/
 │   ├── debug/            # Debug build output (gitignored)
 │   └── release/          # Release build output (gitignored)
-├── vendor/
-│   └── JSON/             # JSON library (nlohmann/json)
+├── Resources/            # Game assets
 ├── .vscode/              # VSCode configuration
 │   ├── tasks.json        # Build tasks
 │   ├── launch.json       # Debug configurations
 │   └── settings.json     # Editor settings
 ├── CMakeLists.txt        # CMake build configuration
-├── CLAUDE.md             # AI assistant instructions
 └── README.md             # This file
 ```
 
@@ -158,7 +169,7 @@ All dependencies are automatically fetched and built by CMake via FetchContent:
 - **SDL3** - Core windowing, events, and input
 - **SDL3_image** - Image loading (PNG, JPG, etc.)
 - **SDL3_ttf** - TrueType font rendering
-- **Vulkan2D** - 2D renderer using Vulkan (integrated in `src/Vulkan2D/`)
+- **Vulkan2D** - 2D renderer using Vulkan (integrated in `src/Vulkan/`)
 - **EnTT** - Entity Component System library (v3.13.2)
 - **yaml-cpp** - YAML parsing for resource manifests
 - **spdlog** - Fast C++ logging library (v1.15.0)
@@ -248,7 +259,9 @@ To exit:
 
 ## Development Workflow
 
-1. **Make code changes** in `src/main.cpp` or other source files
+1. **Make code changes**:
+   - Engine code: `src/` directory (Runa2Engine DLL)
+   - Game code: `Sandbox/` directory (game implementation)
 2. **Build** using `F5` (VSCode) or `cmake --build build/debug`
 3. **Debug** using F5 in VSCode (with breakpoints)
 4. **Test** by running the executable

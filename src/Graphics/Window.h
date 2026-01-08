@@ -16,13 +16,11 @@ public:
     Window(const std::string& title, int width, int height);
     ~Window();
 
-    // Disable copying
+    // Disable copying and moving (Window contains raw pointer that could become dangling)
     Window(const Window&) = delete;
     Window& operator=(const Window&) = delete;
-
-    // Enable moving
-    Window(Window&&) noexcept = default;
-    Window& operator=(Window&&) noexcept = default;
+    Window(Window&&) = delete;
+    Window& operator=(Window&&) = delete;
 
     SDL_Window* getHandle() const { return m_window; }
     int getWidth() const { return m_width; }

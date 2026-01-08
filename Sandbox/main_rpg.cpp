@@ -39,6 +39,10 @@ protected:
     m_inputManager = std::make_unique<Runa::InputManager>(getInput());
     m_inputManager->initialize();
 
+    // Create white pixel texture for colored rectangles
+    unsigned char whitePixel[4] = {255, 255, 255, 255};
+    m_whitePixelTexture = std::make_unique<Runa::Texture>(getRenderer(), 1, 1, whitePixel);
+
     // Setup input
     setupInput();
 
@@ -47,6 +51,13 @@ protected:
 
     // Create player
     createPlayer();
+
+    // Initialize camera to player position
+    if (m_registry->getRegistry().valid(m_player)) {
+      auto& pos = m_registry->getRegistry().get<Runa::ECS::Position>(m_player);
+      auto& size = m_registry->getRegistry().get<Runa::ECS::Size>(m_player);
+      m_camera->setPosition(pos.x + size.width / 2.0f, pos.y + size.height / 2.0f);
+    }
 
     // Spawn initial enemies
     for (int i = 0; i < 8; ++i) {
@@ -397,9 +408,9 @@ protected:
     // Render world
     renderWorld();
 
-    // Render entities
+    // Render entities (pass white pixel texture for colored rectangles)
     Runa::ECS::Systems::renderSprites(m_registry->getRegistry(), *m_spriteBatch,
-                                      *m_camera);
+                                      *m_camera, m_whitePixelTexture.get());
 
     // Render damage numbers
     Runa::ECS::RPGSystems::renderDamageNumbers(
@@ -443,16 +454,33 @@ protected:
     int endY = std::min(49, static_cast<int>(bounds.bottom / 32) + 1);
 
     // Render tiles (simple colored squares)
-    for (int y = startY; y <= endY; ++y) {
-      for (int x = startX; x <= endX; ++x) {
-        int tileIndex = m_tileMap->getTile(x, y);
+    if (m_whitePixelTexture && m_whitePixelTexture->isValid()) {
+      for (int y = startY; y <= endY; ++y) {
+        for (int x = startX; x <= endX; ++x) {
+          int tileIndex = m_tileMap->getTile(x, y);
 
-        int screenX, screenY;
-        m_camera->worldToScreen(x * 32.0f, y * 32.0f, screenX, screenY);
+          int screenX, screenY;
+          // Convert tile center to screen coordinates
+          m_camera->worldToScreen(x * 32.0f + 16.0f, y * 32.0f + 16.0f, screenX, screenY);
 
-        // Color based on tile type
-        // We'll just use the sprite batch's colored drawing
-        // For now, skip rendering tiles as we don't have textures
+          // Color based on tile type
+          float r = 0.2f, g = 0.6f, b = 0.2f;  // Default: green grass
+          if (tileIndex == 1) {
+            // Dirt - brown
+            r = 0.6f; g = 0.4f; b = 0.2f;
+          } else if (tileIndex == 2) {
+            // Dark grass - darker green
+            r = 0.1f; g = 0.4f; b = 0.1f;
+          } else if (tileIndex == 3) {
+            // Rock - gray
+            r = 0.4f; g = 0.4f; b = 0.4f;
+          }
+
+          // Draw tile as colored rectangle (adjust to top-left corner)
+          int drawX = screenX - 16;
+          int drawY = screenY - 16;
+          m_spriteBatch->draw(*m_whitePixelTexture, drawX, drawY, r, g, b, 1.0f, 32.0f, 32.0f);
+        }
       }
     }
   }
@@ -499,6 +527,7 @@ private:
   std::unique_ptr<Runa::Camera> m_camera;
   std::unique_ptr<Runa::TileMap> m_tileMap;
   std::unique_ptr<Runa::InputManager> m_inputManager;
+  std::unique_ptr<Runa::Texture> m_whitePixelTexture;  // For colored rectangles
 
   entt::entity m_player;
   float m_gameTime = 0.0f;

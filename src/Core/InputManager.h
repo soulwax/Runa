@@ -4,7 +4,8 @@
  * input contexts, and multi-device support.
  */
 
-#pragma once
+#ifndef RUNA_CORE_INPUTMANAGER_H
+#define RUNA_CORE_INPUTMANAGER_H
 
 #include "../RunaAPI.h"
 #include "Input.h"
@@ -121,3 +122,5 @@ namespace Runa {
 	};
 
 }  // namespace Runa
+
+#endif // RUNA_CORE_INPUTMANAGER_H

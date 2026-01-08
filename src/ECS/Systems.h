@@ -12,6 +12,7 @@ namespace Runa {
     class SpriteBatch;
     class Camera;
     class TileMap;
+    class Texture;
 }
 
 namespace Runa::ECS::Systems {
@@ -52,7 +53,8 @@ RUNA_API void updateEntityCollisions(entt::registry& registry);
 // ============================================================================
 
 // Render all sprites to sprite batch (with camera transform)
-RUNA_API void renderSprites(entt::registry& registry, SpriteBatch& batch, Camera& camera);
+// whitePixelTexture: Used for rendering entities without sprite sheets as colored rectangles
+RUNA_API void renderSprites(entt::registry& registry, SpriteBatch& batch, Camera& camera, Texture* whitePixelTexture = nullptr);
 
 // ============================================================================
 // Camera System

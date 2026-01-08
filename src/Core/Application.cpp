@@ -12,6 +12,7 @@ Application::Application(const std::string &title, int width, int height) {
   // This ensures we can log errors during Application construction
 
   // Initialize SDL
+  // SDL3 returns bool: true on success, false on failure
   if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS)) {
     throw std::runtime_error(std::string("Failed to initialize SDL: ") +
                              SDL_GetError());
@@ -20,6 +21,7 @@ Application::Application(const std::string &title, int width, int height) {
   LOG_INFO("SDL3 initialized successfully");
 
   // Initialize SDL_ttf
+  // SDL3_ttf returns bool: true on success, false on failure
   if (!TTF_Init()) {
     LOG_WARN("Failed to initialize SDL_ttf: {}", SDL_GetError());
     // Don't throw - font rendering is optional

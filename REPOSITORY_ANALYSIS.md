@@ -1,496 +1,523 @@
-# Runa2 Game Engine - Repository Analysis
+# Runa2 Repository Analysis
+
+**Last Updated:** January 2025
+**Version:** 1.0.0
+**Language:** C++20
+**Platform:** Cross-platform (Windows, Linux, macOS)
+
+---
 
 ## Executive Summary
 
-**Runa2** is a cross-platform C++20 2D game engine built with SDL3 and Vulkan2D. It features a modern Entity Component System (ECS) architecture, comprehensive RPG systems, scene management, and hardware-accelerated rendering. The engine is currently demonstrated through "The Slime Hunter RPG" - a top-down action RPG with combat, quests, inventory, and AI systems.
+Runa2 is a cross-platform 2D game engine built with modern C++20, featuring:
+- **Vulkan2D** for hardware-accelerated 2D rendering
+- **SDL3** for windowing, events, and input
+- **EnTT** Entity Component System (ECS) architecture
+- **Dear ImGui** for immediate-mode GUI (recently integrated)
+- Scene-based architecture with resource management
+- RPG gameplay systems (combat, inventory, quests, AI)
 
-**Version**: 1.0.0  
-**License**: AGPLv3  
-**Author**: soulwax@github
-
----
-
-## Core Technologies & Dependencies
-
-### Primary Technologies
-- **C++20** - Modern C++ standard (required, no extensions)
-- **CMake 3.20+** - Build system with Ninja generator
-- **GCC/G++** (or Clang on macOS) - Compiler toolchain
-- **Vulkan** - Graphics API (via Vulkan2D abstraction)
-
-### Core Dependencies (Auto-fetched via CMake FetchContent)
-- **SDL3** (main branch) - Windowing, events, input handling
-- **SDL3_image** (main branch) - PNG/JPG image loading
-- **SDL3_ttf** (main branch) - TrueType font rendering (vendored FreeType)
-- **EnTT v3.13.2** - Header-only Entity Component System library
-- **yaml-cpp** (master) - YAML parsing for resource manifests
-- **spdlog v1.15.0** - Fast C++ logging library
-- **nlohmann/json v3.11.3** - JSON library (available but not actively used)
-
-### Integrated Libraries
-- **Vulkan2D** - 2D Vulkan renderer (Git submodule in `src/Vulkan2D/`)
-  - 23 C source files (~350KB)
-  - Includes VulkanMemoryAllocator for GPU memory management
-  - Provides VK2D API abstraction over Vulkan
+The engine is designed for rapid game development with a clean, modular architecture and automatic dependency management via CMake FetchContent.
 
 ---
 
-## Project Architecture
+## Architecture Overview
 
-### Build Architecture
-The project uses a **shared library architecture**:
+### Core Architecture Pattern
+- **Shared Library Engine** (`Runa2Engine` DLL) in `src/` directory
+- **Game Implementation** (`Runa2` executable) in `Sandbox/` directory
+- **Application Base Class** pattern for game initialization
+- **Scene Management** system for organizing game states
+- **ECS (Entity Component System)** using EnTT for game logic
+- **Resource Management** with YAML manifests
 
-1. **Runa2Engine** (SHARED) - Engine core library
-   - Contains all engine systems (Core, Graphics, ECS, Scenes)
-   - Exports symbols via `RUNA_API` macro
-   - Output: `libRuna2Engine.dll` (Windows), `.so` (Linux), `.dylib` (macOS)
+### Code Organization
+- **Engine Code** (`src/`): All code in `Runa::` namespace goes into the DLL
+- **Game Code** (`Sandbox/`): Game implementations that use the engine API
+- **Clear Separation**: Engine is reusable, game code is application-specific
 
-2. **Runa2** (EXECUTABLE) - Game application
-   - Links against Runa2Engine shared library
-   - Currently uses `main_rpg.cpp` as entry point
-   - Alternative entry points available: `main.cpp`, `main_scene_demo.cpp`, `main_input_demo.cpp`
+### Key Design Patterns
+1. **Component-Based Architecture**: ECS with EnTT
+2. **Scene System**: MenuScene, GameScene, PauseScene
+3. **Resource Loading**: YAML-based sprite sheet definitions
+4. **Input Binding System**: Context-aware input with action mapping
+5. **Renderer Abstraction**: Vulkan2D backend with SpriteBatch API
 
-### Directory Structure
+---
+
+## Technology Stack
+
+### Core Dependencies (via CMake FetchContent)
+- **SDL3** (main branch) - Windowing, events, input
+- **SDL3_image** (main branch) - Image loading (PNG, JPG, etc.)
+- **SDL3_ttf** (main branch) - TrueType font rendering
+- **Vulkan2D** (integrated in `src/Vulkan/`) - 2D Vulkan renderer
+- **EnTT v3.13.2** - Entity Component System
+- **spdlog v1.15.0** - Fast C++ logging
+- **yaml-cpp** (master) - YAML parsing
+- **nlohmann/json v3.11.3** - JSON library
+- **Dear ImGui v1.90.9** - Immediate-mode GUI (recently integrated)
+
+### Build System
+- **CMake 3.20+** with Ninja generator
+- **GCC/G++** (C++20 compatible) or Clang
+- **Vulkan SDK** required for Vulkan2D
+
+---
+
+## Project Structure
 
 ```
 Runa2/
-├── src/                          # Source code
-│   ├── Core/                     # Core engine systems
-│   │   ├── Application.h/cpp    # Base application class with lifecycle
-│   │   ├── Scene.h/cpp           # Scene base class
-│   │   ├── SceneManager.h/cpp   # Scene stack management
-│   │   ├── ResourceManager.h/cpp # YAML-based resource loading
-│   │   ├── Log.h/cpp            # spdlog wrapper
-│   │   ├── Input.h/cpp          # Frame-based keyboard/mouse input
-│   │   ├── InputManager.h/cpp   # Action-based input system with bindings
-│   │   ├── GamepadManager.h/cpp  # Gamepad support
-│   │   ├── Entity.h/cpp         # Legacy entity class (superseded by ECS)
-│   │   ├── PlayerController.h/cpp # Legacy player controller
-│   │   └── Collision.h/cpp      # AABB collision detection
+├── src/                         # Engine code (Runa2Engine DLL)
+│   ├── Core/                    # Core engine systems
+│   │   ├── Application.{h,cpp} # Main application base class
+│   │   ├── Input.{h,cpp}        # Input abstraction
+│   │   ├── InputManager.{h,cpp} # Context-aware input binding
+│   │   ├── InputBinding.h       # Input action definitions
+│   │   ├── Scene.{h,cpp}        # Scene base class
+│   │   ├── SceneManager.{h,cpp} # Scene state management
+│   │   ├── ResourceManager.{h,cpp} # Resource loading (YAML, textures)
+│   │   ├── Log.{h,cpp}          # Logging system (spdlog wrapper)
+│   │   └── Collision.{h,cpp}    # Collision detection utilities
 │   │
-│   ├── Graphics/                 # Rendering systems
-│   │   ├── Window.h/cpp         # SDL3 window management
-│   │   ├── Renderer.h/cpp       # Vulkan2D renderer wrapper
-│   │   ├── SpriteBatch.h/cpp    # Batched sprite rendering
-│   │   ├── Texture.h/cpp        # Texture wrapper
-│   │   ├── SpriteSheet.h/cpp    # Sprite atlas management
-│   │   ├── TileMap.h/cpp        # Grid-based tile rendering
-│   │   ├── Camera.h/cpp         # 2D camera with entity following
-│   │   ├── Font.h/cpp           # TrueType font rendering
-│   │   ├── Shader.h/cpp         # Shader management
-│   │   ├── PostProcess.h/cpp    # Post-processing (stub, deprecated)
-│   │   └── SimpleShapes.h/cpp   # Basic shape rendering
+│   ├── Graphics/                # Rendering systems
+│   │   ├── Window.{h,cpp}       # SDL3 window wrapper
+│   │   ├── Renderer.{h,cpp}     # Vulkan2D renderer wrapper
+│   │   ├── SpriteBatch.{h,cpp}  # Batched sprite rendering
+│   │   ├── Texture.{h,cpp}      # Texture loading/management
+│   │   ├── SpriteSheet.{h,cpp}  # Sprite sheet parsing (YAML)
+│   │   ├── Camera.{h,cpp}        # 2D camera with world-to-screen transform
+│   │   ├── Font.{h,cpp}          # SDL3_ttf font rendering
+│   │   ├── TileMap.{h,cpp}      # Tile-based map system
+│   │   ├── ImGui.{h,cpp}        # Dear ImGui integration (NEW)
+│   │   ├── PostProcess.{h,cpp}  # Post-processing effects
+│   │   └── SimpleShapes.{h,cpp} # Utility for colored rectangles
 │   │
-│   ├── ECS/                      # Entity Component System
-│   │   ├── Components.h         # Basic components (Position, Velocity, Sprite, etc.)
-│   │   ├── RPGComponents.h      # RPG components (Health, Combat, Inventory, Quest, etc.)
-│   │   ├── Registry.h/cpp       # EntityRegistry wrapper
-│   │   ├── Systems.h/cpp        # Basic ECS systems (movement, rendering, collision)
-│   │   └── RPGSystems.h/cpp     # RPG systems (combat, AI, quests, items)
+│   ├── ECS/                     # Entity Component System
+│   │   ├── Components.h         # Core ECS components (Position, Velocity, etc.)
+│   │   ├── Systems.{h,cpp}     # Core ECS systems (movement, rendering, etc.)
+│   │   ├── Registry.{h,cpp}     # EntityRegistry wrapper for EnTT
+│   │   ├── RPGComponents.h      # RPG-specific components (Health, Combat, etc.)
+│   │   └── RPGSystems.{h,cpp}   # RPG gameplay systems (combat, AI, quests)
 │   │
-│   ├── Scenes/                   # Built-in scene implementations
-│   │   ├── MenuScene.h/cpp       # Main menu
-│   │   ├── GameScene.h/cpp      # Gameplay scene
-│   │   └── PauseScene.h/cpp     # Pause overlay
+│   ├── Scenes/                  # Engine scene base classes
+│   │   ├── MenuScene.{h,cpp}    # Main menu scene
+│   │   ├── GameScene.{h,cpp}    # Main gameplay scene
+│   │   └── PauseScene.{h,cpp}   # Pause menu scene
 │   │
-│   ├── Vulkan2D/                 # Vulkan2D renderer (Git submodule)
-│   │   ├── VK2D/include/        # Public API headers
-│   │   └── VK2D/src/             # Implementation (23 C files)
+│   ├── Vulkan/                  # Vulkan2D renderer (integrated)
+│   │   └── VK2D/                # Vulkan2D source code
 │   │
-│   ├── main_rpg.cpp              # ACTIVE: The Slime Hunter RPG demo
-│   ├── main.cpp                  # Basic ECS demo
-│   ├── main_scene_demo.cpp       # Scene system demo
-│   ├── main_input_demo.cpp       # Input system demo
-│   ├── runapch.h/cpp             # Precompiled header
-│   └── RunaAPI.h                 # Shared library export macros
+│   ├── runapch.h                # Precompiled header
+│   └── RunaAPI.h                # API export macros
 │
-├── Resources/                    # Game assets
-│   ├── Fonts/                    # TrueType fonts (Renogare.otf/ttf)
-│   ├── manifests/                # Resource manifests (YAML)
-│   ├── mystic_woods_2.2/         # Tileset assets
-│   ├── SpiteSheets/              # Sprite sheets
-│   └── shaders/                  # GLSL shaders (30+ effects)
-│       ├── *.vert/*.frag         # Source files
-│       └── compiled/*.spv        # Compiled SPIR-V binaries
+├── Sandbox/                     # Game implementation (uses engine)
+│   ├── main_rpg.cpp             # RPG demo entry point (PRIMARY)
+│   ├── main.cpp                  # Basic ECS demo entry point
+│   ├── main_input_demo.cpp      # Input system demo
+│   ├── main_scene_demo.cpp      # Scene system demo
+│   └── README.md                 # Sandbox documentation
 │
-├── build/                        # Build output (gitignored)
-│   ├── debug/                    # Debug builds (-g -O0)
-│   └── release/                  # Release builds (-O3)
+├── Resources/                   # Game assets
+│   ├── Fonts/                   # TTF font files
+│   ├── shaders/                 # GLSL shader files
+│   ├── SpiteSheets/             # Sprite sheets and YAML definitions
+│   └── manifests/               # Resource manifest files
 │
-├── vendor/                       # Third-party libraries
-│   ├── JSON/                     # nlohmann/json
-│   └── Vulkan2D/                 # Vulkan2D renderer
-│
-├── CMakeLists.txt                # Build configuration
-├── README.md                     # User documentation
-├── CLAUDE.md                     # AI assistant guide
-└── CHANGELOG.md                  # Version history
+├── CMakeLists.txt               # Main build configuration
+└── README.md                    # Project documentation
 ```
 
 ---
 
-## Key Features & Systems
+## Key Features
 
-### 1. Entity Component System (ECS)
+### 1. Graphics Pipeline
 
-**Framework**: EnTT v3.13.2 (header-only, modern C++)
+**Rendering Backend:** Vulkan2D
+- Hardware-accelerated 2D rendering via Vulkan
+- Automatic sprite batching for optimal performance
+- NEAREST filtering for pixel-perfect rendering
+- VSYNC enabled, MSAA disabled
+- Triple buffering (3 swap chain images)
 
-#### Basic Components (`Components.h`)
-- **Transform & Physics**: `Position`, `Velocity`, `Size`, `Transform`
-- **Rendering**: `Sprite`, `Animation`
-- **Collision**: `AABB`, `CollisionLayer`
-- **Input**: `PlayerInput`, `CameraTarget`
-- **Tags**: `Player`, `Enemy`, `Projectile`, `Pickup`, `Static`, `Active`
+**Rendering Flow:**
+```cpp
+renderer.beginFrame();        // Start frame, clear screen
+spriteBatch.begin();          // Begin sprite batching
+// ... draw calls ...
+spriteBatch.end();            // Flush batch to GPU
+renderer.endFrame();          // Present frame
+```
 
-#### RPG Components (`RPGComponents.h`)
-- **Stats**: `Health`, `Combat`, `Experience`
-- **AI**: `AIController` (Idle, Patrol, Chase, Attack, Flee, Dead states)
-- **Items**: `Item`, `DroppedItem`, `Inventory`
-- **Quests**: `Quest`, `QuestGiver`
-- **UI**: `DamageNumber` (floating damage text)
+**Sprite Rendering:**
+- Entities with sprite sheets: Rendered via `SpriteBatch::draw()` with texture and frame data
+- Entities without sprite sheets: Rendered as colored rectangles using white pixel texture
+- Camera system: World-to-screen coordinate transformation
+- Tile rendering: Colored rectangles based on tile type
 
-#### ECS Systems
-- **Basic Systems** (`Systems.h/cpp`):
-  - `updatePlayerInput()` - Reads input, sets velocities
-  - `updateMovement()` - Applies velocity to position
-  - `updateAnimation()` - Updates animation frames
-  - `updateTileCollisions()` - Resolves tilemap collisions
-  - `renderSprites()` - Renders all sprites with camera transform
+### 2. Entity Component System (ECS)
 
-- **RPG Systems** (`RPGSystems.h/cpp`):
-  - `updateAI()` - Enemy AI state machine
-  - `updateCombat()` - Attack detection, damage calculation
-  - `updateItemCollection()` - Item pickup logic
-  - `updateQuests()` - Quest progress tracking
-  - `updateDamageNumbers()` - Floating damage text animation
-  - `renderPlayerUI()` - Health bar, XP bar, inventory display
-  - `renderDamageNumbers()` - Renders floating damage text
+**Core Components** (`Components.h`):
+- `Position` - World coordinates (x, y)
+- `Velocity` - Movement velocity (x, y)
+- `Size` - Entity dimensions (width, height)
+- `Sprite` - Rendering data (spriteSheet, spriteName, tint colors)
+- `Animation` - Animation state (currentFrame, animationTime, frameRate)
+- `AABB` - Axis-aligned bounding box for collision
+- `Active` - Entity active flag
+- `Player` - Player tag component
+- `PlayerInput` - Player input configuration
+- `CameraTarget` - Camera follow target
 
-#### EntityRegistry
-Wrapper around `entt::registry` with helper functions:
-- `createEntity(x, y)` - Creates basic entity
-- `createPlayer(x, y, spriteSheet, spriteName, speed)` - Creates player entity
-- `addSprite()`, `addAnimation()`, `addCollision()` - Component helpers
+**RPG Components** (`RPGComponents.h`):
+- `Health` - HP system (current, max, isDead)
+- `Combat` - Combat stats (damage, attackRange, cooldown)
+- `Experience` - XP and leveling system
+- `Inventory` - Item storage and gold
+- `Item` - Item data (type, name, description, value)
+- `Enemy` - Enemy tag component
+- `AIController` - AI behavior (Idle, Patrol, Chase, Attack, Flee, Dead)
+- `DroppedItem` - World item entity
+- `QuestGiver` - NPC quest system
+- `DamageNumber` - Floating damage text
 
-### 2. Graphics & Rendering
+**Core Systems** (`Systems.cpp`):
+- `updatePlayerInput()` - Process keyboard input, set velocities
+- `updateMovement()` - Apply velocity to position
+- `updateAnimation()` - Update sprite animation frames
+- `updateTileCollisions()` - Tile-based collision detection
+- `updateEntityCollisions()` - Entity-to-entity collision
+- `renderSprites()` - Render all sprites with camera transform
+- `updateCameraFollow()` - Smooth camera following
 
-**Backend**: Vulkan2D (VK2D) - Hardware-accelerated 2D rendering via Vulkan
-
-#### Rendering Pipeline
-1. **Renderer** - Wraps VK2DRenderer, manages frame lifecycle
-   - `beginFrame()` / `endFrame()` - Frame boundaries (called by Application)
-   - `clear(r, g, b, a)` - Clear screen color
-   - VSYNC enabled, NEAREST filtering, MSAA disabled
-
-2. **SpriteBatch** - Automatic sprite batching
-   - Batches multiple draws into single draw calls
-   - Supports textures, sprite sheets, tinting, rotation
-   - Performance: 3,600 tiles @ 60 FPS (tested on RTX 3070 Ti)
-
-3. **Texture** - Texture loading and management
-   - Loads via SDL3_image (PNG, JPG)
-   - Wraps VK2DTexture
-
-4. **Camera** - 2D camera system
-   - Entity following with smooth interpolation
-   - World-to-screen / screen-to-world transforms
-   - Visible bounds calculation for frustum culling
-   - Methods: `follow()`, `followEntity()`, `worldToScreen()`, `getWorldBounds()`
-
-5. **TileMap** - Grid-based tile rendering
-   - Per-tile solidity flags
-   - Efficient tile lookup and rendering
-
-6. **Font** - TrueType font rendering
-   - Renders text to textures
-   - Supports custom colors
-
-#### Shader System
-**30+ GLSL shaders** available in `Resources/shaders/`:
-
-- **Visual Effects**: psychedelic, CRT, pixelate, bloom, kaleidoscope, water
-- **Color Grading**: day_night, grayscale, sepia, vignette, blur
-- **Gameplay Effects**: damage_flash, dissolve, outline, ghost, fade
-- **Status Effects**: freeze, poison, lightning, heat_distortion
-- **Magic Effects**: glow, shield, portal
-- **Utility**: palette_swap
-
-Shaders compile to SPIR-V via `glslc` (Vulkan SDK). Compilation scripts: `compile_shaders.bat` / `compile_shaders.sh`
-
-**Note**: Post-processing system is currently a stub (`PostProcess.h/cpp`). Shaders exist but integration with Vulkan2D pipeline is not implemented.
+**RPG Systems** (`RPGSystems.cpp`):
+- `updateCombat()` - Player/enemy combat logic
+- `updateAI()` - Enemy AI behavior (chase, attack, patrol)
+- `updateItemCollection()` - Item pickup system
+- `updateQuests()` - Quest completion tracking
+- `updateDamageNumbers()` - Floating damage text animation
+- `renderDamageNumbers()` - Render floating damage text
+- `renderPlayerUI()` - Render HUD (HP, XP, Gold, Items)
 
 ### 3. Input System
 
-#### Dual Input Systems
+**InputManager** (`InputManager.h`):
+- Context-aware input binding (e.g., "Gameplay", "Menu")
+- Action-based input (e.g., "Move", "Attack", "Interact")
+- 2D axis binding (WASD/Arrow keys)
+- Key binding with modifiers
+- Input context switching
 
-1. **Input** (`Input.h/cpp`) - Frame-based direct input
-   - `isKeyDown()`, `isKeyPressed()`, `isKeyReleased()`
-   - `isMouseButtonDown()`, `isMouseButtonPressed()`, `isMouseButtonReleased()`
-   - `getMousePosition(x, y)`
+**Usage Example:**
+```cpp
+m_inputManager->bind2DAxis("Gameplay", "Move", SDLK_W, SDLK_S, SDLK_A, SDLK_D);
+m_inputManager->bindKey("Gameplay", "Attack", SDLK_SPACE);
+m_inputManager->setActiveContext("Gameplay");
+```
 
-2. **InputManager** (`InputManager.h/cpp`) - Action-based input system
-   - **Input Actions**: Named actions (e.g., "Move", "Attack", "Interact")
-   - **Input Bindings**: JSON-based key bindings (`Resources/input_bindings.json`)
-   - **Contexts**: Multiple input contexts (e.g., "Gameplay", "Menu")
-   - **2D Axes**: WASD/Arrow keys mapped to 2D movement axes
-   - **Gamepad Support**: Via `GamepadManager`
+### 4. Scene System
 
-**Current RPG Demo** uses InputManager with actions:
-- "Move" (WASD 2D axis)
-- "Attack" (SPACE)
-- "Interact" (E)
-- "ToggleInventory" (I)
+**Scene Base Class** (`Scene.h`):
+- Virtual methods: `onInit()`, `onUpdate(dt)`, `onRender()`, `onShutdown()`
+- Scene lifecycle management
+- Input handling per scene
 
-### 4. Scene Management
+**SceneManager** (`SceneManager.h`):
+- Scene stack management
+- Scene transitions
+- Active scene tracking
 
-**Stack-based scene system** for game state management:
-
-- **Scene Base Class** - Lifecycle hooks: `onEnter()`, `onExit()`, `onPause()`, `onResume()`
-- **SceneManager** - Manages scene stack
-  - `pushScene()` - Add overlay (e.g., pause menu)
-  - `popScene()` - Remove top scene
-  - `changeScene()` - Replace current scene
-  - `clearScenes()` - Clear all scenes
-- **Transparent Scenes** - Render underlying scenes (for overlays)
-
-**Built-in Scenes**:
-- `MenuScene` - Main menu with text rendering
-- `GameScene` - Full gameplay with ECS
-- `PauseScene` - Overlay pause menu
+**Available Scenes:**
+- `MenuScene` - Main menu with title and start button
+- `GameScene` - Main gameplay scene
+- `PauseScene` - Pause menu overlay
 
 ### 5. Resource Management
 
-**ResourceManager** (`ResourceManager.h/cpp`) - YAML-based asset loading:
+**ResourceManager** (`ResourceManager.h`):
+- YAML-based sprite sheet loading
+- Texture loading from files
+- Resource manifest parsing
+- Sprite frame extraction from sprite sheets
 
-- **Tileset Loading**: `loadTilesetFromAtlasYAML(yamlPath, imagePath, name)`
-- **Sprite Lookup**: `getSprite(tilesetName, spriteName)`
-- **Manifest System**: `Resources/manifests/resource_manifest.yaml`
-
-**YAML Format**:
+**Sprite Sheet Format** (YAML):
 ```yaml
-meta:
-  tile_size: 16
-  frames: 1
-tiles:
-  - id: sprite_name
-    atlas_x: 16
-    atlas_y: 16
-    tile_size: 16
+sprites:
+  - name: "grass_tile"
+    x: 0
+    y: 0
+    width: 16
+    height: 16
 ```
 
-**Known Issue**: Complex YAML files (20+ tiles) cause silent crashes. Workaround: Use direct `Texture` loading.
+### 6. Camera System
 
-### 6. Collision System
+**Camera** (`Camera.h`):
+- World-to-screen coordinate transformation
+- Screen-to-world coordinate transformation
+- Smooth following with configurable smoothing
+- Zoom support (0.25x to 4.0x)
+- Manual camera controls (WASD movement)
+- Mouse panning support
+- World bounds calculation for culling
 
-**Collision** (`Collision.h/cpp`) - AABB collision detection:
+**Usage:**
+```cpp
+camera.followEntity(registry, playerEntity, 0.1f); // Smooth follow
+camera.worldToScreen(worldX, worldY, screenX, screenY);
+```
 
-- `checkAABB()` - Test two AABBs
-- `resolveAABB()` - Push one box out of another
-- `checkTileCollisions()` - Entity vs tilemap collision resolution
-- **CollisionManager** - Bulk collision checks
+### 7. Font Rendering
 
-### 7. Logging System
+**Font** (`Font.h`):
+- SDL3_ttf integration
+- Text rendering to textures
+- Color support (SDL_Color)
+- Transparent background rendering
 
-**Log** (`Log.h/cpp`) - spdlog wrapper with macros:
+**API:**
+```cpp
+auto texture = font->renderText("Hello World", {255, 255, 255, 255});
+spriteBatch->draw(*texture, x, y);
+```
 
-- `LOG_TRACE()`, `LOG_DEBUG()`, `LOG_INFO()`, `LOG_WARN()`, `LOG_ERROR()`, `LOG_CRITICAL()`
-- File logging to `logs/runa2.log`
-- Console output with colors
+**Note:** SDL3_ttf `TTF_RenderText_Blended` signature:
+```cpp
+TTF_RenderText_Blended(font, text, length, color)
+```
+
+### 8. Dear ImGui Integration (NEW)
+
+**ImGuiManager** (`ImGui.h`):
+- C++ wrapper for Dear ImGui
+- Vulkan backend integration
+- Manual SDL3 event processing (SDL3 backend disabled due to API incompatibilities)
+- Frame setup and rendering
+
+**Status:**
+- ✅ ImGui context initialization
+- ✅ Manual SDL3 event handling (mouse, keyboard, text input)
+- ✅ Frame setup (display size, delta time)
+- ⚠️ Vulkan rendering integration pending (requires Vulkan2D render pass integration)
+
+**Usage:**
+```cpp
+ImGuiManager imgui(window, renderer);
+imgui.beginFrame();
+ImGui::Text("Hello, world!");
+imgui.endFrame();
+```
 
 ---
 
-## Current Demo: The Slime Hunter RPG
+## Entry Points
 
-**Entry Point**: `src/main_rpg.cpp`
+All game entry points are in the `Sandbox/` directory:
 
-### Gameplay Features
-- **Player Character**: Blue square, WASD movement, SPACE attack
-- **Enemies**: Green slimes with AI (patrol, chase, attack)
-- **Items**: Red potions (heal 30 HP), Yellow coins (5 gold)
-- **Quest System**: NPC quest giver, "Defeat 5 slimes" quest
-- **Inventory**: Press I to toggle, displays collected items
-- **Combat**: Melee attacks, damage numbers, health bars
-- **Experience**: Leveling system with XP rewards
-- **Camera**: Follows player with smooth interpolation
-- **World**: 50x50 tile procedurally generated map with obstacles
+### 1. `Sandbox/main_rpg.cpp` (PRIMARY - RPG Demo)
+- Full RPG gameplay demo
+- Player movement, combat, inventory
+- Enemy AI, quest system
+- UI rendering (HP, XP, Gold, Items)
+- Damage numbers, item collection
 
-### Systems Integration
-- ECS for all entities (player, enemies, items, NPCs)
-- InputManager for action-based controls
-- RPGSystems for combat, AI, quests, items
-- Camera system for world-to-screen transforms
-- Font rendering for UI text
+### 2. `Sandbox/main.cpp` (Basic ECS Demo)
+- Simple ECS demo with player movement
+- Grass tile rendering
+- Basic camera following
+
+### 3. `Sandbox/main_input_demo.cpp` (Input System Demo)
+- Input binding system demonstration
+- Context switching
+- Action-based input
+
+### 4. `Sandbox/main_scene_demo.cpp` (Scene System Demo)
+- Scene management demonstration
+- Scene transitions
 
 ---
 
-## Build System
+## Build Configuration
 
-### Configuration
-- **Generator**: Ninja
-- **Compiler**: GCC/G++ (or Clang on macOS)
-- **C++ Standard**: C++20 (required, no extensions)
-- **Debug Flags**: `-g -O0` (full symbols, no optimization)
-- **Release Flags**: `-O3` (maximum optimization)
+### CMake Configuration
+- **C++ Standard:** C++20 (required, no extensions)
+- **Build Type:** Debug (`-g -O0`) or Release (`-O3`)
+- **Architecture:** Shared library (`Runa2Engine`) + executable (`Runa2`)
+- **Generator:** Ninja
+- **Compile Commands:** Exported for clangd/IntelliSense
 
 ### Build Commands
 ```bash
-# Configure Debug
-cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++ -S . -B build/debug
-
-# Build
+# Debug build
+cmake -G Ninja -DCMAKE_BUILD_TYPE=Debug -S . -B build/debug
 cmake --build build/debug
 
-# Run
-./build/debug/Runa2.exe  # Windows
-./build/debug/Runa2      # Linux/macOS
+# Release build
+cmake -G Ninja -DCMAKE_BUILD_TYPE=Release -S . -B build/release
+cmake --build build/release
 ```
 
 ### First Build
-- Takes **5-15 minutes** (downloads and compiles SDL3, Vulkan2D, dependencies)
-- Requires Git in PATH for FetchContent
-- Requires Vulkan runtime (usually included with GPU drivers)
-
-### VSCode Integration
-- **F5** - Build and debug
-- **Ctrl+Shift+B** - Build only
-- Tasks configured for Debug/Release builds
-- Launch configs for debugging with GDB
-- IntelliSense via `compile_commands.json`
+- Takes 5-15 minutes (downloads and compiles all dependencies)
+- Subsequent builds are incremental and fast
 
 ---
 
-## Notable Patterns & Design Decisions
+## Current Demo: RPG Game
 
-### 1. Shared Library Architecture
-- Engine code in shared library (`Runa2Engine`)
-- Game code in executable (`Runa2`)
-- Enables multiple games using same engine
-- DLL/shared library management handled by CMake
+**Features:**
+- 50x50 tile world with grass, dirt, and rock tiles
+- Player character (blue rectangle) with WASD movement
+- 8 enemy slimes (green rectangles) with AI (chase, attack, patrol)
+- 10 health potions and 10 gold coins (red/yellow rectangles)
+- Quest giver NPC (purple rectangle)
+- Combat system (player attacks enemies, enemies attack player)
+- Experience and leveling system
+- Inventory system (20 slots)
+- Damage numbers (floating text)
+- UI display (HP, Level, XP, Gold, Items)
+- Camera following player smoothly
 
-### 2. Dual Entity Systems
-- **Legacy**: `Entity` base class with inheritance (`Entity.h`, `PlayerController.h`)
-- **Modern**: ECS with EnTT (`ECS/` folder)
-- ECS preferred for new code (better performance, flexibility)
-- Legacy system maintained for backward compatibility
-
-### 3. Precompiled Headers
-- `runapch.h/cpp` - Must be first include in all `.cpp` files
-- Includes common SDL3, STL, spdlog headers
-- Critical: Include order matters (spdlog before sinks)
-
-### 4. Namespace Organization
-- `Runa::` - Core engine namespace
-- `Runa::ECS::` - ECS components and systems
-- `Runa::Graphics::` - Graphics systems (implicit via `Runa::`)
-
-### 5. Export Macros
-- `RUNA_API` - Shared library export/import (`RunaAPI.h`)
-- `RUNA2_ENGINE_EXPORTS` - Defined when building engine library
-- Ensures proper symbol visibility across DLL boundaries
+**Controls:**
+- **WASD** - Move player
+- **SPACE** - Attack (auto-attacks nearby enemies)
+- **I** - Toggle inventory
+- **E** - Interact with NPCs
+- **ESC** - Quit
 
 ---
 
 ## Known Issues & Limitations
 
-### 1. ResourceManager YAML Loading Crashes
-- **Symptom**: Silent crash with complex YAML files (20+ tiles)
-- **Affected**: `decor-grass.yaml`, `dirt-grass.yaml`
-- **Workaround**: Use direct `Texture` loading
-- **Status**: Under investigation
+### Fixed Issues
+- ✅ Font rendering bug (incorrect `TTF_RenderText_Blended` parameters) - **FIXED**
+- ✅ Entity rendering (entities without sprite sheets not rendering) - **FIXED**
+- ✅ Tile rendering (tiles not being drawn) - **FIXED**
+- ✅ Camera initialization (camera not positioned at player start) - **FIXED**
 
-### 2. Post-Processing Not Integrated
-- **Shaders**: 30+ GLSL shaders exist in `Resources/shaders/`
-- **Integration**: `PostProcess` class is a stub
-- **Reason**: Vulkan2D uses internal pipeline, custom post-processing requires custom implementation
-- **Status**: Shaders available but not usable
+### Current Limitations
+- ⚠️ **ImGui Vulkan Rendering**: Vulkan backend rendering not yet integrated with Vulkan2D render passes
+- ⚠️ **ResourceManager YAML Loading**: Complex YAML sprite sheet loading may cause crashes (workaround: direct texture loading)
+- ⚠️ **Sprite Sheet Support**: Entities without sprite sheets render as colored rectangles (temporary solution)
+- ⚠️ **SDL3 ImGui Backend**: Disabled due to API incompatibilities (using manual event handling)
 
-### 3. EnTT API Compatibility
-- Use `view.size_hint()` instead of `view.empty()` (EnTT v3.13.2)
-- Component headers must be included explicitly outside `ECS/` folder
-
-### 4. Texture Path Requirements
-- Working directory must be project root
-- Use relative paths WITHOUT leading slash: `"Resources/path.png"` ✓
-- Wrong: `"/Resources/path.png"` ✗
+### Performance
+- **Target FPS:** 60 FPS (VSYNC-limited)
+- **Resolution:** 1280x720
+- **Rendering:** Hardware-accelerated via Vulkan2D
+- **Batching:** Automatic sprite batching for optimal draw calls
 
 ---
 
-## Performance Characteristics
+## Development Patterns
 
-### Tested Configuration
-- **GPU**: NVIDIA GeForce RTX 3070 Ti
-- **Vulkan**: 1.4.325
-- **Resolution**: 1280x720
-- **FPS**: Consistent 59-61 FPS (VSYNC-limited)
+### Application Lifecycle
+```cpp
+class MyGame : public Runa::Application {
+protected:
+    void onInit() override { /* Initialize resources */ }
+    void onUpdate(float dt) override { /* Update game logic */ }
+    void onRender() override { /* Render frame */ }
+    void onShutdown() override { /* Cleanup */ }
+};
+```
 
-### Rendering Performance
-- **3,600 tiles** rendered per frame with no performance impact
-- Automatic sprite batching via Vulkan2D
-- Camera frustum culling for visible tiles only
+### ECS Usage Pattern
+```cpp
+// Create entity
+auto entity = registry->createEntity(x, y);
+reg.emplace<Position>(entity, x, y);
+reg.emplace<Size>(entity, width, height);
+reg.emplace<Sprite>(entity);
 
-### Build Performance
-- **First build**: 5-15 minutes (dependency compilation)
-- **Incremental builds**: Fast (only changed files recompile)
-- **CMake configure**: ~10-30 seconds
+// Update systems
+Runa::ECS::Systems::updateMovement(reg, dt);
+Runa::ECS::Systems::renderSprites(reg, *spriteBatch, *camera, whitePixelTexture);
+```
+
+### Rendering Pattern
+```cpp
+renderer.beginFrame();
+spriteBatch->begin();
+
+// Render world
+renderWorld();
+
+// Render entities
+Runa::ECS::Systems::renderSprites(reg, *spriteBatch, *camera, whitePixelTexture);
+
+// Render UI
+Runa::ECS::RPGSystems::renderPlayerUI(reg, *spriteBatch, *font, width, height);
+
+spriteBatch->end();
+renderer.endFrame();
+```
 
 ---
 
-## Development Workflow
+## Future Enhancements
 
-### Typical Development Cycle
-1. **Edit code** in `src/` directory
-2. **Build** via F5 (VSCode) or `cmake --build build/debug`
-3. **Debug** with breakpoints in VSCode
-4. **Test** by running executable
-
-### Code Organization
-- **Engine code** in `src/Core/`, `src/Graphics/`, `src/ECS/`
-- **Game code** in `src/main_*.cpp` files
-- **Assets** in `Resources/`
-- **Build output** in `build/` (gitignored)
-
-### IntelliSense Setup
-- `compile_commands.json` auto-generated by CMake
-- Clangd or C/C++ extension uses compile commands
-- **Critical**: Restart clangd after changing build configs
-
----
-
-## Future Development Areas
-
-### Planned Features (from CHANGELOG)
-- Fix ResourceManager YAML loading crash
-- Implement camera following system (partially done)
-- Add collision detection with walls/obstacles (partially done)
-- Add enemy entities (done)
-- Add sprite animation system (partially done)
-- Implement tile-based collision maps (done)
-- Add sound system
-- Add particle effects
-
-### Potential Improvements
-- Post-processing pipeline integration
-- Audio system (SDL3_mixer or similar)
-- Physics system (box2d integration?)
+### Planned Features
+- Full ImGui Vulkan rendering integration
+- Sprite animation system improvements
+- Sound system integration
+- Particle effects system
+- Post-processing effects pipeline
+- Resource hot-reloading
 - Save/load system
-- Networking/multiplayer
-- Scripting system (Lua?)
+- Networking support (future)
+
+### Technical Debt
+- Complete ImGui integration with Vulkan2D
+- Fix ResourceManager YAML loading crashes
+- Improve sprite sheet rendering for entities
+- Add proper sprite animation support
+- Optimize collision detection
 
 ---
 
-## Summary
+## Contributing Guidelines
 
-Runa2 is a **mature, feature-rich 2D game engine** with:
-- ✅ Modern ECS architecture (EnTT)
-- ✅ Hardware-accelerated rendering (Vulkan2D)
-- ✅ Comprehensive RPG systems
-- ✅ Scene management
-- ✅ Action-based input system
-- ✅ Resource management (YAML manifests)
-- ✅ Extensive shader library (30+ effects)
-- ✅ Cross-platform support (Windows, Linux, macOS)
-- ✅ Well-documented codebase
+### Code Style
+- C++20 standard (no extensions)
+- RAII for resource management
+- Smart pointers (`std::unique_ptr`, `std::shared_ptr`)
+- Const correctness
+- Namespace: `Runa::` for engine code
 
-The engine is actively developed and demonstrated through "The Slime Hunter RPG" - a fully playable top-down action RPG showcasing all major systems.
+### File Organization
+- Headers in `src/` with matching `.cpp` files
+- Precompiled header: `runapch.h`
+- API exports: `RUNA_API` macro
 
-**Current Status**: Production-ready for 2D game development, with some known limitations (YAML loading, post-processing integration) that have workarounds.
+### Logging
+- Use `LOG_INFO()`, `LOG_DEBUG()`, `LOG_WARN()`, `LOG_ERROR()`, `LOG_CRITICAL()`
+- Logging via spdlog wrapper
+
+---
+
+## Documentation
+
+- **README.md** - Project overview and build instructions
+- **CHANGELOG.md** - Version history and changes
+- **REPOSITORY_ANALYSIS.md** - This file (comprehensive codebase overview)
+
+---
+
+## License
+
+AGPLv3 License (see LICENSE.md)
+
+---
+
+## Author
+
+soulwax@github
+
+---
+
+**Last Analysis:** January 2025
+**Engine Version:** 1.0.0
+**Status:** Active Development

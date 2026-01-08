@@ -3,7 +3,8 @@
  * Manages gamepad/controller input with SDL3.
  */
 
-#pragma once
+#ifndef RUNA_CORE_GAMEPADMANAGER_H
+#define RUNA_CORE_GAMEPADMANAGER_H
 
 #include "../RunaAPI.h"
 #include <SDL3/SDL.h>
@@ -88,3 +89,5 @@ private:
 };
 
 } // namespace Runa
+
+#endif // RUNA_CORE_GAMEPADMANAGER_H

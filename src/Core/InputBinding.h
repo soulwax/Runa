@@ -3,7 +3,8 @@
  * Defines how inputs are bound to actions.
  */
 
-#pragma once
+#ifndef RUNA_CORE_INPUTBINDING_H
+#define RUNA_CORE_INPUTBINDING_H
 
 #include "../RunaAPI.h"
 #include "InputAction.h"
@@ -92,3 +93,5 @@ namespace Runa {
 	};
 
 }  // namespace Runa
+
+#endif // RUNA_CORE_INPUTBINDING_H

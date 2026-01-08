@@ -4,7 +4,8 @@
  * Provides lifecycle hooks for scene transitions and updates.
  */
 
-#pragma once
+#ifndef RUNA_CORE_SCENE_H
+#define RUNA_CORE_SCENE_H
 
 #include "../RunaAPI.h"
 #include <string>
@@ -53,3 +54,5 @@ namespace Runa {
 	};
 
 }  // namespace Runa
+
+#endif // RUNA_CORE_SCENE_H

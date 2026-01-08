@@ -1,4 +1,4 @@
-# File: src/Vulkan2D/CMakeLists.txt
+# File: src/Vulkan/CMakeLists.txt
 
 cmake_minimum_required(VERSION 3.17)
 project(Vulkan2D LANGUAGES C CXX)
@@ -36,7 +36,6 @@ add_library(Vulkan2D
         VK2D/src/Texture.c
         VK2D/src/Util.c
         VK2D/src/Validation.c
-        VK2D/src/VulkanInterface.c
         extern/VulkanMemoryAllocator/src/VmaUsage.cpp
 )
 

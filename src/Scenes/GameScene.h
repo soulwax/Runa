@@ -3,7 +3,8 @@
  * Main gameplay scene with ECS-based player movement.
  */
 
-#pragma once
+#ifndef RUNA_SCENES_GAMESCENE_H
+#define RUNA_SCENES_GAMESCENE_H
 
 #include "../Core/Scene.h"
 #include "../Graphics/SpriteBatch.h"
@@ -40,3 +41,5 @@ namespace Runa {
 	};
 
 }  // namespace Runa
+
+#endif // RUNA_SCENES_GAMESCENE_H

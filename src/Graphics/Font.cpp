@@ -28,7 +28,8 @@ Font::Font(Renderer& renderer, const std::string& fontPath, int fontSize)
     LOG_INFO("Font loaded successfully: {} (size: {})", fontPath, fontSize);
     
     // Test if font can render a simple character
-    SDL_Surface* testSurface = TTF_RenderText_Blended(m_font, "A", 1, {255, 255, 255, 255});
+    SDL_Color white = {255, 255, 255, 255};
+    SDL_Surface* testSurface = TTF_RenderText_Blended(m_font, "A", 1, white);
     if (testSurface) {
         LOG_DEBUG("Font test render successful: {}x{}", testSurface->w, testSurface->h);
         SDL_DestroySurface(testSurface);
@@ -75,7 +76,8 @@ std::unique_ptr<Texture> Font::renderText(const std::string& text, SDL_Color col
     }
 
     // Render text to surface with alpha blending (transparent background)
-    SDL_Surface* textSurface = TTF_RenderText_Blended(m_font, text.c_str(), text.size(), color);
+    // SDL3_ttf: TTF_RenderText_Blended(font, text, length, color)
+    SDL_Surface* textSurface = TTF_RenderText_Blended(m_font, text.c_str(), text.length(), color);
     if (!textSurface) {
         LOG_ERROR("Failed to render text '{}': {}", text, SDL_GetError());
         return nullptr;

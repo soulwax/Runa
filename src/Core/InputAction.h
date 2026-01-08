@@ -3,7 +3,8 @@
  * Defines input actions and action types for the input manager.
  */
 
-#pragma once
+#ifndef RUNA_CORE_INPUTACTION_H
+#define RUNA_CORE_INPUTACTION_H
 
 #include "../RunaAPI.h"
 #include <string>
@@ -129,3 +130,5 @@ namespace Runa {
 	};
 
 }  // namespace Runa
+
+#endif // RUNA_CORE_INPUTACTION_H

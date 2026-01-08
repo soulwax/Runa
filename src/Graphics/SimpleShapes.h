@@ -3,7 +3,8 @@
  * Utility for rendering simple colored shapes for prototyping
  */
 
-#pragma once
+#ifndef RUNA_GRAPHICS_SIMPLESHAPES_H
+#define RUNA_GRAPHICS_SIMPLESHAPES_H
 
 #include "../RunaAPI.h"
 #include "Texture.h"
@@ -25,3 +26,5 @@ private:
 };
 
 } // namespace Runa
+
+#endif // RUNA_GRAPHICS_SIMPLESHAPES_H

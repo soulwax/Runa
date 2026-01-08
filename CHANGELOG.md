@@ -5,6 +5,95 @@ All notable changes to the Runa2 game engine will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.3] - 2026-01-08
+
+### Added
+- **Codebase Separation**: Separated engine code from game implementation
+  - Created `Sandbox/` directory for game implementations
+  - Engine code (all `Runa::` namespace) remains in `src/` directory
+  - Game entry points moved: `main.cpp`, `main_rpg.cpp`, `main_input_demo.cpp`, `main_scene_demo.cpp` → `Sandbox/`
+  - Clear separation between reusable engine DLL and application-specific game code
+  - Added `Sandbox/README.md` documenting the separation
+
+### Changed
+- **Project Structure**: Reorganized codebase for better maintainability
+  - Engine code (`src/`) compiles into `Runa2Engine` shared library (DLL)
+  - Game code (`Sandbox/`) compiles into `Runa2` executable that links to engine DLL
+  - Updated CMakeLists.txt to build from `Sandbox/main_rpg.cpp`
+  - Updated include paths: Sandbox files can access engine headers via `src/` include directory
+- **Folder Rename**: Renamed `src/Vulkan2D/` to `src/Vulkan/`
+  - Updated CMakeLists.txt to reference `src/Vulkan` instead of `src/Vulkan2D`
+  - Updated documentation (README.md, REPOSITORY_ANALYSIS.md) with new folder path
+  - Library name "Vulkan2D" remains unchanged (only folder path renamed)
+- **Documentation Updates**: Updated project documentation to reflect new structure
+  - README.md: Updated project structure section
+  - REPOSITORY_ANALYSIS.md: Updated architecture overview and project structure
+  - Added code organization section explaining engine vs game separation
+
+### Fixed
+- **Font Rendering Bug**: Fixed incorrect `TTF_RenderText_Blended` API usage
+  - SDL3_ttf requires 4 parameters: `(font, text, length, color)`
+  - Fixed calls in `Font.cpp` to include text length parameter
+  - Resolves incomplete text rendering (e.g., "Ite-" fragments)
+- **Entity Rendering**: Fixed entities without sprite sheets not rendering
+  - Updated `renderSprites()` to render entities as colored rectangles when no sprite sheet is available
+  - Uses white pixel texture scaled to entity size with tint colors
+  - Entities now visible as colored rectangles (player: blue, enemies: green, items: red/yellow)
+- **Tile Rendering**: Fixed tiles not being drawn in world
+  - Implemented basic tile rendering in `renderWorld()` using colored rectangles
+  - Tiles render based on tile type (grass: green, dirt: brown, rock: gray)
+  - Camera culling properly calculates visible tile range
+- **Camera Initialization**: Fixed camera not positioned at player start
+  - Added camera position initialization in `onInit()` to match player starting position
+  - Camera now correctly follows player from game start
+
+### Removed
+- **VulkanInterface Files**: Removed `VulkanInterface.h` and `VulkanInterface.c`
+  - Files deleted from `src/Vulkan/VK2D/include/VK2D/` and `src/Vulkan/VK2D/src/`
+  - Removed reference from `src/Vulkan/CMakeLists.txt` to prevent build errors
+
+---
+
+## [1.0.2] - 2026-01-08
+
+### Fixed
+- **CRITICAL: SDL Initialization Bug** - Fixed inverted logic in `SDL_Init()` check
+  - Changed `if (!SDL_Init(...))` to `if (SDL_Init(...) != 0)` in `Application.cpp`
+  - SDL was incorrectly throwing errors on successful initialization
+  - Prevents application from failing to start
+- **CRITICAL: TTF Initialization Bug** - Fixed inverted logic in `TTF_Init()` check
+  - Changed `if (!TTF_Init())` to `if (TTF_Init() != 0)` in `Application.cpp`
+  - Font system was incorrectly logging warnings on successful initialization
+- **Input System Double-Clearing** - Removed redundant `beginFrame()` call
+  - Removed `beginFrame()` call from `Window::processEvents()` (line 42)
+  - `Application::mainLoop()` already calls `beginFrame()` once per frame
+  - Prevents input "just pressed/released" states from being cleared twice
+  - Fixes missed key presses and mouse button events
+- **Window Move Operations** - Disabled move constructor/assignment
+  - Window contains raw `Input*` pointer that could become dangling after move
+  - Changed from `= default` to `= delete` for move operations
+  - Prevents potential undefined behavior from moved Window objects
+- **ResourceManager Memory Management** - Fixed SDL_GetBasePath() usage
+  - SDL3's `SDL_GetBasePath()` returns const pointer to internally-managed memory
+  - Removed incorrect `SDL_free()` call (SDL3 manages memory automatically)
+  - Prevents potential double-free or use-after-free errors
+- **Camera Division by Zero Protection** - Added safety checks in `setZoom()`
+  - Clamps zoom values to prevent division by zero in coordinate transforms
+  - Minimum zoom: 0.25f, Maximum zoom: 4.0f
+  - Ensures `worldToScreen()` and `screenToWorld()` never divide by zero
+- **EntityRegistry Entity Count** - Implemented `getEntityCount()` method
+  - Previously always returned 0 (unimplemented)
+  - Now correctly counts entities via `Active` component view
+  - Uses EnTT view iteration since registry doesn't have direct `size()` method
+
+### Changed
+- **Debug Logging**: Throttled texture creation debug message to update once per second
+  - `[debug] Created texture from pixels ...` now logs at most once per second
+  - Reduces log spam when textures are created frequently
+  - Implemented using `std::chrono::steady_clock` for accurate timing
+
+---
+
 ## [0.1.0] - 2026-01-03
 
 ### Added
@@ -115,4 +204,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
-[0.1.0]: https://github.com/yourusername/Runa2/releases/tag/v0.1.0
+[1.0.3]: https://github.com/soulwax/Runa/releases/tag/v1.0.3
+[1.0.2]: https://github.com/soulwax/Runa/releases/tag/v1.0.2
+[0.1.1]: https://github.com/soulwax/Runa/releases/tag/v0.1.1
+[0.1.0]: https://github.com/soulwax/Runa/releases/tag/v0.1.0
