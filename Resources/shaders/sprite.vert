@@ -13,10 +13,10 @@ layout(push_constant) uniform PushConstants {
 } pc;
 
 void main() {
-    // Convert from pixel coordinates to normalized device coordinates
+
     vec2 normalizedPos = (inPosition / pc.screenSize) * 2.0 - 1.0;
-    normalizedPos.y = -normalizedPos.y; // Flip Y axis
-    
+    normalizedPos.y = -normalizedPos.y;
+
     gl_Position = vec4(normalizedPos, 0.0, 1.0);
     fragTexCoord = inTexCoord;
     fragColor = inColor;

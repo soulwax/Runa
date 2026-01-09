@@ -12,16 +12,16 @@ layout(push_constant) uniform PushConstants {
 } pc;
 
 void main() {
-    // Simple box blur (9-tap)
+
     vec2 texelSize = 1.0 / textureSize(texSampler, 0);
 
-    // Blur radius (can be controlled by time parameter)
+
     float blurAmount = 2.0;
 
     vec4 color = vec4(0.0);
     float total = 0.0;
 
-    // 9-tap box blur
+
     for (float x = -blurAmount; x <= blurAmount; x += blurAmount) {
         for (float y = -blurAmount; y <= blurAmount; y += blurAmount) {
             vec2 offset = vec2(x, y) * texelSize;

@@ -14,7 +14,7 @@ layout(push_constant) uniform PushConstants {
 void main() {
     vec4 texColor = texture(texSampler, fragTexCoord);
 
-    // Fade to black based on time (0 = fully visible, 1 = fully black)
+
     float fadeAmount = clamp(pc.time, 0.0, 1.0);
 
     outColor = vec4(texColor.rgb * (1.0 - fadeAmount), texColor.a);

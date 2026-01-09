@@ -14,10 +14,10 @@ layout(push_constant) uniform PushConstants {
 void main() {
     vec4 texColor = texture(texSampler, fragTexCoord);
 
-    // Convert to grayscale using luminance formula
+
     float gray = dot(texColor.rgb, vec3(0.299, 0.587, 0.114));
 
-    // Optional: use time to control transition (0 = color, 1 = grayscale)
+
     float amount = clamp(pc.time, 0.0, 1.0);
     vec3 finalColor = mix(texColor.rgb, vec3(gray), amount);
 

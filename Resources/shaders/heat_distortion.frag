@@ -12,20 +12,20 @@ layout(push_constant) uniform PushConstants {
 } pc;
 
 void main() {
-    // Heat wave distortion
+
     float distortionStrength = 0.015;
 
-    // Rising heat waves using multiple sine waves
+
     float wave1 = sin(fragTexCoord.y * 15.0 - pc.time * 3.0) * distortionStrength;
     float wave2 = sin(fragTexCoord.y * 25.0 + pc.time * 4.0) * distortionStrength * 0.5;
 
-    // Apply horizontal distortion (heat rises vertically, distorts horizontally)
+
     vec2 distortedUV = fragTexCoord;
     distortedUV.x += wave1 + wave2;
 
     vec4 texColor = texture(texSampler, distortedUV);
 
-    // Add slight warm tint
+
     vec3 heatTint = vec3(1.1, 0.95, 0.85);
     vec3 finalColor = texColor.rgb * heatTint;
 

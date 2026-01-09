@@ -23,7 +23,7 @@ protected:
     LOG_INFO("Game: Press ESC to pause, WASD to move");
     LOG_INFO("Pause: Press ESC to resume, Q to quit to menu");
 
-    // Start with menu scene
+
     getSceneManager().pushScene(std::make_unique<Runa::MenuScene>(*this));
   }
 
@@ -34,7 +34,7 @@ protected:
 };
 
 int main(int argc, char* argv[]) {
-  // Initialize logging
+
   Runa::Log::init();
   LOG_INFO("Starting Runa2 Scene System Demo");
 

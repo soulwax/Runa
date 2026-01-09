@@ -14,16 +14,16 @@ layout(push_constant) uniform PushConstants {
 void main() {
     vec4 texColor = texture(texSampler, fragTexCoord);
 
-    // Calculate distance from center
+
     vec2 centerOffset = fragTexCoord - vec2(0.5);
     float dist = length(centerOffset);
 
-    // Create vignette effect (darkens edges)
+
     float vignetteStrength = 0.6;
     float vignetteRadius = 0.8;
     float vignette = smoothstep(vignetteRadius, vignetteRadius - 0.4, dist);
 
-    // Mix with darkness
+
     vec3 darkColor = vec3(0.0);
     vec3 finalColor = mix(darkColor, texColor.rgb, vignette * (1.0 - vignetteStrength) + vignetteStrength);
 

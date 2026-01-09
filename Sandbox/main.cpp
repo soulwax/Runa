@@ -1,5 +1,5 @@
-// File: src/main.cpp
-// ECS-based game with player movement
+
+
 
 #include "Core/Application.h"
 #include "Core/Log.h"
@@ -7,7 +7,7 @@
 #include "Graphics/Texture.h"
 #include "runapch.h"
 
-// ECS headers
+
 #include "ECS/Components.h"
 #include "ECS/Registry.h"
 #include "ECS/Systems.h"
@@ -20,13 +20,13 @@ protected:
   void onInit() override {
     LOG_INFO("=== Runa2 ECS Demo ===");
 
-    // Create core systems
+
     m_spriteBatch = std::make_unique<Runa::SpriteBatch>(getRenderer());
 
-    // Create ECS registry
+
     m_registry = std::make_unique<Runa::ECS::EntityRegistry>();
 
-    // Load textures directly
+
     try {
       m_grassTexture = std::make_unique<Runa::Texture>(
           getRenderer(), "Resources/SpiteSheets/decor-grass.png");
@@ -40,9 +40,9 @@ protected:
       throw;
     }
 
-    // Create player entity at screen center
-    float playerX = 640.0f; // Center of 1280px screen
-    float playerY = 360.0f; // Center of 720px screen
+
+    float playerX = 640.0f;
+    float playerY = 360.0f;
 
     auto &reg = m_registry->getRegistry();
     m_playerEntity = reg.create();
@@ -51,7 +51,7 @@ protected:
     reg.emplace<Runa::ECS::Velocity>(m_playerEntity, 0.0f, 0.0f);
     reg.emplace<Runa::ECS::Size>(m_playerEntity, 16.0f, 16.0f);
     reg.emplace<Runa::ECS::PlayerInput>(m_playerEntity,
-                                        200.0f); // 200 pixels/sec
+                                        200.0f);
     reg.emplace<Runa::ECS::Player>(m_playerEntity);
 
     LOG_INFO("Player entity created at ({}, {})", playerX, playerY);
@@ -64,11 +64,11 @@ protected:
   void onUpdate(float dt) override {
     auto &reg = m_registry->getRegistry();
 
-    // Run ECS systems
-    // 1. Input system - read input and set velocities
+
+
     Runa::ECS::Systems::updatePlayerInput(reg, getInput(), dt);
 
-    // 2. Physics system - apply velocities to positions
+
     Runa::ECS::Systems::updateMovement(reg, dt);
   }
 
@@ -81,7 +81,7 @@ protected:
 
     m_spriteBatch->begin();
 
-    // Draw grass background
+
     const int tileSize = 16;
     const int tilesX = 1280 / tileSize;
     const int tilesY = 720 / tileSize;
@@ -93,7 +93,7 @@ protected:
       }
     }
 
-    // Render player
+
     auto &reg = m_registry->getRegistry();
     auto view =
         reg.view<Runa::ECS::Position, Runa::ECS::Size, Runa::ECS::Player>();
@@ -102,17 +102,17 @@ protected:
       auto &pos = view.get<Runa::ECS::Position>(entity);
       auto &size = view.get<Runa::ECS::Size>(entity);
 
-      // Draw player as a dirt tile (for visibility)
+
       m_spriteBatch->draw(
           *m_dirtTexture, static_cast<int>(pos.x), static_cast<int>(pos.y), 16,
-          0, // Source rect: dirt tile
+          0,
           static_cast<int>(size.width), static_cast<int>(size.height), 1.0f,
-          0.5f, 0.5f, 1.0f); // Reddish tint
+          0.5f, 0.5f, 1.0f);
     }
 
     m_spriteBatch->end();
 
-    // Log FPS occasionally
+
     if (m_frameCount % 60 == 0) {
       LOG_DEBUG("FPS: {}", getFPS());
     }

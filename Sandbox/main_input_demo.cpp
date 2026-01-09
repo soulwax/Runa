@@ -28,29 +28,29 @@ protected:
 	void onInit() override {
 		LOG_INFO("=== Runa2 Input Manager Demo ===");
 
-		// Create input manager
+
 		m_inputManager = std::make_unique<Runa::InputManager>(getInput());
 		m_inputManager->initialize();
 
-		// Setup graphics
+
 		m_spriteBatch = std::make_unique<Runa::SpriteBatch>(getRenderer());
 		m_font = std::make_unique<Runa::Font>(getRenderer(), "Resources/Fonts/Renogare.ttf", 24);
 
-		// Create demo player "sprite" (just a colored square)
+
 		m_playerX = 640.0f;
 		m_playerY = 360.0f;
 
-		// Setup input contexts and bindings
+
 		setupGameplayContext();
 		setupMenuContext();
 
-		// Start in gameplay context
+
 		m_inputManager->setActiveContext("Gameplay");
 		m_currentContext = "Gameplay";
 
 		LOG_INFO("Input Demo initialized");
 
-		// Save current bindings as default
+
 		m_inputManager->saveBindings("Resources/input_bindings.json");
 		LOG_INFO("Controls:");
 		LOG_INFO("  WASD / Arrow Keys / Left Stick - Move");
@@ -61,53 +61,53 @@ protected:
 	}
 
 	void setupGameplayContext() {
-		// Create gameplay context
+
 		auto* gameplay = m_inputManager->createContext("Gameplay");
 
-		// Movement - 2D axis with keyboard AND gamepad
-		m_inputManager->bind2DAxis("Gameplay", "Move",
-		                            SDLK_W, SDLK_S, SDLK_A, SDLK_D);  // WASD
-		m_inputManager->bind2DAxis("Gameplay", "Move",
-		                            SDLK_UP, SDLK_DOWN, SDLK_LEFT, SDLK_RIGHT);  // Arrows
 
-		// Also bind gamepad left stick to movement
+		m_inputManager->bind2DAxis("Gameplay", "Move",
+		                            SDLK_W, SDLK_S, SDLK_A, SDLK_D);
+		m_inputManager->bind2DAxis("Gameplay", "Move",
+		                            SDLK_UP, SDLK_DOWN, SDLK_LEFT, SDLK_RIGHT);
+
+
 		auto* moveBinding = gameplay->getBindingSet().getBinding("Move");
 		if (moveBinding) {
 			moveBinding->addSource(Runa::InputSource::gamepadAxis(SDL_GAMEPAD_AXIS_LEFTX, 1.0f, 0));
 			moveBinding->addSource(Runa::InputSource::gamepadAxis(SDL_GAMEPAD_AXIS_LEFTY, 1.0f, 0));
 		}
 
-		// Jump - keyboard space + gamepad A button
+
 		m_inputManager->bindKey("Gameplay", "Jump", SDLK_SPACE);
 		m_inputManager->bindGamepadButton("Gameplay", "Jump", SDL_GAMEPAD_BUTTON_SOUTH, 0);
 
-		// Interact - E key + gamepad B button
+
 		m_inputManager->bindKey("Gameplay", "Interact", SDLK_E);
 		m_inputManager->bindGamepadButton("Gameplay", "Interact", SDL_GAMEPAD_BUTTON_EAST, 0);
 
-		// Fire - Left mouse + Right trigger
+
 		m_inputManager->bindKey("Gameplay", "Fire", SDLK_RETURN);
 		auto* fireBinding = gameplay->getBindingSet().addBinding("Fire", Runa::ActionType::Button);
 		fireBinding->addSource(Runa::InputSource::mouseButton(SDL_BUTTON_LEFT));
 
-		// Pause - ESC + gamepad Start button
+
 		m_inputManager->bindKey("Gameplay", "Pause", SDLK_ESCAPE);
 
-		// Save/Load bindings
+
 		m_inputManager->bindKey("Gameplay", "SaveBindings", SDLK_F5);
 		m_inputManager->bindKey("Gameplay", "LoadBindings", SDLK_F6);
 		m_inputManager->bindGamepadButton("Gameplay", "Pause", SDL_GAMEPAD_BUTTON_START, 0);
 		m_inputManager->bindGamepadButton("Gameplay", "Pause", SDL_GAMEPAD_BUTTON_START, 0);
 
-		// Context switch
+
 		m_inputManager->bindKey("Gameplay", "SwitchContext", SDLK_TAB);
 	}
 
 	void setupMenuContext() {
-		// Create menu context
+
 		m_inputManager->createContext("Menu");
 
-		// Menu navigation
+
 		m_inputManager->bindKey("Menu", "Up", SDLK_W);
 		m_inputManager->bindKey("Menu", "Up", SDLK_UP);
 		m_inputManager->bindGamepadButton("Menu", "Up", SDL_GAMEPAD_BUTTON_DPAD_UP, 0);
@@ -122,18 +122,18 @@ protected:
 
 		m_inputManager->bindKey("Menu", "Back", SDLK_ESCAPE);
 
-		// Save/Load bindings
+
 		m_inputManager->bindKey("Menu", "SaveBindings", SDLK_F5);
 		m_inputManager->bindKey("Menu", "LoadBindings", SDLK_F6);
 		m_inputManager->bindGamepadButton("Menu", "Back", SDL_GAMEPAD_BUTTON_EAST, 0);
 		m_inputManager->bindGamepadButton("Menu", "Back", SDL_GAMEPAD_BUTTON_EAST, 0);
 
-		// Context switch
+
 		m_inputManager->bindKey("Menu", "SwitchContext", SDLK_TAB);
 	}
 
 	void onUpdate(float dt) override {
-		// Handle save/load
+
 		if (m_inputManager->isActionPressed("SaveBindings")) {
 			if (m_inputManager->saveBindings("Resources/input_bindings.json")) {
 				LOG_INFO("Bindings saved successfully!");
@@ -150,12 +150,12 @@ protected:
 			}
 		}
 
-		// Update save message timer
+
 		if (m_saveMessageTimer > 0.0f) {
 			m_saveMessageTimer -= dt;
 		}
 
-		// Handle context switching
+
 		if (m_inputManager->isActionPressed("SwitchContext")) {
 			if (m_currentContext == "Gameplay") {
 				m_inputManager->setActiveContext("Menu");
@@ -176,20 +176,20 @@ protected:
 	}
 
 	void updateGameplay(float dt) {
-		// Get movement from 2D axis
+
 		float moveX = m_inputManager->getActionAxisX("Move");
 		float moveY = m_inputManager->getActionAxisY("Move");
 
-		// Apply movement
+
 		const float speed = 300.0f;
 		m_playerX += moveX * speed * dt;
 		m_playerY += moveY * speed * dt;
 
-		// Clamp to screen bounds
+
 		m_playerX = std::clamp(m_playerX, 25.0f, 1255.0f);
 		m_playerY = std::clamp(m_playerY, 25.0f, 695.0f);
 
-		// Handle actions
+
 		if (m_inputManager->isActionPressed("Jump")) {
 			LOG_INFO("Jump!");
 			m_jumpTimer = 0.3f;
@@ -210,7 +210,7 @@ protected:
 			LOG_INFO("Paused: {}", m_paused);
 		}
 
-		// Update jump timer
+
 		if (m_jumpTimer > 0.0f) {
 			m_jumpTimer -= dt;
 		}
@@ -247,21 +247,21 @@ protected:
 			renderMenu();
 		}
 
-		// Render input info
+
 		renderInputInfo();
 
 		m_spriteBatch->end();
 	}
 
 	void renderGameplay() {
-		// Render player (colored square)
+
 		SDL_Color playerColor = m_fireActive ? SDL_Color{255, 100, 100, 255} : SDL_Color{100, 200, 255, 255};
 		if (m_jumpTimer > 0.0f) {
-			playerColor = {255, 255, 100, 255};  // Yellow when jumping
+			playerColor = {255, 255, 100, 255};
 		}
 
-		// Draw player as filled rect (we'll use the sprite batch for text instead)
-		// For now, just show text at player position
+
+
 
 		if (m_paused) {
 			auto pauseText = m_font->renderText("PAUSED", {255, 255, 255, 255});
@@ -298,31 +298,31 @@ protected:
 			}
 		};
 
-		// Context info
+
 		std::stringstream ss;
 		ss << "Context: " << m_currentContext;
 		renderLine(ss.str(), {100, 255, 100, 255});
 
-		// Gamepad info
+
 		int gamepadCount = m_inputManager->getGamepadManager().getConnectedGamepadCount();
 		ss.str("");
 		ss << "Gamepads: " << gamepadCount;
 		renderLine(ss.str());
 
 		if (m_currentContext == "Gameplay") {
-			// Movement info
+
 			float moveX = m_inputManager->getActionAxisX("Move");
 			float moveY = m_inputManager->getActionAxisY("Move");
 			ss.str("");
 			ss << "Move: (" << std::fixed << std::setprecision(2) << moveX << ", " << moveY << ")";
 			renderLine(ss.str());
 
-			// Player position
+
 			ss.str("");
 			ss << "Player: (" << static_cast<int>(m_playerX) << ", " << static_cast<int>(m_playerY) << ")";
 			renderLine(ss.str());
 
-			// Action states
+
 			std::string actions;
 			if (m_inputManager->isActionDown("Jump")) actions += "Jump ";
 			if (m_inputManager->isActionDown("Interact")) actions += "Interact ";
@@ -333,11 +333,11 @@ protected:
 			}
 		}
 
-		// Instructions
+
 		y = 680;
 		renderLine("TAB - Switch Context | F5 - Save | F6 - Load | ESC - Pause/Back");
 
-		// Save/load message
+
 		if (m_saveMessageTimer > 0.0f) {
 			auto msgText = m_font->renderText(m_saveMessage, {100, 255, 100, 255});
 			if (msgText) {
@@ -355,7 +355,7 @@ private:
 	std::unique_ptr<Runa::SpriteBatch> m_spriteBatch;
 	std::unique_ptr<Runa::Font> m_font;
 
-	// Demo state
+
 	std::string m_currentContext;
 	float m_playerX = 640.0f;
 	float m_playerY = 360.0f;

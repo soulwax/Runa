@@ -1,4 +1,4 @@
-// File: src/Core/Entity.cpp
+
 
 #include "../runapch.h"
 #include "Entity.h"
@@ -6,7 +6,7 @@
 
 namespace Runa {
 
-// AABB implementation
+
 bool AABB::intersects(const AABB& other) const {
     return (x < other.x + other.width &&
             x + width > other.x &&
@@ -19,7 +19,7 @@ bool AABB::contains(float px, float py) const {
             py >= y && py < y + height);
 }
 
-// Entity implementation
+
 Entity::Entity(float x, float y, float width, float height)
     : m_x(x), m_y(y), m_width(width), m_height(height),
       m_velocityX(0.0f), m_velocityY(0.0f)
@@ -27,11 +27,11 @@ Entity::Entity(float x, float y, float width, float height)
 }
 
 void Entity::update(float dt) {
-    // Base implementation: apply velocity to position
+
     m_x += m_velocityX * dt;
     m_y += m_velocityY * dt;
 
-    // Update animation time
+
     m_animationTime += dt;
 }
 
@@ -45,9 +45,9 @@ void Entity::render(SpriteBatch& batch) {
         return;
     }
 
-    // Get current frame (simple frame cycling)
+
     if (sprite->frames.size() > 1) {
-        // Cycle through frames at 10 FPS
+
         m_currentFrame = static_cast<int>(m_animationTime * 10.0f) % static_cast<int>(sprite->frames.size());
     } else {
         m_currentFrame = 0;
@@ -55,7 +55,7 @@ void Entity::render(SpriteBatch& batch) {
 
     const SpriteFrame& frame = sprite->frames[m_currentFrame];
 
-    // Render sprite at entity position
+
     batch.draw(m_spriteSheet->getTexture(),
                static_cast<int>(m_x), static_cast<int>(m_y),
                frame);
@@ -91,4 +91,4 @@ void Entity::setSprite(const SpriteSheet* spriteSheet, const std::string& sprite
     m_animationTime = 0.0f;
 }
 
-} // namespace Runa
+}

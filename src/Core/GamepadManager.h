@@ -13,22 +13,22 @@
 
 namespace Runa {
 
-// Gamepad state for a single controller
+
 struct RUNA_API GamepadState {
   SDL_Gamepad *handle = nullptr;
   SDL_JoystickID instanceID = 0;
   int playerIndex = 0;
   bool connected = false;
 
-  // Button states
+
   bool buttons[SDL_GAMEPAD_BUTTON_COUNT] = {};
   bool buttonsPressed[SDL_GAMEPAD_BUTTON_COUNT] = {};
   bool buttonsReleased[SDL_GAMEPAD_BUTTON_COUNT] = {};
 
-  // Axis values (-1 to 1, normalized)
+
   float axes[SDL_GAMEPAD_AXIS_COUNT] = {};
 
-  // Dead zone settings
+
   float stickDeadZone = 0.15f;
   float triggerDeadZone = 0.01f;
 
@@ -40,21 +40,21 @@ struct RUNA_API GamepadState {
   }
 };
 
-// Manages all connected gamepads
+
 class RUNA_API GamepadManager {
 public:
   GamepadManager();
   ~GamepadManager();
 
-  // Initialize gamepad system
+
   void initialize();
   void shutdown();
 
-  // Update from SDL events
+
   void update(const SDL_Event &event);
   void beginFrame();
 
-  // Gamepad queries
+
   bool isButtonDown(int playerIndex, SDL_GamepadButton button) const;
   bool isButtonPressed(int playerIndex, SDL_GamepadButton button) const;
   bool isButtonReleased(int playerIndex, SDL_GamepadButton button) const;
@@ -67,11 +67,11 @@ public:
   float getLeftTrigger(int playerIndex) const;
   float getRightTrigger(int playerIndex) const;
 
-  // Device management
+
   bool isGamepadConnected(int playerIndex) const;
   int getConnectedGamepadCount() const;
 
-  // Dead zone configuration
+
   void setStickDeadZone(int playerIndex, float deadZone);
   void setTriggerDeadZone(int playerIndex, float deadZone);
 
@@ -88,6 +88,6 @@ private:
   float applyDeadZone(float value, float deadZone) const;
 };
 
-} // namespace Runa
+}
 
-#endif // RUNA_CORE_GAMEPADMANAGER_H
+#endif

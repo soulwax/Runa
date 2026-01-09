@@ -14,15 +14,15 @@ layout(push_constant) uniform PushConstants {
 void main() {
     vec4 texColor = texture(texSampler, fragTexCoord);
 
-    // Outline thickness in texture coordinates
+
     vec2 texelSize = 1.0 / textureSize(texSampler, 0);
     float outlineWidth = 2.0;
 
-    // Sample neighboring pixels to detect edges
+
     float alpha = texColor.a;
     float maxAlpha = alpha;
 
-    // Sample 8 surrounding pixels
+
     for (float x = -outlineWidth; x <= outlineWidth; x += outlineWidth) {
         for (float y = -outlineWidth; y <= outlineWidth; y += outlineWidth) {
             if (x == 0.0 && y == 0.0) continue;
@@ -32,10 +32,10 @@ void main() {
         }
     }
 
-    // If this pixel is transparent but neighbors are opaque, it's an outline
+
     bool isOutline = (alpha < 0.1) && (maxAlpha > 0.1);
 
-    // Outline color (yellow, pulsing with time)
+
     vec3 outlineColor = vec3(1.0, 1.0, 0.3);
     float pulse = 0.7 + 0.3 * sin(pc.time * 4.0);
 

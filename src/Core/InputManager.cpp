@@ -28,7 +28,7 @@ namespace Runa {
 		LOG_INFO("Initializing InputManager...");
 		m_gamepadManager->initialize();
 
-		// Create default context
+
 		createContext("Default");
 		setActiveContext("Default");
 
@@ -44,19 +44,19 @@ namespace Runa {
 	}
 
 	void InputManager::update(const SDL_Event& event) {
-		// Update gamepad manager
+
 		m_gamepadManager->update(event);
 	}
 
 	void InputManager::beginFrame() {
-		// Clear action cache
+
 		m_actionCache.clear();
 
-		// Update gamepad begin frame
+
 		m_gamepadManager->beginFrame();
 	}
 
-	// ===== Context Management =====
+
 
 	InputContext* InputManager::createContext(const std::string& name) {
 		auto it = m_contexts.find(name);
@@ -79,12 +79,12 @@ namespace Runa {
 	}
 
 	void InputManager::pushContext(const std::string& name) {
-		// Don't push if already on top
+
 		if (!m_activeContexts.empty() && m_activeContexts.back() == name) {
 			return;
 		}
 
-		// Remove from stack if it exists elsewhere
+
 		m_activeContexts.erase(
 			std::remove(m_activeContexts.begin(), m_activeContexts.end(), name),
 			m_activeContexts.end()
@@ -111,10 +111,10 @@ namespace Runa {
 		LOG_DEBUG("Set active input context: {}", name);
 	}
 
-	// ===== Action Queries =====
+
 
 	ActionValue InputManager::getAction(const std::string& actionName) const {
-		// Check cache first
+
 		auto cacheIt = m_actionCache.find(actionName);
 		if (cacheIt != m_actionCache.end()) {
 			return cacheIt->second;
@@ -122,7 +122,7 @@ namespace Runa {
 
 		ActionValue result;
 
-		// Search through active contexts (top to bottom)
+
 		for (auto it = m_activeContexts.rbegin(); it != m_activeContexts.rend(); ++it) {
 			auto contextIt = m_contexts.find(*it);
 			if (contextIt == m_contexts.end()) continue;
@@ -133,11 +133,11 @@ namespace Runa {
 			const InputBinding* binding = context->getBindingSet().getBinding(actionName);
 			if (binding) {
 				result = evaluateAction(*binding);
-				break;  // Found in this context, stop searching
+				break;
 			}
 		}
 
-		// Cache result
+
 		m_actionCache[actionName] = result;
 		return result;
 	}
@@ -166,7 +166,7 @@ namespace Runa {
 		return getAction(actionName).getAxisY();
 	}
 
-	// ===== Binding Helpers =====
+
 
 	void InputManager::bindKey(const std::string& contextName, const std::string& actionName, SDL_Keycode key) {
 		InputContext* context = createContext(contextName);
@@ -193,27 +193,27 @@ namespace Runa {
 		InputContext* context = createContext(contextName);
 		InputBinding* binding = context->getBindingSet().addBinding(actionName, ActionType::Axis2D);
 
-		// Add keyboard sources with proper scaling
+
 		auto upSrc = InputSource::keyboard(up);
-		upSrc.scale = -1.0f;  // Up is negative Y
+		upSrc.scale = -1.0f;
 		binding->addSource(upSrc);
 
 		auto downSrc = InputSource::keyboard(down);
-		downSrc.scale = 1.0f;  // Down is positive Y
+		downSrc.scale = 1.0f;
 		binding->addSource(downSrc);
 
 		auto leftSrc = InputSource::keyboard(left);
-		leftSrc.scale = -1.0f;  // Left is negative X
+		leftSrc.scale = -1.0f;
 		binding->addSource(leftSrc);
 
 		auto rightSrc = InputSource::keyboard(right);
-		rightSrc.scale = 1.0f;  // Right is positive X
+		rightSrc.scale = 1.0f;
 		binding->addSource(rightSrc);
 	}
 
-	// ===== Serialization =====
 
-	// Helper: Convert InputType to string
+
+
 	static std::string inputTypeToString(InputType type) {
 		switch (type) {
 			case InputType::Keyboard: return "Keyboard";
@@ -226,7 +226,7 @@ namespace Runa {
 		}
 	}
 
-	// Helper: Convert string to InputType
+
 	static InputType stringToInputType(const std::string& str) {
 		if (str == "Keyboard") return InputType::Keyboard;
 		if (str == "MouseButton") return InputType::MouseButton;
@@ -237,7 +237,7 @@ namespace Runa {
 		return InputType::Keyboard;
 	}
 
-	// Helper: Convert ActionType to string
+
 	static std::string actionTypeToString(ActionType type) {
 		switch (type) {
 			case ActionType::Button: return "Button";
@@ -247,7 +247,7 @@ namespace Runa {
 		}
 	}
 
-	// Helper: Convert string to ActionType
+
 	static ActionType stringToActionType(const std::string& str) {
 		if (str == "Button") return ActionType::Button;
 		if (str == "Axis1D") return ActionType::Axis1D;
@@ -255,7 +255,7 @@ namespace Runa {
 		return ActionType::Button;
 	}
 
-	// Helper: Serialize InputSource to JSON
+
 	static json serializeSource(const InputSource& source) {
 		json j;
 		j["type"] = inputTypeToString(source.type);
@@ -266,7 +266,7 @@ namespace Runa {
 		return j;
 	}
 
-	// Helper: Deserialize InputSource from JSON
+
 	static InputSource deserializeSource(const json& j) {
 		InputSource source;
 		source.type = stringToInputType(j.value("type", "Keyboard"));
@@ -282,7 +282,7 @@ namespace Runa {
 			json root;
 			json contextsArray = json::array();
 
-			// Serialize all contexts
+
 			for (const auto& [name, context] : m_contexts) {
 				json contextJson;
 				contextJson["name"] = name;
@@ -290,7 +290,7 @@ namespace Runa {
 
 				json bindingsArray = json::array();
 
-				// Serialize all bindings in this context
+
 				const auto& bindings = context->getBindingSet().getBindings();
 				for (const auto& [actionName, binding] : bindings) {
 					json bindingJson;
@@ -312,14 +312,14 @@ namespace Runa {
 
 			root["contexts"] = contextsArray;
 
-			// Write to file
+
 			std::ofstream file(filePath);
 			if (!file.is_open()) {
 				LOG_ERROR("Failed to open file for writing: {}", filePath);
 				return false;
 			}
 
-			file << root.dump(2);  // Pretty print with 2-space indent
+			file << root.dump(2);
 			file.close();
 
 			LOG_INFO("Saved input bindings to: {}", filePath);
@@ -333,18 +333,18 @@ namespace Runa {
 
 	bool InputManager::loadBindings(const std::string& filePath) {
 		try {
-			// Open file
+
 			std::ifstream file(filePath);
 			if (!file.is_open()) {
 				LOG_ERROR("Failed to open file for reading: {}", filePath);
 				return false;
 			}
 
-			// Parse JSON
+
 			json root = json::parse(file);
 			file.close();
 
-			// Clear existing contexts (except Default)
+
 			auto defaultContext = m_contexts.find("Default");
 			if (defaultContext != m_contexts.end()) {
 				auto defaultPtr = std::move(defaultContext->second);
@@ -354,30 +354,30 @@ namespace Runa {
 				m_contexts.clear();
 			}
 
-			// Load contexts
+
 			if (root.contains("contexts") && root["contexts"].is_array()) {
 				for (const auto& contextJson : root["contexts"]) {
 					std::string name = contextJson.value("name", "Unnamed");
 					bool enabled = contextJson.value("enabled", true);
 
-					// Create or get context
+
 					InputContext* context = createContext(name);
 					context->setEnabled(enabled);
 
-					// Load bindings
+
 					if (contextJson.contains("bindings") && contextJson["bindings"].is_array()) {
 						for (const auto& bindingJson : contextJson["bindings"]) {
 							std::string actionName = bindingJson.value("action", "");
 							std::string typeStr = bindingJson.value("type", "Button");
 							ActionType type = stringToActionType(typeStr);
 
-							// Create binding
+
 							InputBinding* binding = context->getBindingSet().addBinding(actionName, type);
 
-							// Clear existing sources (addBinding might return existing binding)
+
 							binding->clearSources();
 
-							// Load sources
+
 							if (bindingJson.contains("sources") && bindingJson["sources"].is_array()) {
 								for (const auto& sourceJson : bindingJson["sources"]) {
 									InputSource source = deserializeSource(sourceJson);
@@ -400,7 +400,7 @@ namespace Runa {
 			return false;
 		}
 	}
-	// ===== Helper Functions =====
+
 
 	ActionValue InputManager::evaluateAction(const InputBinding& binding) const {
 		ActionValue value;
@@ -413,7 +413,7 @@ namespace Runa {
 
 		switch (binding.getType()) {
 			case ActionType::Button: {
-				// Button: OR all sources together
+
 				for (const auto& source : sources) {
 					if (evaluateSourceButton(source)) {
 						value.buttonDown = true;
@@ -429,7 +429,7 @@ namespace Runa {
 			}
 
 			case ActionType::Axis1D: {
-				// Axis1D: Sum all sources
+
 				for (const auto& source : sources) {
 					value.axis1D += evaluateSource(source);
 				}
@@ -439,24 +439,24 @@ namespace Runa {
 			}
 
 			case ActionType::Axis2D: {
-				// Axis2D: Separate X and Y components
+
 				for (const auto& source : sources) {
 					float val = evaluateSource(source);
 
-					// Determine if this is X or Y based on source type
-					// For keyboard: scale sign determines axis
-					// Negative = left/up, Positive = right/down
+
+
+
 					if (source.type == InputType::Keyboard) {
 						if (source.scale < 0) {
-							// Negative scale: up or left
-							// Assume it's Y if first, X if second
+
+
 							if (value.axis2DY == 0.0f) {
 								value.axis2DY += val;
 							} else {
 								value.axis2DX += val;
 							}
 						} else {
-							// Positive scale: down or right
+
 							if (value.axis2DY == 0.0f) {
 								value.axis2DY += val;
 							} else {
@@ -464,7 +464,7 @@ namespace Runa {
 							}
 						}
 					} else if (source.type == InputType::GamepadAxis) {
-						// For gamepad axes, use the axis index
+
 						int axisIdx = source.code;
 						if (axisIdx == SDL_GAMEPAD_AXIS_LEFTX || axisIdx == SDL_GAMEPAD_AXIS_RIGHTX) {
 							value.axis2DX += val;
@@ -568,4 +568,4 @@ namespace Runa {
 		}
 	}
 
-}  // namespace Runa
+}

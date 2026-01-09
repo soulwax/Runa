@@ -14,16 +14,16 @@ layout(push_constant) uniform PushConstants {
 void main() {
     vec4 texColor = texture(texSampler, fragTexCoord);
 
-    // Sickly green poison tint
+
     vec3 poisonColor = vec3(0.4, 1.0, 0.3);
 
-    // Pulsing poison effect
+
     float pulse = 0.6 + 0.4 * sin(pc.time * 3.0);
 
-    // Apply poison tint with pulse
+
     vec3 finalColor = mix(texColor.rgb, poisonColor, 0.3 * pulse);
 
-    // Add toxic bubbling overlay using noise-like pattern
+
     float bubble = sin(fragTexCoord.x * 30.0 + pc.time * 2.0) *
                    cos(fragTexCoord.y * 30.0 - pc.time * 2.0);
     bubble = smoothstep(0.8, 1.0, bubble) * 0.2;

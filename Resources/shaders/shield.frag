@@ -14,30 +14,30 @@ layout(push_constant) uniform PushConstants {
 void main() {
     vec4 texColor = texture(texSampler, fragTexCoord);
 
-    // Shield color (cyan/blue energy)
+
     vec3 shieldColor = vec3(0.3, 0.7, 1.0);
 
-    // Create hexagonal pattern for energy shield
+
     vec2 center = fragTexCoord - vec2(0.5);
     float angle = atan(center.y, center.x);
     float dist = length(center);
 
-    // Hexagonal pattern
+
     float hexPattern = abs(sin(angle * 6.0 + pc.time * 2.0)) * 0.5 + 0.5;
 
-    // Pulsing edge effect
+
     float edge = smoothstep(0.4, 0.45, dist) * (1.0 - smoothstep(0.45, 0.5, dist));
     float pulse = 0.7 + 0.3 * sin(pc.time * 4.0);
 
-    // Energy shimmer
+
     float shimmer = sin(fragTexCoord.x * 20.0 + pc.time * 3.0) *
                     cos(fragTexCoord.y * 20.0 - pc.time * 2.0);
     shimmer = shimmer * 0.5 + 0.5;
 
-    // Combine effects
+
     vec3 shieldEffect = shieldColor * (edge * pulse + hexPattern * shimmer * 0.3);
 
-    // Mix with original texture
+
     vec3 finalColor = texColor.rgb + shieldEffect * 0.6;
 
     outColor = vec4(finalColor, texColor.a);

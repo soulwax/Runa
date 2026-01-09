@@ -15,7 +15,7 @@ void main() {
     vec2 normalizedPos = (inPosition / pc.screenSize) * 2.0 - 1.0;
     normalizedPos.y = -normalizedPos.y;
 
-    // Add slight wave distortion
+
     normalizedPos.x += sin(pc.time * 3.0 + normalizedPos.y * 10.0) * 0.01;
 
     gl_Position = vec4(normalizedPos, 0.0, 1.0);

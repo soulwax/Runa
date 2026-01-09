@@ -5,6 +5,39 @@ All notable changes to the Runa2 game engine will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.4] - 2026-01-09
+
+### Added
+- **Meadow Rendering System**: Implemented layered tile rendering for game environments
+  - Base grass layer using `grass.png` (no transparency) - fills entire meadow
+  - Decorative grass layer using `decor-grass.png` (with transparency) - 20% coverage for visual variety
+  - Decorative objects layer using `objects.png` (with transparency) - 1% coverage for scattered items
+  - Proper layering ensures transparent tiles render above solid base tiles
+- **Game Implementation**: Created `Sandbox/main_game.cpp` as clean game entry point
+  - Blank canvas with dark blueish sky background
+  - FPS counter display (updates once per second, white text)
+  - Meadow background rendering system
+  - Foundation for future game features
+
+### Changed
+- **Sprite Rendering**: Updated coordinate system handling in `renderSprites()`
+  - Fixed sprite sheet rendering to correctly adjust from center coordinates to top-left
+  - Ensures sprites are properly centered on entities
+  - Colored rectangle rendering also uses correct coordinate adjustment
+- **Meadow Generation**: Improved meadow tile distribution
+  - Increased decorative grass coverage from 5% to 20% for richer visuals
+  - Added sparse object placement (1% coverage) for environmental variety
+  - Only uses non-transparent grass tiles for base layer
+  - Only uses regular decorative grass tiles (0-15), skips mud tiles (16-19)
+
+### Fixed
+- **Sprite Coordinate Alignment**: Fixed sprite rendering misalignment bug
+  - `SpriteBatch::draw()` expects top-left coordinates, but `worldToScreen()` returns center coordinates
+  - Adjusted sprite rendering to subtract half frame width/height before drawing
+  - Ensures sprite sheets are correctly centered on entity positions
+
+---
+
 ## [1.0.3] - 2026-01-08
 
 ### Added
@@ -204,6 +237,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+[1.0.4]: https://github.com/soulwax/Runa/releases/tag/v1.0.4
 [1.0.3]: https://github.com/soulwax/Runa/releases/tag/v1.0.3
 [1.0.2]: https://github.com/soulwax/Runa/releases/tag/v1.0.2
 [0.1.1]: https://github.com/soulwax/Runa/releases/tag/v0.1.1

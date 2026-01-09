@@ -12,25 +12,25 @@ layout(push_constant) uniform PushConstants {
 } pc;
 
 void main() {
-    // Pixelation amount (adjustable - lower = more pixelated)
+
     float pixelSize = 8.0;
-    
-    // Calculate pixel grid
+
+
     vec2 pixelScale = vec2(pixelSize / pc.screenSize.x, pixelSize / pc.screenSize.y);
     vec2 pixelatedUV = floor(fragTexCoord / pixelScale) * pixelScale;
-    
-    // Sample from the center of each pixel
+
+
     pixelatedUV += pixelScale * 0.5;
-    
-    // Clamp to avoid sampling outside texture
+
+
     pixelatedUV = clamp(pixelatedUV, vec2(0.0), vec2(1.0));
-    
-    // Sample the screen texture
+
+
     vec4 color = texture(screenTexture, pixelatedUV);
-    
-    // Optional: Add slight dithering for retro feel
+
+
     float dither = fract(sin(dot(pixelatedUV, vec2(12.9898, 78.233))) * 43758.5453);
     color.rgb += (dither - 0.5) * 0.02;
-    
+
     outColor = color;
 }

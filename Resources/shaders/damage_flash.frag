@@ -14,10 +14,10 @@ layout(push_constant) uniform PushConstants {
 void main() {
     vec4 texColor = texture(texSampler, fragTexCoord);
 
-    // Flash intensity decreases over time (0.3 second duration)
+
     float flashIntensity = max(0.0, 1.0 - (pc.time / 0.3));
 
-    // Mix original color with red flash
+
     vec3 flashColor = mix(texColor.rgb, vec3(1.0, 0.2, 0.2), flashIntensity * 0.7);
 
     outColor = vec4(flashColor, texColor.a);

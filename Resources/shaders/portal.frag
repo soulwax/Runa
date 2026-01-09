@@ -16,7 +16,7 @@ void main() {
     float dist = length(center);
     float angle = atan(center.y, center.x);
 
-    // Spiral distortion
+
     float spiral = angle + dist * 10.0 - pc.time * 2.0;
     vec2 distortedUV = fragTexCoord;
     distortedUV.x += sin(spiral) * dist * 0.3;
@@ -24,23 +24,23 @@ void main() {
 
     vec4 texColor = texture(texSampler, distortedUV);
 
-    // Portal color gradient (purple to cyan)
-    vec3 innerColor = vec3(0.8, 0.3, 1.0);  // Purple
-    vec3 outerColor = vec3(0.3, 0.8, 1.0);  // Cyan
+
+    vec3 innerColor = vec3(0.8, 0.3, 1.0);
+    vec3 outerColor = vec3(0.3, 0.8, 1.0);
     vec3 portalColor = mix(innerColor, outerColor, dist * 2.0);
 
-    // Rotating energy rings
+
     float rings = sin(dist * 20.0 - pc.time * 5.0);
     rings = smoothstep(0.7, 1.0, rings);
 
-    // Vortex effect - darker in center
+
     float vortex = 1.0 - smoothstep(0.0, 0.5, dist);
 
-    // Combine effects
+
     vec3 finalColor = texColor.rgb * (1.0 - vortex * 0.7);
     finalColor += portalColor * (rings * 0.5 + vortex * 0.3);
 
-    // Add swirling particles
+
     float particles = sin(spiral * 3.0) * sin(pc.time * 10.0 + dist * 30.0);
     particles = smoothstep(0.95, 1.0, particles);
     finalColor += portalColor * particles * 0.5;

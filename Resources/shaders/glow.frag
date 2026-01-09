@@ -14,14 +14,14 @@ layout(push_constant) uniform PushConstants {
 void main() {
     vec4 texColor = texture(texSampler, fragTexCoord);
 
-    // Pulsing glow effect
+
     float pulse = 0.7 + 0.3 * sin(pc.time * 3.0);
 
-    // Add bright glow to bright areas
-    float brightness = dot(texColor.rgb, vec3(0.299, 0.587, 0.114));
-    vec3 glowColor = vec3(0.5, 0.8, 1.0); // Cyan-blue glow
 
-    // Intensify bright pixels
+    float brightness = dot(texColor.rgb, vec3(0.299, 0.587, 0.114));
+    vec3 glowColor = vec3(0.5, 0.8, 1.0);
+
+
     vec3 finalColor = texColor.rgb + glowColor * brightness * pulse * 0.5;
 
     outColor = vec4(finalColor, texColor.a);

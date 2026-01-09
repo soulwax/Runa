@@ -1,4 +1,4 @@
-// File: src/Core/Application.h
+
 
 #ifndef RUNA_CORE_APPLICATION_H
 #define RUNA_CORE_APPLICATION_H
@@ -11,7 +11,7 @@
 
 namespace Runa {
 
-// Forward declarations
+
 class SceneManager;
 
 class RUNA_API Application {
@@ -21,13 +21,13 @@ public:
 
   void run();
 
-  // Public accessors
+
   Window &getWindow() { return *m_window; }
   Renderer &getRenderer() { return *m_renderer; }
   Input &getInput() { return *m_input; }
   SceneManager &getSceneManager();
 
-  // Get current FPS (updated every second)
+
   int getFPS() const { return m_currentFPS; }
 
 protected:
@@ -47,5 +47,5 @@ private:
   void mainLoop();
 };
 
-} // namespace Runa
-#endif // RUNA_CORE_APPLICATION_H
+}
+#endif

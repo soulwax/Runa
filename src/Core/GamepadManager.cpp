@@ -21,7 +21,7 @@ namespace Runa {
 	void GamepadManager::initialize() {
 		LOG_INFO("Initializing GamepadManager...");
 
-		// Open all connected gamepads
+
 		int numJoysticks = 0;
 		SDL_JoystickID* joysticks = SDL_GetJoysticks(&numJoysticks);
 
@@ -51,7 +51,7 @@ namespace Runa {
 	}
 
 	void GamepadManager::beginFrame() {
-		// Clear one-shot button states
+
 		for (auto& [id, state] : m_gamepads) {
 			state.reset();
 		}
@@ -96,10 +96,10 @@ namespace Runa {
 				if (it != m_gamepads.end()) {
 					int axis = static_cast<int>(event.gaxis.axis);
 					if (axis >= 0 && axis < SDL_GAMEPAD_AXIS_COUNT) {
-						// Normalize to -1 to 1 range
+
 						float value = event.gaxis.value / 32767.0f;
 
-						// Apply dead zone
+
 						bool isTrigger = (axis == SDL_GAMEPAD_AXIS_LEFT_TRIGGER ||
 						                  axis == SDL_GAMEPAD_AXIS_RIGHT_TRIGGER);
 						float deadZone = isTrigger ? it->second.triggerDeadZone : it->second.stickDeadZone;
@@ -263,11 +263,11 @@ namespace Runa {
 			return 0.0f;
 		}
 
-		// Remap from [deadZone, 1.0] to [0.0, 1.0]
+
 		float sign = (value > 0) ? 1.0f : -1.0f;
 		float absValue = std::abs(value);
 		float remapped = (absValue - deadZone) / (1.0f - deadZone);
 		return sign * std::clamp(remapped, 0.0f, 1.0f);
 	}
 
-}  // namespace Runa
+}

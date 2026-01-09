@@ -14,16 +14,16 @@ layout(push_constant) uniform PushConstants {
 void main() {
     vec4 texColor = texture(texSampler, fragTexCoord);
 
-    // Convert to grayscale
+
     float gray = dot(texColor.rgb, vec3(0.299, 0.587, 0.114));
 
-    // Apply sepia tone matrix
+
     vec3 sepia;
     sepia.r = gray * 1.2;
     sepia.g = gray * 1.0;
     sepia.b = gray * 0.8;
 
-    // Optional: use time to control transition intensity
+
     float amount = clamp(pc.time, 0.0, 1.0);
     vec3 finalColor = mix(texColor.rgb, sepia, amount);
 

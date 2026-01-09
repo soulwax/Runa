@@ -1,4 +1,4 @@
-// File: src/Core/Input.cpp
+
 
 #include "../runapch.h"
 #include "Input.h"
@@ -12,7 +12,7 @@ Input::Input(Window& window)
 }
 
 void Input::beginFrame() {
-    // Clear "just pressed/released" states at the start of each frame
+
     m_keysPressed.clear();
     m_keysReleased.clear();
     m_mouseButtonsPressed.clear();
@@ -23,7 +23,7 @@ void Input::beginFrame() {
 void Input::update(const SDL_Event& event) {
     switch (event.type) {
         case SDL_EVENT_KEY_DOWN:
-            if (!event.key.repeat) {  // Ignore key repeats
+            if (!event.key.repeat) {
                 m_keysDown.insert(event.key.key);
                 m_keysPressed.insert(event.key.key);
             }
@@ -91,4 +91,4 @@ float Input::getMouseWheel() const {
     return m_mouseWheel;
 }
 
-} // namespace Runa
+}

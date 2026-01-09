@@ -30,7 +30,7 @@ protected:
     LOG_INFO("=== Runa RPG ===");
     srand(static_cast<unsigned>(time(nullptr)));
 
-    // Initialize systems
+
     m_registry = std::make_unique<Runa::ECS::EntityRegistry>();
     m_spriteBatch = std::make_unique<Runa::SpriteBatch>(getRenderer());
     m_font = std::make_unique<Runa::Font>(getRenderer(),
@@ -39,38 +39,38 @@ protected:
     m_inputManager = std::make_unique<Runa::InputManager>(getInput());
     m_inputManager->initialize();
 
-    // Create white pixel texture for colored rectangles
+
     unsigned char whitePixel[4] = {255, 255, 255, 255};
     m_whitePixelTexture = std::make_unique<Runa::Texture>(getRenderer(), 1, 1, whitePixel);
 
-    // Setup input
+
     setupInput();
 
-    // Create world
+
     createWorld();
 
-    // Create player
+
     createPlayer();
 
-    // Initialize camera to player position
+
     if (m_registry->getRegistry().valid(m_player)) {
       auto& pos = m_registry->getRegistry().get<Runa::ECS::Position>(m_player);
       auto& size = m_registry->getRegistry().get<Runa::ECS::Size>(m_player);
       m_camera->setPosition(pos.x + size.width / 2.0f, pos.y + size.height / 2.0f);
     }
 
-    // Spawn initial enemies
+
     for (int i = 0; i < 8; ++i) {
       spawnSlime();
     }
 
-    // Spawn items
+
     for (int i = 0; i < 10; ++i) {
       spawnPotion();
       spawnCoin();
     }
 
-    // Create quest giver NPC
+
     createQuestGiver();
 
     m_gameTime = 0.0f;
@@ -84,11 +84,11 @@ protected:
   }
 
   void setupInput() {
-    // Movement
+
     m_inputManager->bind2DAxis("Gameplay", "Move", SDLK_W, SDLK_S, SDLK_A,
                                SDLK_D);
 
-    // Actions
+
     m_inputManager->bindKey("Gameplay", "Attack", SDLK_SPACE);
     m_inputManager->bindKey("Gameplay", "Interact", SDLK_E);
     m_inputManager->bindKey("Gameplay", "ToggleInventory", SDLK_I);
@@ -97,46 +97,46 @@ protected:
   }
 
   void createWorld() {
-    // Create a 50x50 tile world
+
     m_tileMap = std::make_unique<Runa::TileMap>(50, 50, 32);
 
-    // Generate simple world (grass and dirt)
+
     for (int y = 0; y < 50; ++y) {
       for (int x = 0; x < 50; ++x) {
-        // Create a simple pattern
+
         if (x < 5 || x > 45 || y < 5 || y > 45) {
-          m_tileMap->setTile(x, y, 2); // Dark grass (border)
+          m_tileMap->setTile(x, y, 2);
         } else if ((x + y) % 3 == 0) {
-          m_tileMap->setTile(x, y, 1); // Dirt
+          m_tileMap->setTile(x, y, 1);
         } else {
-          m_tileMap->setTile(x, y, 0); // Grass
+          m_tileMap->setTile(x, y, 0);
         }
       }
     }
 
-    // Add some obstacles
+
     for (int i = 0; i < 20; ++i) {
       int x = 10 + (rand() % 30);
       int y = 10 + (rand() % 30);
-      m_tileMap->setTile(x, y, 3); // Rock
+      m_tileMap->setTile(x, y, 3);
       m_tileMap->setSolidTile(3, true);
     }
   }
 
   void createPlayer() {
-    float startX = 25.0f * 32.0f; // Center of world
+    float startX = 25.0f * 32.0f;
     float startY = 25.0f * 32.0f;
 
     m_player = m_registry->createEntity(startX, startY);
 
-    // Add components
+
     auto &reg = m_registry->getRegistry();
     reg.emplace<Runa::ECS::Player>(m_player);
     reg.emplace<Runa::ECS::Size>(m_player, 24.0f, 24.0f);
     reg.emplace<Runa::ECS::AABB>(m_player, 24.0f, 24.0f);
     reg.emplace<Runa::ECS::CameraTarget>(m_player);
 
-    // Sprite (blue square for player)
+
     auto &sprite = reg.emplace<Runa::ECS::Sprite>(m_player);
     sprite.spriteSheet = nullptr;
     sprite.tintR = 0.2f;
@@ -144,7 +144,7 @@ protected:
     sprite.tintB = 1.0f;
     sprite.tintA = 1.0f;
 
-    // RPG components
+
     auto &health = reg.emplace<Runa::ECS::Health>(m_player);
     health.current = 100.0f;
     health.max = 100.0f;
@@ -163,15 +163,15 @@ protected:
     inv.gold = 0;
     inv.maxSlots = 20;
 
-    // Velocity component for movement
+
     reg.emplace<Runa::ECS::Velocity>(m_player, 0.0f, 0.0f);
 
-    // PlayerInput for movement
+
     reg.emplace<Runa::ECS::PlayerInput>(m_player, 150.0f);
   }
 
   void spawnSlime() {
-    // Spawn away from player
+
     float x = (10 + (rand() % 30)) * 32.0f;
     float y = (10 + (rand() % 30)) * 32.0f;
 
@@ -183,7 +183,7 @@ protected:
     reg.emplace<Runa::ECS::Size>(slime, 28.0f, 28.0f);
     reg.emplace<Runa::ECS::AABB>(slime, 28.0f, 28.0f);
 
-    // Green slime sprite
+
     auto &sprite = reg.emplace<Runa::ECS::Sprite>(slime);
     sprite.spriteSheet = nullptr;
     sprite.tintR = 0.2f;
@@ -191,18 +191,18 @@ protected:
     sprite.tintB = 0.2f;
     sprite.tintA = 1.0f;
 
-    // Health
+
     auto &health = reg.emplace<Runa::ECS::Health>(slime);
     health.current = 30.0f;
     health.max = 30.0f;
 
-    // Combat
+
     auto &combat = reg.emplace<Runa::ECS::Combat>(slime);
     combat.damage = 5.0f;
     combat.attackRange = 30.0f;
     combat.attackCooldown = 1.5f;
 
-    // AI
+
     auto &ai = reg.emplace<Runa::ECS::AIController>(slime);
     ai.state = Runa::ECS::AIState::Patrol;
     ai.detectionRange = 180.0f;
@@ -220,7 +220,7 @@ protected:
     reg.emplace<Runa::ECS::ItemEntity>(item);
     reg.emplace<Runa::ECS::Size>(item, 16.0f, 16.0f);
 
-    // Red sprite for potion
+
     auto &sprite = reg.emplace<Runa::ECS::Sprite>(item);
     sprite.spriteSheet = nullptr;
     sprite.tintR = 1.0f;
@@ -228,7 +228,7 @@ protected:
     sprite.tintB = 0.2f;
     sprite.tintA = 1.0f;
 
-    // Item data
+
     auto &droppedItem = reg.emplace<Runa::ECS::DroppedItem>(item);
     droppedItem.item.type = Runa::ECS::ItemType::Potion;
     droppedItem.item.name = "Health Potion";
@@ -248,7 +248,7 @@ protected:
     reg.emplace<Runa::ECS::ItemEntity>(item);
     reg.emplace<Runa::ECS::Size>(item, 12.0f, 12.0f);
 
-    // Yellow sprite for coin
+
     auto &sprite = reg.emplace<Runa::ECS::Sprite>(item);
     sprite.spriteSheet = nullptr;
     sprite.tintR = 1.0f;
@@ -256,7 +256,7 @@ protected:
     sprite.tintB = 0.0f;
     sprite.tintA = 1.0f;
 
-    // Item data
+
     auto &droppedItem = reg.emplace<Runa::ECS::DroppedItem>(item);
     droppedItem.item.type = Runa::ECS::ItemType::Coin;
     droppedItem.item.name = "Gold Coin";
@@ -274,7 +274,7 @@ protected:
     reg.emplace<Runa::ECS::NPC>(npc);
     reg.emplace<Runa::ECS::Size>(npc, 24.0f, 24.0f);
 
-    // Purple sprite for NPC
+
     auto &sprite = reg.emplace<Runa::ECS::Sprite>(npc);
     sprite.spriteSheet = nullptr;
     sprite.tintR = 0.7f;
@@ -282,7 +282,7 @@ protected:
     sprite.tintB = 0.9f;
     sprite.tintA = 1.0f;
 
-    // Quest
+
     auto &questGiver = reg.emplace<Runa::ECS::QuestGiver>(npc);
     questGiver.npcName = "Village Elder";
     questGiver.dialogueText = "Please help us! Defeat 5 slimes!";
@@ -300,7 +300,7 @@ protected:
   void onUpdate(float dt) override {
     m_gameTime += dt;
 
-    // Handle player input
+
     auto &reg = m_registry->getRegistry();
     if (reg.valid(m_player) && reg.all_of<Runa::ECS::PlayerInput>(m_player)) {
       float moveX = m_inputManager->getActionAxisX("Move");
@@ -312,16 +312,16 @@ protected:
       vel.y = moveY * playerInput.speed;
     }
 
-    // Handle attack input (expand player's attack range temporarily)
+
     if (m_inputManager->isActionPressed("Attack")) {
       if (reg.valid(m_player) && reg.all_of<Runa::ECS::Combat>(m_player)) {
         auto &combat = reg.get<Runa::ECS::Combat>(m_player);
-        combat.attackRange = 50.0f; // Temporarily increase range
+        combat.attackRange = 50.0f;
         LOG_DEBUG("Player attacks!");
       }
     }
 
-    // Handle interact (start quest)
+
     if (m_inputManager->isActionPressed("Interact")) {
       auto questView = reg.view<Runa::ECS::QuestGiver, Runa::ECS::Position>();
       auto playerView = reg.view<Runa::ECS::Player, Runa::ECS::Position>();
@@ -352,12 +352,12 @@ protected:
       }
     }
 
-    // Toggle inventory
+
     if (m_inputManager->isActionPressed("ToggleInventory")) {
       m_showInventory = !m_showInventory;
     }
 
-    // Update quest text timer
+
     if (m_questTextTimer > 0.0f) {
       m_questTextTimer -= dt;
       if (m_questTextTimer <= 0.0f) {
@@ -365,7 +365,7 @@ protected:
       }
     }
 
-    // Update ECS systems
+
     Runa::ECS::Systems::updateMovement(reg, dt);
     Runa::ECS::Systems::updateAnimation(reg, dt);
     Runa::ECS::RPGSystems::updateAI(reg, dt);
@@ -374,13 +374,13 @@ protected:
     Runa::ECS::RPGSystems::updateQuests(reg);
     Runa::ECS::RPGSystems::updateDamageNumbers(reg, dt);
 
-    // Update camera to follow player
+
     if (reg.valid(m_player)) {
       m_camera->followEntity(reg, m_player, 0.1f);
     }
     m_camera->update(dt);
 
-    // Check for game over
+
     if (reg.valid(m_player) && reg.all_of<Runa::ECS::Health>(m_player)) {
       auto &health = reg.get<Runa::ECS::Health>(m_player);
       if (health.isDead && !m_gameOver) {
@@ -389,7 +389,7 @@ protected:
       }
     }
 
-    // Spawn more slimes if too few
+
     auto enemyView = reg.view<Runa::ECS::Enemy>();
     int enemyCount = 0;
     for (auto entity : enemyView) {
@@ -405,22 +405,22 @@ protected:
 
     m_spriteBatch->begin();
 
-    // Render world
+
     renderWorld();
 
-    // Render entities (pass white pixel texture for colored rectangles)
+
     Runa::ECS::Systems::renderSprites(m_registry->getRegistry(), *m_spriteBatch,
                                       *m_camera, m_whitePixelTexture.get());
 
-    // Render damage numbers
+
     Runa::ECS::RPGSystems::renderDamageNumbers(
         m_registry->getRegistry(), *m_spriteBatch, *m_font, *m_camera);
 
-    // Render UI
+
     Runa::ECS::RPGSystems::renderPlayerUI(m_registry->getRegistry(),
                                           *m_spriteBatch, *m_font, 1280, 720);
 
-    // Render quest text
+
     if (m_showQuestText) {
       auto texture = m_font->renderText("New Quest: Slime Infestation!",
                                         {255, 255, 100, 255});
@@ -429,12 +429,12 @@ protected:
       }
     }
 
-    // Render inventory
+
     if (m_showInventory) {
       renderInventory();
     }
 
-    // Game over screen
+
     if (m_gameOver) {
       auto texture = m_font->renderText("GAME OVER", {255, 50, 50, 255});
       if (texture) {
@@ -446,37 +446,37 @@ protected:
   }
 
   void renderWorld() {
-    // Get visible tile range from camera
+
     auto bounds = m_camera->getWorldBounds();
     int startX = std::max(0, static_cast<int>(bounds.left / 32));
     int startY = std::max(0, static_cast<int>(bounds.top / 32));
     int endX = std::min(49, static_cast<int>(bounds.right / 32) + 1);
     int endY = std::min(49, static_cast<int>(bounds.bottom / 32) + 1);
 
-    // Render tiles (simple colored squares)
+
     if (m_whitePixelTexture && m_whitePixelTexture->isValid()) {
       for (int y = startY; y <= endY; ++y) {
         for (int x = startX; x <= endX; ++x) {
           int tileIndex = m_tileMap->getTile(x, y);
 
           int screenX, screenY;
-          // Convert tile center to screen coordinates
+
           m_camera->worldToScreen(x * 32.0f + 16.0f, y * 32.0f + 16.0f, screenX, screenY);
 
-          // Color based on tile type
-          float r = 0.2f, g = 0.6f, b = 0.2f;  // Default: green grass
+
+          float r = 0.2f, g = 0.6f, b = 0.2f;
           if (tileIndex == 1) {
-            // Dirt - brown
+
             r = 0.6f; g = 0.4f; b = 0.2f;
           } else if (tileIndex == 2) {
-            // Dark grass - darker green
+
             r = 0.1f; g = 0.4f; b = 0.1f;
           } else if (tileIndex == 3) {
-            // Rock - gray
+
             r = 0.4f; g = 0.4f; b = 0.4f;
           }
 
-          // Draw tile as colored rectangle (adjust to top-left corner)
+
           int drawX = screenX - 16;
           int drawY = screenY - 16;
           m_spriteBatch->draw(*m_whitePixelTexture, drawX, drawY, r, g, b, 1.0f, 32.0f, 32.0f);
@@ -493,7 +493,7 @@ protected:
 
     auto &inv = playerView.get<Runa::ECS::Inventory>(playerView.front());
 
-    // Inventory background
+
     auto title = m_font->renderText("=== INVENTORY ===", {255, 255, 255, 255});
     if (title) {
       m_spriteBatch->draw(*title, 400, 100);
@@ -527,7 +527,7 @@ private:
   std::unique_ptr<Runa::Camera> m_camera;
   std::unique_ptr<Runa::TileMap> m_tileMap;
   std::unique_ptr<Runa::InputManager> m_inputManager;
-  std::unique_ptr<Runa::Texture> m_whitePixelTexture;  // For colored rectangles
+  std::unique_ptr<Runa::Texture> m_whitePixelTexture;
 
   entt::entity m_player;
   float m_gameTime = 0.0f;

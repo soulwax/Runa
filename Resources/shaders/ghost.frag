@@ -14,7 +14,7 @@ layout(push_constant) uniform PushConstants {
 void main() {
     vec4 texColor = texture(texSampler, fragTexCoord);
 
-    // Reduce opacity and add slight blue tint
+
     float ghostAlpha = 0.4 + 0.1 * sin(pc.time * 2.0);
     vec3 ghostTint = vec3(0.8, 0.9, 1.2);
 

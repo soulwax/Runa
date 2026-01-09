@@ -1,4 +1,4 @@
-// File: src/Core/Input.h
+
 
 #ifndef RUNA_CORE_INPUT_H
 #define RUNA_CORE_INPUT_H
@@ -11,28 +11,28 @@ namespace Runa {
 
 class Window;
 
-// Input system - manages keyboard, mouse, and gamepad input
+
 class RUNA_API Input {
 public:
     explicit Input(Window& window);
     ~Input() = default;
 
-    // Disable copying, enable moving
+
     Input(const Input&) = delete;
     Input& operator=(const Input&) = delete;
     Input(Input&&) noexcept = default;
     Input& operator=(Input&&) noexcept = default;
 
-    // Must be called once per frame (called by Window::processEvents)
+
     void update(const SDL_Event& event);
-    void beginFrame();  // Clear "just pressed/released" states
+    void beginFrame();
 
-    // Keyboard queries (frame-based)
+
     bool isKeyDown(SDL_Keycode key) const;
-    bool isKeyPressed(SDL_Keycode key) const;   // True only on frame pressed
-    bool isKeyReleased(SDL_Keycode key) const;  // True only on frame released
+    bool isKeyPressed(SDL_Keycode key) const;
+    bool isKeyReleased(SDL_Keycode key) const;
 
-    // Mouse queries
+
     bool isMouseButtonDown(int button) const;
     bool isMouseButtonPressed(int button) const;
     bool isMouseButtonReleased(int button) const;
@@ -42,12 +42,12 @@ public:
 private:
     Window& m_window;
 
-    // Keyboard state
-    std::unordered_set<SDL_Keycode> m_keysDown;
-    std::unordered_set<SDL_Keycode> m_keysPressed;    // This frame only
-    std::unordered_set<SDL_Keycode> m_keysReleased;   // This frame only
 
-    // Mouse state
+    std::unordered_set<SDL_Keycode> m_keysDown;
+    std::unordered_set<SDL_Keycode> m_keysPressed;
+    std::unordered_set<SDL_Keycode> m_keysReleased;
+
+
     std::unordered_set<int> m_mouseButtonsDown;
     std::unordered_set<int> m_mouseButtonsPressed;
     std::unordered_set<int> m_mouseButtonsReleased;
@@ -56,6 +56,6 @@ private:
     float m_mouseWheel = 0.0f;
 };
 
-} // namespace Runa
+}
 
-#endif // RUNA_CORE_INPUT_H
+#endif

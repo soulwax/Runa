@@ -14,52 +14,52 @@ layout(push_constant) uniform PushConstants {
 void main() {
     vec2 uv = fragTexCoord;
     vec2 center = vec2(0.5, 0.5);
-    
-    // Create radial distortion
+
+
     vec2 dir = uv - center;
     float dist = length(dir);
     float angle = atan(dir.y, dir.x);
-    
-    // Wave distortion
+
+
     float wave1 = sin(dist * 10.0 - pc.time * 2.0) * 0.02;
     float wave2 = cos(angle * 5.0 + pc.time * 1.5) * 0.015;
     float wave3 = sin(pc.time * 3.0 + dist * 15.0) * 0.01;
-    
+
     vec2 distortedUV = uv + dir * (wave1 + wave2 + wave3);
-    
-    // Color cycling with multiple frequencies
+
+
     float colorPhase1 = pc.time * 0.5;
     float colorPhase2 = pc.time * 0.7;
     float colorPhase3 = pc.time * 0.9;
-    
+
     vec3 colorShift = vec3(
         sin(colorPhase1 + dist * 5.0) * 0.5 + 0.5,
         sin(colorPhase2 + dist * 7.0) * 0.5 + 0.5,
         sin(colorPhase3 + dist * 9.0) * 0.5 + 0.5
     );
-    
-    // Sample the screen texture
+
+
     vec4 screenColor = texture(screenTexture, distortedUV);
-    
-    // Apply color cycling
+
+
     screenColor.rgb = mix(screenColor.rgb, colorShift, 0.3);
-    
-    // Add pulsing brightness
+
+
     float pulse = sin(pc.time * 2.0) * 0.1 + 0.9;
     screenColor.rgb *= pulse;
-    
-    // Add chromatic aberration effect
+
+
     float chromaOffset = dist * 0.01;
     vec2 chromaUV1 = distortedUV + vec2(chromaOffset, 0.0);
     vec2 chromaUV2 = distortedUV - vec2(chromaOffset, 0.0);
-    
+
     float r = texture(screenTexture, chromaUV1).r;
     float g = screenColor.g;
     float b = texture(screenTexture, chromaUV2).b;
-    
+
     screenColor.rgb = mix(screenColor.rgb, vec3(r, g, b), 0.4);
-    
-    // Add radial color rings
+
+
     float rings = sin(dist * 20.0 - pc.time * 3.0) * 0.5 + 0.5;
     vec3 ringColor = vec3(
         sin(rings * 3.14159 + colorPhase1),
@@ -67,11 +67,11 @@ void main() {
         sin(rings * 3.14159 + colorPhase3)
     ) * 0.3;
     screenColor.rgb += ringColor;
-    
-    // Vignette with color
+
+
     float vignette = 1.0 - smoothstep(0.3, 1.0, dist);
     screenColor.rgb *= vignette;
     screenColor.rgb += (1.0 - vignette) * colorShift * 0.2;
-    
+
     outColor = screenColor;
 }
