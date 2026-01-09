@@ -18,13 +18,13 @@ public:
     SimpleShapes(Renderer& renderer);
     ~SimpleShapes() = default;
 
-    // Get the white pixel texture (used for tinting)
+
     Texture* getWhitePixel() { return m_whitePixel.get(); }
 
 private:
     std::unique_ptr<Texture> m_whitePixel;
 };
 
-} // namespace Runa
+}
 
-#endif // RUNA_GRAPHICS_SIMPLESHAPES_H
+#endif

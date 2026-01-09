@@ -1,4 +1,4 @@
-// File: src/Graphics/Texture.h
+
 
 #ifndef RUNA_GRAPHICS_TEXTURE_H
 #define RUNA_GRAPHICS_TEXTURE_H
@@ -19,11 +19,11 @@ namespace Runa
         Texture(Renderer &renderer, int width, int height, const void *pixelData);
         ~Texture();
 
-        // Disable copying
+
         Texture(const Texture &) = delete;
         Texture &operator=(const Texture &) = delete;
 
-        // Enable moving
+
         Texture(Texture &&other) noexcept;
         Texture &operator=(Texture &&other) noexcept;
 
@@ -32,7 +32,7 @@ namespace Runa
         int getHeight() const { return m_height; }
         bool isValid() const { return m_texture != nullptr; }
 
-        // Get texture region info
+
         struct Rect
         {
             int x, y, w, h;
@@ -47,6 +47,6 @@ namespace Runa
         void createFromPixels(int width, int height, const void *pixelData);
     };
 
-} // namespace Runa
+}
 
-#endif // RUNA_GRAPHICS_TEXTURE_H
+#endif

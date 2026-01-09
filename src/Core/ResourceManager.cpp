@@ -1,4 +1,4 @@
-// File: src/Core/ResourceManager.cpp
+
 
 #include "../runapch.h"
 #include "ResourceManager.h"
@@ -8,18 +8,18 @@
 namespace Runa {
 
 namespace {
-    // Helper function to find project root (where Resources/ folder is)
+
     std::filesystem::path findProjectRoot() {
-        // Start from executable directory
-        // SDL3: SDL_GetBasePath() returns const char* to internally-managed memory
-        // The memory is automatically freed by SDL - DO NOT call SDL_free() on it
+
+
+
         const char* basePath = SDL_GetBasePath();
         std::filesystem::path currentPath = basePath ? basePath : std::filesystem::current_path();
-        // No need to free basePath - SDL3 manages it internally
 
-        // Walk up the directory tree looking for Resources folder or CMakeLists.txt
+
+
         std::filesystem::path checkPath = currentPath;
-        for (int i = 0; i < 10; ++i) { // Limit search depth
+        for (int i = 0; i < 10; ++i) {
             if (std::filesystem::exists(checkPath / "Resources") ||
                 std::filesystem::exists(checkPath / "CMakeLists.txt")) {
                 return checkPath;
@@ -31,7 +31,7 @@ namespace {
             }
         }
 
-        // Fallback: use current working directory
+
         return std::filesystem::current_path();
     }
 }
@@ -45,15 +45,15 @@ void ResourceManager::loadSpriteSheetFromYAML(const std::string& yamlPath) {
     LOG_INFO("Loading spritesheet manifest: {}", yamlPath);
 
     try {
-        // Find project root and resolve path relative to it
+
         std::filesystem::path projectRoot = findProjectRoot();
         std::filesystem::path path(yamlPath);
 
         if (path.is_relative()) {
-            // Try project root first
+
             path = projectRoot / path;
 
-            // If not found, try current working directory as fallback
+
             if (!std::filesystem::exists(path)) {
                 path = std::filesystem::absolute(yamlPath);
             }
@@ -72,18 +72,18 @@ void ResourceManager::loadSpriteSheetFromYAML(const std::string& yamlPath) {
 
         YAML::Node sheetNode = config["spritesheet"];
 
-        // Get spritesheet name
+
         std::string name = sheetNode["name"].as<std::string>();
 
-        // Get texture path (resolve relative to YAML file location)
+
         std::string texturePath = sheetNode["texture"].as<std::string>();
         std::filesystem::path yamlDir = path.parent_path();
         std::filesystem::path texturePathObj(texturePath);
 
-        // If texture path is relative, resolve relative to YAML file location
+
         if (texturePathObj.is_relative()) {
             std::string fullTexturePath = (yamlDir / texturePath).string();
-            // If not found relative to YAML, try project root
+
             if (!std::filesystem::exists(fullTexturePath)) {
                 fullTexturePath = (projectRoot / texturePath).string();
             }
@@ -92,17 +92,17 @@ void ResourceManager::loadSpriteSheetFromYAML(const std::string& yamlPath) {
             texturePath = texturePathObj.string();
         }
 
-        // Create spritesheet
+
         auto spriteSheet = std::make_unique<SpriteSheet>(m_renderer, texturePath);
 
-        // Parse sprites
+
         if (sheetNode["sprites"]) {
             for (const auto& spriteNode : sheetNode["sprites"]) {
                 std::string spriteName = spriteNode["name"].as<std::string>();
                 std::string type = spriteNode["type"] ? spriteNode["type"].as<std::string>() : "single";
 
                 if (type == "single") {
-                    // Single sprite frame
+
                     int x = spriteNode["x"].as<int>();
                     int y = spriteNode["y"].as<int>();
                     int width = spriteNode["width"].as<int>();
@@ -111,7 +111,7 @@ void ResourceManager::loadSpriteSheetFromYAML(const std::string& yamlPath) {
                     spriteSheet->addSprite(spriteName, x, y, width, height);
 
                 } else if (type == "animation") {
-                    // Animation with multiple frames
+
                     int x = spriteNode["x"].as<int>();
                     int y = spriteNode["y"].as<int>();
                     int frameWidth = spriteNode["frame_width"].as<int>();
@@ -125,7 +125,7 @@ void ResourceManager::loadSpriteSheetFromYAML(const std::string& yamlPath) {
                                               frameCount, columns, frameDuration, loop);
 
                 } else if (type == "grid") {
-                    // Grid-based tileset
+
                     int tileWidth = spriteNode["tile_width"].as<int>();
                     int tileHeight = spriteNode["tile_height"].as<int>();
                     int columns = spriteNode["columns"] ? spriteNode["columns"].as<int>() : 0;
@@ -134,7 +134,7 @@ void ResourceManager::loadSpriteSheetFromYAML(const std::string& yamlPath) {
                     spriteSheet->createGrid(spriteName, tileWidth, tileHeight, columns, rows);
 
                 } else if (type == "frames") {
-                    // Manually specified frames
+
                     std::vector<SpriteFrame> frames;
                     bool loop = spriteNode["loop"] ? spriteNode["loop"].as<bool>() : true;
 
@@ -153,7 +153,7 @@ void ResourceManager::loadSpriteSheetFromYAML(const std::string& yamlPath) {
             }
         }
 
-        // Store spritesheet
+
         m_spriteSheets[name] = std::move(spriteSheet);
         LOG_INFO("Loaded spritesheet '{}' with {} sprites/animations",
                  name, m_spriteSheets[name]->getSpriteNames().size());
@@ -169,12 +169,12 @@ void ResourceManager::loadTilesetFromAtlasYAML(const std::string& yamlPath, cons
     LOG_INFO("Loading tileset from atlas YAML: {} (image: {})", yamlPath, imagePath);
 
     try {
-        // Find project root and resolve paths
+
         std::filesystem::path projectRoot = findProjectRoot();
         std::filesystem::path yamlPathObj(yamlPath);
         std::filesystem::path imagePathObj(imagePath);
 
-        // Resolve YAML path
+
         if (yamlPathObj.is_relative()) {
             yamlPathObj = projectRoot / yamlPathObj;
             if (!std::filesystem::exists(yamlPathObj)) {
@@ -182,7 +182,7 @@ void ResourceManager::loadTilesetFromAtlasYAML(const std::string& yamlPath, cons
             }
         }
 
-        // Resolve image path (relative to YAML file location first, then project root)
+
         if (imagePathObj.is_relative()) {
             std::filesystem::path yamlDir = yamlPathObj.parent_path();
             std::filesystem::path fullImagePath = yamlDir / imagePathObj;
@@ -206,22 +206,22 @@ void ResourceManager::loadTilesetFromAtlasYAML(const std::string& yamlPath, cons
             throw std::runtime_error("YAML file missing 'tiles' root node");
         }
 
-        // Get tile size from meta (default to 16)
+
         int tileSize = 16;
         if (config["meta"] && config["meta"]["tile_size"]) {
             tileSize = config["meta"]["tile_size"].as<int>();
         }
 
-        // Create spritesheet from image
+
         auto spriteSheet = std::make_unique<SpriteSheet>(m_renderer, imagePathObj.string());
 
-        // Parse tiles
+
         YAML::Node tilesNode = config["tiles"];
         int tileCount = 0;
 
         for (const auto& tileNode : tilesNode) {
             if (!tileNode["id"]) {
-                continue; // Skip tiles without id
+                continue;
             }
 
             std::string tileId = tileNode["id"].as<std::string>();
@@ -229,12 +229,12 @@ void ResourceManager::loadTilesetFromAtlasYAML(const std::string& yamlPath, cons
             int atlasY = tileNode["atlas_y"] ? tileNode["atlas_y"].as<int>() : 0;
             int tileSizeOverride = tileNode["tile_size"] ? tileNode["tile_size"].as<int>() : tileSize;
 
-            // Add sprite using atlas coordinates
+
             spriteSheet->addSprite(tileId, atlasX, atlasY, tileSizeOverride, tileSizeOverride);
             tileCount++;
         }
 
-        // Store spritesheet
+
         m_spriteSheets[name] = std::move(spriteSheet);
         LOG_INFO("Loaded tileset '{}' with {} tiles from atlas coordinates", name, tileCount);
 
@@ -274,4 +274,4 @@ void ResourceManager::clear() {
     LOG_INFO("ResourceManager cleared");
 }
 
-} // namespace Runa
+}

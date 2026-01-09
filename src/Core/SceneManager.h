@@ -23,17 +23,17 @@ namespace Runa {
 		SceneManager() = default;
 		~SceneManager() = default;
 
-		// Scene management
+
 		void pushScene(std::unique_ptr<Scene> scene);
 		void popScene();
-		void changeScene(std::unique_ptr<Scene> scene);  // Replace current scene
+		void changeScene(std::unique_ptr<Scene> scene);
 		void clearScenes();
 
-		// Update and render
+
 		void update(float dt);
 		void render();
 
-		// Queries
+
 		Scene* getCurrentScene() const;
 		bool hasScenes() const { return !m_scenes.empty(); }
 		size_t getSceneCount() const { return m_scenes.size(); }
@@ -42,6 +42,6 @@ namespace Runa {
 		std::vector<std::unique_ptr<Scene>> m_scenes;
 	};
 
-}  // namespace Runa
+}
 
-#endif // RUNA_CORE_SCENEMANAGER_H
+#endif

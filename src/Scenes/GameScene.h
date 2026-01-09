@@ -40,6 +40,6 @@ namespace Runa {
 		const int TILE_SIZE = 16;
 	};
 
-}  // namespace Runa
+}
 
-#endif // RUNA_SCENES_GAMESCENE_H
+#endif

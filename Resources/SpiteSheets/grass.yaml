@@ -24,7 +24,7 @@ tiles:
   blocks_movement: false
   movement_cost: 1.0
   has_collision: false
-  contains_transparency: true
+  contains_transparency: false
   alpha_mode: alpha_blend
   casts_shadow: false
   receives_shadow: true

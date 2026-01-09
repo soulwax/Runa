@@ -23,7 +23,7 @@ void MenuScene::onEnter() {
   m_font =
       std::make_unique<Font>(getRenderer(), "Resources/Fonts/Renogare.ttf", 48);
 
-  // Create text textures
+
   SDL_Color white = {255, 255, 255, 255};
   SDL_Color yellow = {255, 255, 0, 255};
   m_titleTexture = m_font->renderText("RUNA2 ENGINE", white);
@@ -33,14 +33,14 @@ void MenuScene::onEnter() {
 void MenuScene::onExit() { LOG_INFO("MenuScene: Exiting"); }
 
 void MenuScene::onUpdate(float dt) {
-  // Blink "Press SPACE" text
+
   m_blinkTimer += dt;
   if (m_blinkTimer >= 0.5f) {
     m_showStart = !m_showStart;
     m_blinkTimer = 0.0f;
   }
 
-  // Check for space key to start game
+
   if (getInput().isKeyPressed(SDLK_SPACE)) {
     LOG_INFO("Starting game...");
     getApp().getSceneManager().changeScene(
@@ -53,18 +53,18 @@ void MenuScene::onRender() {
 
   m_spriteBatch->begin();
 
-  // Get window size for centering
+
   int winWidth = getApp().getWindow().getWidth();
   int winHeight = getApp().getWindow().getHeight();
 
-  // Draw title (centered, top third)
+
   if (m_titleTexture) {
     int titleX = (winWidth - static_cast<int>(m_titleTexture->getWidth())) / 2;
     int titleY = winHeight / 3;
     m_spriteBatch->draw(*m_titleTexture, titleX, titleY);
   }
 
-  // Draw "Press SPACE" (centered, middle)
+
   if (m_startTexture && m_showStart) {
     int startX = (winWidth - static_cast<int>(m_startTexture->getWidth())) / 2;
     int startY = winHeight / 2;
@@ -74,4 +74,4 @@ void MenuScene::onRender() {
   m_spriteBatch->end();
 }
 
-} // namespace Runa
+}

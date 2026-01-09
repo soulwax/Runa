@@ -1,4 +1,4 @@
-// File: src/Graphics/Window.h
+
 
 #ifndef RUNA_GRAPHICS_WINDOW_H
 #define RUNA_GRAPHICS_WINDOW_H
@@ -16,7 +16,7 @@ public:
     Window(const std::string& title, int width, int height);
     ~Window();
 
-    // Disable copying and moving (Window contains raw pointer that could become dangling)
+
     Window(const Window&) = delete;
     Window& operator=(const Window&) = delete;
     Window(Window&&) = delete;
@@ -30,7 +30,7 @@ public:
     void processEvents();
     void setShouldClose(bool shouldClose) { m_shouldClose = shouldClose; }
 
-    // Input system integration
+
     void setInput(Input* input) { m_input = input; }
 
 private:
@@ -41,6 +41,6 @@ private:
     Input* m_input = nullptr;
 };
 
-} // namespace Runa
+}
 
-#endif // RUNA_GRAPHICS_WINDOW_H
+#endif

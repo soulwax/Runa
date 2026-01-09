@@ -1,4 +1,4 @@
-// File: src/Graphics/ImGui.h
+
 
 #ifndef RUNA_GRAPHICS_IMGUI_H
 #define RUNA_GRAPHICS_IMGUI_H
@@ -7,7 +7,7 @@
 #include "Window.h"
 #include "Renderer.h"
 #include <imgui.h>
-// #include <imgui_impl_sdl3.h>  // Disabled: SDL3 API incompatibility
+
 #include <imgui_impl_vulkan.h>
 #include <memory>
 
@@ -24,11 +24,11 @@ public:
     ImGuiManager(Window& window, Renderer& renderer);
     ~ImGuiManager();
 
-    // Disable copying
+
     ImGuiManager(const ImGuiManager&) = delete;
     ImGuiManager& operator=(const ImGuiManager&) = delete;
 
-    // Disable moving
+
     ImGuiManager(ImGuiManager&&) noexcept = delete;
     ImGuiManager& operator=(ImGuiManager&&) noexcept = delete;
 
@@ -73,6 +73,6 @@ private:
     void shutdown();
 };
 
-} // namespace Runa
+}
 
-#endif // RUNA_GRAPHICS_IMGUI_H
+#endif

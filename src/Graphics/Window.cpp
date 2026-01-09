@@ -1,4 +1,4 @@
-// File: src/Graphics/Window.cpp
+
 
 #include "../runapch.h"
 #include "Window.h"
@@ -36,13 +36,13 @@ namespace Runa
 
     void Window::processEvents()
     {
-        // Note: beginFrame() is called by Application::mainLoop() to avoid double-clearing
-        // input states. Do not call it here.
+
+
 
         SDL_Event event;
         while (SDL_PollEvent(&event))
         {
-            // Update input system with event
+
             if (m_input)
             {
                 m_input->update(event);
@@ -70,4 +70,4 @@ namespace Runa
         }
     }
 
-} // namespace Runa
+}

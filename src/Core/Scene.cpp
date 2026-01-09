@@ -23,4 +23,4 @@ namespace Runa {
 		return m_app.getInput();
 	}
 
-}  // namespace Runa
+}

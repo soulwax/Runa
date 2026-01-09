@@ -14,7 +14,7 @@
 namespace Runa {
     namespace ECS {
 
-    // ===== Stats & Combat =====
+
 
     struct RUNA_API Health {
         float current = 100.0f;
@@ -58,7 +58,7 @@ namespace Runa {
         }
     };
 
-    // ===== AI & Behavior =====
+
 
     enum class AIState {
         Idle,
@@ -77,14 +77,14 @@ namespace Runa {
         float chaseTime = 0.0f;
         float idleTime = 0.0f;
 
-        // Patrol behavior
+
         float patrolX = 0.0f;
         float patrolY = 0.0f;
         float patrolRadius = 100.0f;
         bool hasPatrolPoint = false;
     };
 
-    // ===== Items & Inventory =====
+
 
     enum class ItemType {
         Potion,
@@ -102,7 +102,7 @@ namespace Runa {
         int value = 0;
         int stackSize = 1;
 
-        // Effects
+
         float healAmount = 0.0f;
         float damageBonus = 0.0f;
 
@@ -122,13 +122,13 @@ namespace Runa {
         int gold = 0;
 
         bool addItem(const Item& item) {
-            // Stack coins
+
             if (item.type == ItemType::Coin) {
                 gold += item.value;
                 return true;
             }
 
-            // Check if we can stack with existing item
+
             for (auto& existingItem : items) {
                 if (existingItem.name == item.name && existingItem.stackSize < 99) {
                     existingItem.stackSize += item.stackSize;
@@ -136,13 +136,13 @@ namespace Runa {
                 }
             }
 
-            // Add new item if we have space
+
             if (items.size() < static_cast<size_t>(maxSlots)) {
                 items.push_back(item);
                 return true;
             }
 
-            return false; // Inventory full
+            return false;
         }
 
         bool hasItem(const std::string& itemName) const {
@@ -163,7 +163,7 @@ namespace Runa {
         }
     };
 
-    // ===== Quests =====
+
 
     enum class QuestStatus {
         NotStarted,
@@ -178,13 +178,13 @@ namespace Runa {
         std::string description;
         QuestStatus status = QuestStatus::NotStarted;
 
-        // Quest objectives
+
         int enemiesKilled = 0;
         int enemiesRequired = 0;
         std::vector<std::string> itemsRequired;
         std::vector<std::string> itemsCollected;
 
-        // Rewards
+
         int xpReward = 100;
         int goldReward = 50;
         std::vector<Item> itemRewards;
@@ -205,7 +205,7 @@ namespace Runa {
         bool questCompleted = false;
     };
 
-    // ===== UI & Interaction =====
+
 
     struct RUNA_API Interactable {
         std::string name;
@@ -222,14 +222,14 @@ namespace Runa {
         bool isCritical = false;
     };
 
-    // ===== Tag Components =====
+
 
     struct RUNA_API Player {};
     struct RUNA_API Enemy {};
     struct RUNA_API NPC {};
     struct RUNA_API ItemEntity {};
 
-    } // namespace ECS
-} // namespace Runa
+    }
+}
 
-#endif // RUNA_ECS_RPGCOMPONENTS_H
+#endif

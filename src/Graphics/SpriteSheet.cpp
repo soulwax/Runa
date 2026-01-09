@@ -1,4 +1,4 @@
-// File: src/Graphics/SpriteSheet.cpp
+
 
 #include "../runapch.h"
 #include "SpriteSheet.h"
@@ -25,7 +25,7 @@ void SpriteSheet::addSprite(const std::string& name, int x, int y, int width, in
     frame.y = y;
     frame.width = width;
     frame.height = height;
-    frame.duration = 0.0f;  // Single frame, no duration
+    frame.duration = 0.0f;
 
     sprite.frames.push_back(frame);
     m_sprites[name] = sprite;
@@ -53,15 +53,15 @@ void SpriteSheet::addAnimation(const std::string& name, int x, int y, int frameW
 
         sprite.frames.push_back(frame);
 
-        // Move to next frame position
+
         currentColumn++;
         if (columns > 0 && currentColumn >= columns) {
-            // Move to next row
+
             currentColumn = 0;
             currentX = x;
             currentY += frameHeight;
         } else {
-            // Move to next column
+
             currentX += frameWidth;
         }
     }
@@ -103,7 +103,7 @@ void SpriteSheet::createGrid(const std::string& baseName, int tileWidth, int til
     int texWidth = m_texture->getWidth();
     int texHeight = m_texture->getHeight();
 
-    // Calculate columns and rows if not specified
+
     if (columns == 0) {
         columns = texWidth / tileWidth;
     }
@@ -119,7 +119,7 @@ void SpriteSheet::createGrid(const std::string& baseName, int tileWidth, int til
             int x = col * tileWidth;
             int y = row * tileHeight;
 
-            // Check if tile is within texture bounds
+
             if (x + tileWidth <= texWidth && y + tileHeight <= texHeight) {
                 std::string tileName = baseName + "_" + std::to_string(index);
                 addSprite(tileName, x, y, tileWidth, tileHeight);
@@ -131,4 +131,4 @@ void SpriteSheet::createGrid(const std::string& baseName, int tileWidth, int til
     LOG_DEBUG("Created {} tiles from grid", index);
 }
 
-} // namespace Runa
+}

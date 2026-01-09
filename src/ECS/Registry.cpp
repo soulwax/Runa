@@ -1,5 +1,5 @@
-// File: src/ECS/Registry.cpp
-// Registry wrapper implementation
+
+
 
 #include "../runapch.h"
 #include "Registry.h"
@@ -39,7 +39,7 @@ entt::entity EntityRegistry::createPlayer(float x, float y,
                                          float speed) {
     auto entity = createSpriteEntity(x, y, spriteSheet, spriteName, 14.0f, 14.0f);
 
-    // Add player-specific components
+
     m_registry.emplace<Player>(entity);
 
     PlayerInput playerInput;
@@ -50,7 +50,7 @@ entt::entity EntityRegistry::createPlayer(float x, float y,
     cameraTarget.smoothing = 0.15f;
     m_registry.emplace<CameraTarget>(entity, cameraTarget);
 
-    // Add collision
+
     AABB aabb;
     aabb.width = 14.0f;
     aabb.height = 14.0f;
@@ -96,4 +96,4 @@ void EntityRegistry::addCollision(entt::entity entity, float width, float height
     m_registry.emplace_or_replace<AABB>(entity, aabb);
 }
 
-} // namespace Runa::ECS
+}

@@ -1,4 +1,4 @@
-// File: src/Graphics/Renderer.cpp
+
 
 #include "Renderer.h"
 #include "../runapch.h"
@@ -7,13 +7,13 @@
 namespace Runa {
 
 Renderer::Renderer(Window &window) : m_window(window) {
-  // Configure Vulkan2D renderer
-  VK2DRendererConfig config = {};
-  config.msaa = VK2D_MSAA_1X;  // No MSAA for pixel-perfect rendering
-  config.screenMode = VK2D_SCREEN_MODE_VSYNC;  // VSync like original
-  config.filterMode = VK2D_FILTER_TYPE_NEAREST;  // Pixel-perfect filtering
 
-  // Initialize Vulkan2D renderer
+  VK2DRendererConfig config = {};
+  config.msaa = VK2D_MSAA_1X;
+  config.screenMode = VK2D_SCREEN_MODE_VSYNC;
+  config.filterMode = VK2D_FILTER_TYPE_NEAREST;
+
+
   VK2DResult result = vk2dRendererInit(m_window.getHandle(), config, nullptr);
 
   if (result != VK2D_SUCCESS) {
@@ -32,7 +32,7 @@ Renderer::Renderer(Window &window) : m_window(window) {
 
 Renderer::~Renderer() {
   if (m_vk2dRenderer) {
-    vk2dRendererWait();  // Ensure GPU is idle before cleanup
+    vk2dRendererWait();
     vk2dRendererQuit();
     m_vk2dRenderer = nullptr;
     LOG_INFO("Renderer destroyed");
@@ -40,7 +40,7 @@ Renderer::~Renderer() {
 }
 
 void Renderer::beginFrame() {
-  // Convert clear color to Vulkan2D format (vec4 = float[4])
+
   vec4 clearColorArray = {m_clearColor.r, m_clearColor.g, m_clearColor.b, m_clearColor.a};
   vk2dRendererStartFrame(clearColorArray);
 }
@@ -50,11 +50,11 @@ void Renderer::endFrame() {
 }
 
 void Renderer::clear(float r, float g, float b, float a) {
-  // Store clear color for next frame (Vulkan2D clears at frame start)
+
   m_clearColor.r = r;
   m_clearColor.g = g;
   m_clearColor.b = b;
   m_clearColor.a = a;
 }
 
-} // namespace Runa
+}

@@ -1,4 +1,4 @@
-// File: src/Graphics/TileMap.cpp
+
 
 #include "../runapch.h"
 #include "TileMap.h"
@@ -54,9 +54,9 @@ namespace Runa
             {
                 int tileIndex = getTile(x, y);
                 if (tileIndex < 0)
-                    continue; // Skip empty tiles
+                    continue;
 
-                // Get sprite name (e.g., "plains_tile_0")
+
                 std::string spriteName = tileBaseName + "_" + std::to_string(tileIndex);
                 const Sprite *sprite = tileset.getSprite(spriteName);
 
@@ -112,4 +112,4 @@ namespace Runa
         return m_solidTiles.find(tileIndex) != m_solidTiles.end();
     }
 
-} // namespace Runa
+}

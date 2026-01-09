@@ -12,7 +12,7 @@
 
 namespace Runa {
 
-	// Forward declarations
+
 	class Application;
 	class Renderer;
 	class Input;
@@ -26,33 +26,33 @@ namespace Runa {
 		Scene(Application& app, const std::string& name);
 		virtual ~Scene() = default;
 
-		// Lifecycle hooks
-		virtual void onEnter() {}      // Called when scene becomes active
-		virtual void onExit() {}       // Called when scene is removed
-		virtual void onPause() {}      // Called when scene is paused (another scene pushed on top)
-		virtual void onResume() {}     // Called when scene resumes (top scene popped)
 
-		virtual void onUpdate(float dt) = 0;  // Update logic
-		virtual void onRender() = 0;          // Render scene
+		virtual void onEnter() {}
+		virtual void onExit() {}
+		virtual void onPause() {}
+		virtual void onResume() {}
 
-		// Scene properties
+		virtual void onUpdate(float dt) = 0;
+		virtual void onRender() = 0;
+
+
 		const std::string& getName() const { return m_name; }
 		bool isTransparent() const { return m_transparent; }
 		void setTransparent(bool transparent) { m_transparent = transparent; }
 
 	protected:
-		// Access to application systems
+
 		Application& getApp() { return m_app; }
 		Renderer& getRenderer();
 		Input& getInput();
 
 		std::string m_name;
-		bool m_transparent = false;  // If true, scene below will also render
+		bool m_transparent = false;
 
 	private:
 		Application& m_app;
 	};
 
-}  // namespace Runa
+}
 
-#endif // RUNA_CORE_SCENE_H
+#endif

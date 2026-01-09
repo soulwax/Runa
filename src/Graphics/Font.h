@@ -1,4 +1,4 @@
-// File: src/Graphics/Font.h
+
 
 #ifndef RUNA_GRAPHICS_FONT_H
 #define RUNA_GRAPHICS_FONT_H
@@ -19,15 +19,15 @@ public:
     Font(Renderer& renderer, const std::string& fontPath, int fontSize);
     ~Font();
 
-    // Disable copying
+    
     Font(const Font&) = delete;
     Font& operator=(const Font&) = delete;
 
-    // Enable moving
+    
     Font(Font&& other) noexcept;
     Font& operator=(Font&& other) noexcept;
 
-    // Render text to a texture
+    
     std::unique_ptr<Texture> renderText(const std::string& text, SDL_Color color = {255, 255, 255, 255});
     
     bool isValid() const { return m_font != nullptr; }
@@ -39,8 +39,8 @@ private:
     int m_fontSize = 0;
 };
 
-} // namespace Runa
-#endif // RUNA_GRAPHICS_FONT_H
+} 
+#endif 
 
 
 

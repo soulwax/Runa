@@ -10,8 +10,8 @@
 namespace Runa {
 
 SimpleShapes::SimpleShapes(Renderer& renderer) {
-    // Create a 1x1 white pixel texture for colored rectangles
-    unsigned char whitePixel[4] = {255, 255, 255, 255}; // RGBA
+
+    unsigned char whitePixel[4] = {255, 255, 255, 255};
 
     m_whitePixel = std::make_unique<Texture>(renderer, whitePixel, 1, 1);
 
@@ -22,4 +22,4 @@ SimpleShapes::SimpleShapes(Renderer& renderer) {
     }
 }
 
-} // namespace Runa
+}

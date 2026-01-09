@@ -1,4 +1,4 @@
-// File: src/Graphics/Texture.cpp
+
 
 #include "../runapch.h"
 #include "Texture.h"
@@ -54,14 +54,14 @@ Texture& Texture::operator=(Texture&& other) noexcept {
 }
 
 void Texture::loadFromFile(const std::string& path) {
-    // Vulkan2D has built-in texture loading from files (PNG, BMP, JPG, TIFF)
+
     m_texture = vk2dTextureLoad(path.c_str());
 
     if (!m_texture) {
         throw std::runtime_error("Failed to load texture: " + path);
     }
 
-    // Get dimensions from loaded texture
+
     m_width = static_cast<int>(vk2dTextureWidth(m_texture));
     m_height = static_cast<int>(vk2dTextureHeight(m_texture));
 
@@ -73,8 +73,8 @@ void Texture::createFromPixels(int width, int height, const void* pixelData) {
     m_height = height;
 
     if (pixelData) {
-        // Vulkan2D: Create image from RGBA pixel data
-        // vk2dImageFromPixels expects RGBA pixels (4 bytes per pixel)
+
+
         VK2DLogicalDevice device = vk2dRendererGetDevice();
         VK2DImage image = vk2dImageFromPixels(device, pixelData, width, height, true);
 
@@ -82,17 +82,17 @@ void Texture::createFromPixels(int width, int height, const void* pixelData) {
             throw std::runtime_error("Failed to create image from pixels");
         }
 
-        // Create texture from image
+
         m_texture = vk2dTextureLoadFromImage(image);
 
-        // Free the intermediate image (texture now owns the data)
+
         vk2dImageFree(image);
 
         if (!m_texture) {
             throw std::runtime_error("Failed to create texture from image");
         }
     } else {
-        // Create blank texture
+
         m_texture = vk2dTextureCreate(static_cast<float>(width), static_cast<float>(height));
 
         if (!m_texture) {
@@ -100,15 +100,15 @@ void Texture::createFromPixels(int width, int height, const void* pixelData) {
         }
     }
 
-    // Throttle debug message to once per second
+
     static auto lastLogTime = std::chrono::steady_clock::now();
     auto now = std::chrono::steady_clock::now();
     auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(now - lastLogTime);
-    
+
     if (elapsed.count() >= 1) {
         LOG_DEBUG("Created texture from pixels ({}x{})", width, height);
         lastLogTime = now;
     }
 }
 
-} // namespace Runa
+}
