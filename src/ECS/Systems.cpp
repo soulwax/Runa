@@ -1,4 +1,3 @@
-// File: src/ECS/Systems.cpp
 
 #include "../runapch.h"
 #include "Systems.h"
@@ -14,10 +13,6 @@
 #include <algorithm>
 
 namespace Runa::ECS::Systems {
-
-
-
-
 
 // Helper function to check if any key in a list is down
 static bool isAnyKeyDown(const Input& input, const std::vector<SDL_Keycode>& keys) {
@@ -88,10 +83,6 @@ void updatePlayerInput(entt::registry& registry, Input& input, float dt, Keybind
     }
 }
 
-
-
-
-
 void updateMovement(entt::registry& registry, float dt) {
     auto view = registry.view<Position, Velocity, Active>();
 
@@ -104,9 +95,6 @@ void updateMovement(entt::registry& registry, float dt) {
         pos.y += vel.y * dt;
     }
 }
-
-
-
 
 
 void updateAnimation(entt::registry& registry, float dt) {
@@ -144,9 +132,6 @@ void updateAnimation(entt::registry& registry, float dt) {
         }
     }
 }
-
-
-
 
 
 void updateTileCollisions(entt::registry& registry, const TileMap& tilemap, int tileSize) {
@@ -306,21 +291,15 @@ void renderSprites(entt::registry& registry, SpriteBatch& batch, Camera& camera,
 
                 const SpriteFrame& frame = spriteData->frames[frameIndex];
                 float pixelScale = SpriteBatch::getPixelScale();
-                float zoom = camera.getZoom();
-                float spriteWidthPixels = frame.width * pixelScale * zoom;
-                float spriteHeightPixels = frame.height * pixelScale * zoom;
+                // Sprite rendered size is frame size * pixelScale (zoom only affects world-to-screen, not sprite size)
+                float spriteWidthPixels = frame.width * pixelScale;
+                float spriteHeightPixels = frame.height * pixelScale;
 
-                // Calculate centered position
-                // When flipping horizontally, negative scale flips around the origin (top-left).
-                // The sprite's visual center should remain at screenX regardless of flip state.
-                // Normal: sprite extends from drawX to drawX+width, center at drawX+width/2 = screenX
-                //   So: drawX = screenX - width/2
-                // Flipped: sprite extends from drawX-width to drawX, center at drawX-width/2 = screenX
-                //   So: drawX = screenX + width/2 = screenX - width/2 + width
-                // However, full width compensation may be too much - try half width as middle ground
-                float halfWidth = spriteWidthPixels / 2.0f;
-                int drawX = static_cast<int>(screenX - halfWidth + (sprite.flipX ? halfWidth : 0.0f));
-                int drawY = static_cast<int>(screenY - spriteHeightPixels / 2.0f);
+                // Simple centering - flip compensation is handled in SpriteBatch
+                float halfWidth = spriteWidthPixels * 0.5f;
+                float halfHeight = spriteHeightPixels * 0.5f;
+                int drawX = static_cast<int>(screenX - halfWidth);
+                int drawY = static_cast<int>(screenY - halfHeight);
 
 
                 batch.draw(sprite.spriteSheet->getTexture(), drawX, drawY, frame,
@@ -332,18 +311,12 @@ void renderSprites(entt::registry& registry, SpriteBatch& batch, Camera& camera,
 
 
         if (whitePixelTexture && whitePixelTexture->isValid()) {
-            // Calculate offset in screen pixels: screenX/Y are already in screen space (zoom applied)
-            // The draw call passes (width / 3.0f) as scale, which gets multiplied by s_pixelScale (3.0f)
-            // in SpriteBatch, resulting in rendered size of 'width' logical units
-            // To convert to screen pixels, multiply by zoom: (width * zoom) screen pixels
-            // However, for consistency with sprite rendering path, we should use pixelScale * zoom
-            // to match the coordinate system conversion
             float pixelScale = SpriteBatch::getPixelScale();
-            float zoom = camera.getZoom();
-            float fallbackWidthPixels = width * pixelScale * zoom;
-            float fallbackHeightPixels = height * pixelScale * zoom;
-            int drawX = screenX - static_cast<int>(fallbackWidthPixels / 2.0f);
-            int drawY = screenY - static_cast<int>(fallbackHeightPixels / 2.0f);
+            // Rendered size is width * pixelScale (zoom only affects world-to-screen)
+            float fallbackWidthPixels = width * pixelScale;
+            float fallbackHeightPixels = height * pixelScale;
+            int drawX = screenX - static_cast<int>(fallbackWidthPixels * 0.5f);
+            int drawY = screenY - static_cast<int>(fallbackHeightPixels * 0.5f);
 
             batch.draw(*whitePixelTexture, drawX, drawY, 0, 0, 1, 1,
                        sprite.tintR, sprite.tintG, sprite.tintB, sprite.tintA,

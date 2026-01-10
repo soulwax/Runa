@@ -41,24 +41,34 @@ void SpriteBatch::draw(const Texture &texture, int x, int y, int srcX, int srcY,
         return;
     }
 
-    // Apply flip by negating scale (negative scale flips the sprite)
+    // Apply pixel scale
     float finalScaleX = scaleX * s_pixelScale;
     float finalScaleY = scaleY * s_pixelScale;
+
+    float drawX = static_cast<float>(x);
+    float drawY = static_cast<float>(y);
+
+    // Handle flip by shifting position and negating scale
+    // With negative scale, sprite draws to the LEFT of drawX instead of right
+    // To keep the same visual position, shift drawX right by the rendered width
     if (flipX) {
+        drawX += srcWidth * s_pixelScale * scaleX;  // Shift by rendered width
         finalScaleX = -finalScaleX;
     }
+
     if (flipY) {
+        drawY += srcHeight * s_pixelScale * scaleY;  // Shift by rendered height
         finalScaleY = -finalScaleY;
     }
 
     vk2dRendererDrawTexture(
         texture.getHandle(),
-        static_cast<float>(x),
-        static_cast<float>(y),
+        drawX,
+        drawY,
         finalScaleX,
         finalScaleY,
         0.0f,
-        0.0f,
+        0.0f,  // Keep origin at top-left
         0.0f,
         static_cast<float>(srcX),
         static_cast<float>(srcY),

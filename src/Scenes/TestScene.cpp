@@ -679,8 +679,19 @@ namespace Runa {
 
 		// Log position when direction changes
 		if (directionChanged && position) {
-			LOG_INFO("Player direction changed to '{}' (flipX: {}) at position ({}, {})", 
-			         newSpriteName, newFlipX, position->x, position->y);
+			// Determine actual facing direction for clearer logging
+			std::string actualDirection;
+			if (newSpriteName.find("down") != std::string::npos) {
+				actualDirection = "down";
+			} else if (newSpriteName.find("up") != std::string::npos) {
+				actualDirection = "up";
+			} else if (newFlipX) {
+				actualDirection = "left";  // Right sprite flipped = facing left
+			} else {
+				actualDirection = "right";
+			}
+			LOG_INFO("Player facing '{}' (sprite: '{}', flipX: {}) at position ({}, {})", 
+			         actualDirection, newSpriteName, newFlipX, position->x, position->y);
 		}
 	}
 
