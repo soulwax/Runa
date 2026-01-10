@@ -56,6 +56,8 @@ struct RUNA_API Sprite {
     float tintG = 1.0f;
     float tintB = 1.0f;
     float tintA = 1.0f;
+    bool flipX = false;  // Flip sprite horizontally (mirror on X axis)
+    bool flipY = false;  // Flip sprite vertically (mirror on Y axis)
 };
 
 

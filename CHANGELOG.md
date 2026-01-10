@@ -5,6 +5,83 @@ All notable changes to the Runa2 game engine will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.6] - 2026-01-10
+
+### Fixed
+- **Entity Rendering Offset Calculation Bug**: Fixed incorrect offset calculation for fallback entity rendering
+  - The draw call passes `(width / 3.0f)` as scale, which gets multiplied by `s_pixelScale` (3.0f) in SpriteBatch
+  - This results in rendered size of `width` logical units (scale factor already divided out)
+  - Changed fallback rendering offset from `(width / 2.0f) * pixelScale` to `(width / 2.0f)` for correct centering
+  - The offset now correctly matches the actual rendered sprite size without double-scaling
+- **Version Consistency**: Fixed version mismatch between CMakeLists.txt (1.0.6) and CHANGELOG.md (1.0.5)
+  - Both files now consistently show version 1.0.6 for the 2026-01-10 release
+
+---
+
+## [1.0.5] - 2026-01-10
+
+### Added
+- **Keybindings Metadata System**: Centralized keybindings configuration
+  - Created `Resources/keybindings.yaml` for all game keybindings
+  - Implemented `Keybindings` class (`src/Core/Keybindings.h/cpp`) to load and manage keybindings
+  - Supports multiple keys per action (e.g., WASD and arrow keys for movement)
+  - Human-readable YAML format for easy customization
+  - Integrated with `updatePlayerInput()` system to use metadata file
+  - Falls back to hardcoded keys if keybindings file is missing (backward compatible)
+- **Sprite Flipping System**: Horizontal and vertical sprite mirroring
+  - Added `flipX` and `flipY` boolean flags to `Sprite` component
+  - Implemented flip logic in `SpriteBatch::draw()` using negative scale values
+  - Player sprite automatically flips horizontally when moving left
+  - Flip state maintained during idle animations based on last movement direction
+  - Engine-level implementation allows any sprite to be flipped
+- **Scene Serialization System**: Save and load scene state to/from YAML files
+  - Created `SceneSerializer` class (`src/Core/SceneSerializer.h/cpp`)
+  - Saves all ECS entities and components to human-readable YAML format
+  - Supports: Position, Velocity, Size, Sprite, Animation, PlayerInput, AABB, Player tag, CameraTarget
+  - Scene-specific data section for extensibility
+  - Automatic sprite sheet pointer restoration after loading
+  - Hotkeys: F5 to save, F6 to load (default path: `Resources/saves/scene_save.yaml`)
+  - YAML format compatible with text editors, validators, and version control
+  - Created `Resources/saves/README.md` with format documentation
+
+### Changed
+- **Scene Base Class**: Added serialization support
+  - Added `getType()` method to return scene type string
+  - Added virtual `getRegistry()` method for serialization access
+  - `TestScene` implements `getRegistry()` to expose ECS registry
+- **Player Animation System**: Enhanced with sprite flipping
+  - Uses right-facing sprite for both left and right movement
+  - Automatically flips horizontally when moving left
+  - Maintains flip state during idle animations
+- **Input System**: Now uses keybindings from metadata file
+  - `updatePlayerInput()` accepts optional `Keybindings*` parameter
+  - Overloaded function maintains backward compatibility
+  - `TestScene` loads and uses keybindings from `Resources/keybindings.yaml`
+
+### Fixed
+- **Entity Rendering Position Offset**: Fixed coordinate system mismatch in sprite rendering
+  - `screenX/Y` are in screen pixels (after camera zoom), but offset calculations used logical units
+  - Fixed sprite rendering offset: `drawX = screenX - (frame.width / 2.0f) * zoom`
+  - Fixed fallback rendering offset: `drawX = screenX - (width / 2.0f) * zoom`
+  - Both rendering paths now correctly account for camera zoom (3.0f) when calculating offsets
+  - Entities are now properly centered regardless of camera zoom level
+  - Affects both sprite sheet rendering and white pixel texture fallback rendering
+
+### Technical Details
+- **Keybindings Format**: YAML file with action names mapping to SDL keycode arrays
+  - Example: `move_left: [97, 1073741904]` (SDLK_A and SDLK_LEFT)
+  - Supports comments for keycode documentation
+- **Scene Save Format**: YAML structure with scene metadata, entities array, and scene-specific data
+  - Entities include component data (Position, Velocity, Sprite, etc.)
+  - Sprite sheet pointers are restored by matching sprite names to loaded sprite sheets
+  - Player entity is automatically identified and restored after loading
+- **Sprite Flipping Implementation**: Uses negative scale values in VK2D renderer
+  - Horizontal flip: negate `scaleX`
+  - Vertical flip: negate `scaleY`
+  - Applied in `SpriteBatch::draw()` before passing to `vk2dRendererDrawTexture()`
+
+---
+
 ## [1.0.4] - 2026-01-09
 
 ### Added
@@ -237,6 +314,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+[1.0.6]: https://github.com/soulwax/Runa/releases/tag/v1.0.6
+[1.0.5]: https://github.com/soulwax/Runa/releases/tag/v1.0.5
 [1.0.4]: https://github.com/soulwax/Runa/releases/tag/v1.0.4
 [1.0.3]: https://github.com/soulwax/Runa/releases/tag/v1.0.3
 [1.0.2]: https://github.com/soulwax/Runa/releases/tag/v1.0.2

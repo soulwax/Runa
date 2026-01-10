@@ -62,22 +62,22 @@ void PauseScene::onRender() {
 
   // Draw "PAUSED" title
   if (m_pausedTexture) {
-    int x = (winWidth - static_cast<int>(m_pausedTexture->getWidth())) / 2;
+    int x = (winWidth - static_cast<int>(m_pausedTexture->getWidth())) >> 1;
     int y = winHeight / 3;
     m_spriteBatch->draw(*m_pausedTexture, x, y);
   }
 
   // Draw "Resume" instruction
   if (m_resumeTexture) {
-    int x = (winWidth - static_cast<int>(m_resumeTexture->getWidth())) / 2;
-    int y = winHeight / 2;
+    int x = (winWidth - static_cast<int>(m_resumeTexture->getWidth())) >> 1;
+    int y = winHeight >> 1;
     m_spriteBatch->draw(*m_resumeTexture, x, y);
   }
 
   // Draw "Quit" instruction
   if (m_quitTexture) {
-    int x = (winWidth - static_cast<int>(m_quitTexture->getWidth())) / 2;
-    int y = winHeight / 2 + 60;
+    int x = (winWidth - static_cast<int>(m_quitTexture->getWidth())) >> 1;
+    int y = (winHeight >> 1) + 60;
     m_spriteBatch->draw(*m_quitTexture, x, y);
   }
 

@@ -60,7 +60,7 @@ private:
     Window& m_window;
     float m_x = 0.0f;
     float m_y = 0.0f;
-    float m_zoom = 1.0f;
+    float m_zoom = 3.0f;
     float m_targetX = 0.0f;
     float m_targetY = 0.0f;
     float m_smoothing = 1.0f;

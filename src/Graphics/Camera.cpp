@@ -64,8 +64,8 @@ void Camera::update(float dt) {
 void Camera::worldToScreen(float worldX, float worldY, int& screenX, int& screenY) const {
 
 
-    int halfWidth = m_window.getWidth() / 2;
-    int halfHeight = m_window.getHeight() / 2;
+    int halfWidth = m_window.getWidth() >> 1;
+    int halfHeight = m_window.getHeight() >> 1;
 
     screenX = static_cast<int>((worldX - m_x) * m_zoom + halfWidth);
     screenY = static_cast<int>((worldY - m_y) * m_zoom + halfHeight);
@@ -73,8 +73,8 @@ void Camera::worldToScreen(float worldX, float worldY, int& screenX, int& screen
 
 void Camera::screenToWorld(int screenX, int screenY, float& worldX, float& worldY) const {
 
-    int halfWidth = m_window.getWidth() / 2;
-    int halfHeight = m_window.getHeight() / 2;
+    int halfWidth = m_window.getWidth() >> 1;
+    int halfHeight = m_window.getHeight() >> 1;
 
     worldX = (screenX - halfWidth) / m_zoom + m_x;
     worldY = (screenY - halfHeight) / m_zoom + m_y;
@@ -82,8 +82,8 @@ void Camera::screenToWorld(int screenX, int screenY, float& worldX, float& world
 
 Camera::Bounds Camera::getWorldBounds() const {
 
-    int halfWidth = m_window.getWidth() / 2;
-    int halfHeight = m_window.getHeight() / 2;
+    int halfWidth = m_window.getWidth() >> 1;
+    int halfHeight = m_window.getHeight() >> 1;
 
     float worldHalfWidth = halfWidth / m_zoom;
     float worldHalfHeight = halfHeight / m_zoom;

@@ -9,6 +9,7 @@
 
 namespace Runa {
     class Input;
+    class Keybindings;
     class SpriteBatch;
     class Camera;
     class TileMap;
@@ -23,6 +24,7 @@ namespace Runa::ECS::Systems {
 
 
 RUNA_API void updatePlayerInput(entt::registry& registry, Input& input, float dt);
+RUNA_API void updatePlayerInput(entt::registry& registry, Input& input, float dt, Keybindings* keybindings);
 
 
 

@@ -59,15 +59,15 @@ void MenuScene::onRender() {
 
 
   if (m_titleTexture) {
-    int titleX = (winWidth - static_cast<int>(m_titleTexture->getWidth())) / 2;
+    int titleX = (winWidth - static_cast<int>(m_titleTexture->getWidth())) >> 1;
     int titleY = winHeight / 3;
     m_spriteBatch->draw(*m_titleTexture, titleX, titleY);
   }
 
 
   if (m_startTexture && m_showStart) {
-    int startX = (winWidth - static_cast<int>(m_startTexture->getWidth())) / 2;
-    int startY = winHeight / 2;
+    int startX = (winWidth - static_cast<int>(m_startTexture->getWidth())) >> 1;
+    int startY = winHeight >> 1;
     m_spriteBatch->draw(*m_startTexture, startX, startY);
   }
 

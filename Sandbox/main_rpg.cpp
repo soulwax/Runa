@@ -453,7 +453,6 @@ protected:
     int endX = std::min(49, static_cast<int>(bounds.right / 32) + 1);
     int endY = std::min(49, static_cast<int>(bounds.bottom / 32) + 1);
 
-
     if (m_whitePixelTexture && m_whitePixelTexture->isValid()) {
       for (int y = startY; y <= endY; ++y) {
         for (int x = startX; x <= endX; ++x) {
@@ -479,7 +478,8 @@ protected:
 
           int drawX = screenX - 16;
           int drawY = screenY - 16;
-          m_spriteBatch->draw(*m_whitePixelTexture, drawX, drawY, r, g, b, 1.0f, 32.0f, 32.0f);
+          // Use first overload with srcWidth/srcHeight, scale will be applied by s_pixelScale
+          m_spriteBatch->draw(*m_whitePixelTexture, drawX, drawY, 0, 0, 1, 1, r, g, b, 1.0f, 32.0f / 3.0f, 32.0f / 3.0f);
         }
       }
     }

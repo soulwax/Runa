@@ -101,7 +101,8 @@ namespace Runa {
 			for (int x = startX; x <= endX; ++x) {
 				int screenX, screenY;
 				m_camera->worldToScreen(x * TILE_SIZE, y * TILE_SIZE, screenX, screenY);
-				m_spriteBatch->draw(*m_grassTexture, screenX, screenY, 0);
+				m_spriteBatch->draw(*m_grassTexture, screenX, screenY, 0, 0, 
+				                    static_cast<int>(TILE_SIZE), static_cast<int>(TILE_SIZE));
 			}
 		}
 

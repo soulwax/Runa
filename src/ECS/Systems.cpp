@@ -5,12 +5,14 @@
 #include "Systems.h"
 #include "Components.h"
 #include "../Core/Input.h"
+#include "../Core/Keybindings.h"
 #include "../Graphics/SpriteBatch.h"
 #include "../Graphics/Camera.h"
 #include "../Graphics/TileMap.h"
 #include "../Graphics/Texture.h"
 #include "../Core/Log.h"
 #include <cmath>
+#include <algorithm>
 
 namespace Runa::ECS::Systems {
 
@@ -18,7 +20,22 @@ namespace Runa::ECS::Systems {
 
 
 
+// Helper function to check if any key in a list is down
+static bool isAnyKeyDown(const Input& input, const std::vector<SDL_Keycode>& keys) {
+    for (SDL_Keycode key : keys) {
+        if (input.isKeyDown(key)) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void updatePlayerInput(entt::registry& registry, Input& input, float dt) {
+    // Call overloaded version with no keybindings (uses default hardcoded keys)
+    updatePlayerInput(registry, input, dt, nullptr);
+}
+
+void updatePlayerInput(entt::registry& registry, Input& input, float dt, Keybindings* keybindings) {
     auto view = registry.view<PlayerInput, Velocity, Active>();
 
     for (auto entity : view) {
@@ -29,17 +46,34 @@ void updatePlayerInput(entt::registry& registry, Input& input, float dt) {
         float moveX = 0.0f;
         float moveY = 0.0f;
 
-        if (input.isKeyDown(SDLK_LEFT)) {
-            moveX -= 1.0f;
-        }
-        if (input.isKeyDown(SDLK_RIGHT)) {
-            moveX += 1.0f;
-        }
-        if (input.isKeyDown(SDLK_UP)) {
-            moveY -= 1.0f;
-        }
-        if (input.isKeyDown(SDLK_DOWN)) {
-            moveY += 1.0f;
+        if (keybindings && keybindings->hasAction("move_left")) {
+            // Use keybindings from metadata file
+            if (isAnyKeyDown(input, keybindings->getKeys("move_left"))) {
+                moveX -= 1.0f;
+            }
+            if (isAnyKeyDown(input, keybindings->getKeys("move_right"))) {
+                moveX += 1.0f;
+            }
+            if (isAnyKeyDown(input, keybindings->getKeys("move_up"))) {
+                moveY -= 1.0f;
+            }
+            if (isAnyKeyDown(input, keybindings->getKeys("move_down"))) {
+                moveY += 1.0f;
+            }
+        } else {
+            // Fallback to hardcoded keys if keybindings not available
+            if (input.isKeyDown(SDLK_LEFT) || input.isKeyDown(SDLK_A)) {
+                moveX -= 1.0f;
+            }
+            if (input.isKeyDown(SDLK_RIGHT) || input.isKeyDown(SDLK_D)) {
+                moveX += 1.0f;
+            }
+            if (input.isKeyDown(SDLK_UP) || input.isKeyDown(SDLK_W)) {
+                moveY -= 1.0f;
+            }
+            if (input.isKeyDown(SDLK_DOWN) || input.isKeyDown(SDLK_S)) {
+                moveY += 1.0f;
+            }
         }
 
 
@@ -273,28 +307,49 @@ void renderSprites(entt::registry& registry, SpriteBatch& batch, Camera& camera,
 
                 const SpriteFrame& frame = spriteData->frames[frameIndex];
 
-
-
-                int drawX = screenX - static_cast<int>(frame.width / 2.0f);
-                int drawY = screenY - static_cast<int>(frame.height / 2.0f);
+                // Calculate offset in screen pixels: screenX/Y are already in screen space (zoom applied)
+                // Sprite is rendered with scale 1.0f, which gets multiplied by s_pixelScale in SpriteBatch
+                // Rendered size is (frame.width * pixelScale) logical units
+                // To convert to screen pixels, multiply by zoom: (frame.width * pixelScale * zoom) screen pixels
+                float pixelScale = SpriteBatch::getPixelScale();
+                float zoom = camera.getZoom();
+                float spriteWidthPixels = frame.width * pixelScale * zoom;
+                float spriteHeightPixels = frame.height * pixelScale * zoom;
+                
+                // Calculate centered position
+                int drawX = screenX - static_cast<int>(spriteWidthPixels / 2.0f);
+                int drawY = screenY - static_cast<int>(spriteHeightPixels / 2.0f);
+                
+                // When flipping horizontally, the sprite flips around its origin (top-left),
+                // causing it to shift left. We need to compensate by shifting right by the sprite width.
+                if (sprite.flipX) {
+                    drawX += static_cast<int>(spriteWidthPixels);
+                }
 
 
                 batch.draw(sprite.spriteSheet->getTexture(), drawX, drawY, frame,
-                           sprite.tintR, sprite.tintG, sprite.tintB, sprite.tintA);
+                           sprite.tintR, sprite.tintG, sprite.tintB, sprite.tintA,
+                           1.0f, 1.0f, sprite.flipX, sprite.flipY);
                 continue;
             }
         }
 
 
         if (whitePixelTexture && whitePixelTexture->isValid()) {
+            // Calculate offset in screen pixels: screenX/Y are already in screen space (zoom applied)
+            // The draw call passes (width / 3.0f) as scale, which gets multiplied by s_pixelScale (3.0f)
+            // in SpriteBatch, resulting in rendered size of 'width' logical units
+            // To convert to screen pixels, multiply by zoom: (width * zoom) screen pixels
+            float zoom = camera.getZoom();
+            int drawX = screenX - static_cast<int>((width / 2.0f) * zoom);
+            int drawY = screenY - static_cast<int>((height / 2.0f) * zoom);
 
-            int drawX = screenX - static_cast<int>(width / 2.0f);
-            int drawY = screenY - static_cast<int>(height / 2.0f);
 
-
-            batch.draw(*whitePixelTexture, drawX, drawY,
+            // Use first overload with srcWidth/srcHeight, scale will be applied by s_pixelScale
+            // We pass width/3.0f so that after multiplying by s_pixelScale (3.0f), we get width logical units
+            batch.draw(*whitePixelTexture, drawX, drawY, 0, 0, 1, 1,
                        sprite.tintR, sprite.tintG, sprite.tintB, sprite.tintA,
-                       width, height);
+                       width / 3.0f, height / 3.0f);
         }
     }
 }

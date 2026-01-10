@@ -10,7 +10,7 @@ Renderer::Renderer(Window &window) : m_window(window) {
 
   VK2DRendererConfig config = {};
   config.msaa = VK2D_MSAA_1X;
-  config.screenMode = VK2D_SCREEN_MODE_VSYNC;
+  config.screenMode = VK2D_SCREEN_MODE_VSYNC;  // Enable VSYNC
   config.filterMode = VK2D_FILTER_TYPE_NEAREST;
 
 

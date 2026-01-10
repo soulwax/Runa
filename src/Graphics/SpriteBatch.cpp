@@ -7,9 +7,12 @@
 
 namespace Runa {
 
-SpriteBatch::SpriteBatch(Renderer &renderer) : m_renderer(renderer) {
+float SpriteBatch::s_pixelScale = PixelScale::getScale();
 
-    LOG_INFO("SpriteBatch created (using Vulkan2D internal batching)");
+SpriteBatch::SpriteBatch(Renderer &renderer) : m_renderer(renderer) {
+    // Sync with PixelScale system
+    s_pixelScale = PixelScale::getScale();
+    LOG_INFO("SpriteBatch created (using Vulkan2D internal batching, pixel scale: {})", s_pixelScale);
 }
 
 SpriteBatch::~SpriteBatch() {
@@ -28,7 +31,7 @@ void SpriteBatch::begin() {
 
 void SpriteBatch::draw(const Texture &texture, int x, int y, int srcX, int srcY,
                        int srcWidth, int srcHeight, float r, float g, float b,
-                       float a, float scaleX, float scaleY) {
+                       float a, float scaleX, float scaleY, bool flipX, bool flipY) {
     if (!m_inBatch) {
         LOG_WARN("SpriteBatch::draw() called outside of begin/end!");
         return;
@@ -38,16 +41,22 @@ void SpriteBatch::draw(const Texture &texture, int x, int y, int srcX, int srcY,
         return;
     }
 
-
-
-
+    // Apply flip by negating scale (negative scale flips the sprite)
+    float finalScaleX = scaleX * s_pixelScale;
+    float finalScaleY = scaleY * s_pixelScale;
+    if (flipX) {
+        finalScaleX = -finalScaleX;
+    }
+    if (flipY) {
+        finalScaleY = -finalScaleY;
+    }
 
     vk2dRendererDrawTexture(
         texture.getHandle(),
         static_cast<float>(x),
         static_cast<float>(y),
-        scaleX,
-        scaleY,
+        finalScaleX,
+        finalScaleY,
         0.0f,
         0.0f,
         0.0f,
@@ -73,15 +82,15 @@ void SpriteBatch::draw(const Texture &texture, int x, int y, int srcX, int srcY,
 
 void SpriteBatch::draw(const Texture &texture, int x, int y,
                        const SpriteFrame &frame, float r, float g, float b,
-                       float a, float scaleX, float scaleY) {
+                       float a, float scaleX, float scaleY, bool flipX, bool flipY) {
     draw(texture, x, y, frame.x, frame.y, frame.width, frame.height, r, g, b, a,
-         scaleX, scaleY);
+         scaleX, scaleY, flipX, flipY);
 }
 
 void SpriteBatch::draw(const Texture &texture, int x, int y, float r, float g,
-                       float b, float a, float scaleX, float scaleY) {
+                       float b, float a, float scaleX, float scaleY, bool flipX, bool flipY) {
     draw(texture, x, y, 0, 0, texture.getWidth(), texture.getHeight(), r, g, b, a,
-         scaleX, scaleY);
+         scaleX, scaleY, flipX, flipY);
 }
 
 void SpriteBatch::end() {

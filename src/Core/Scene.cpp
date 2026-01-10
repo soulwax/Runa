@@ -12,7 +12,7 @@
 namespace Runa {
 
 	Scene::Scene(Application& app, const std::string& name)
-		: m_app(app), m_name(name), m_transparent(false) {
+		: m_app(app), m_name(name), m_type("Scene"), m_transparent(false) {
 	}
 
 	Renderer& Scene::getRenderer() {

@@ -16,6 +16,11 @@ namespace Runa {
 	class Application;
 	class Renderer;
 	class Input;
+	
+	// Forward declarations for ECS
+	namespace ECS {
+		class EntityRegistry;
+	}
 
 	/**
 	 * Base class for all scenes.
@@ -37,8 +42,12 @@ namespace Runa {
 
 
 		const std::string& getName() const { return m_name; }
+		std::string getType() const { return m_type; }
 		bool isTransparent() const { return m_transparent; }
 		void setTransparent(bool transparent) { m_transparent = transparent; }
+		
+		// For serialization
+		virtual ECS::EntityRegistry* getRegistry() { return nullptr; }
 
 	protected:
 
@@ -47,6 +56,7 @@ namespace Runa {
 		Input& getInput();
 
 		std::string m_name;
+		std::string m_type;
 		bool m_transparent = false;
 
 	private:

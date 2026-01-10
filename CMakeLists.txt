@@ -3,7 +3,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 project(Runa2
-    VERSION 1.0.4
+    VERSION 1.0.6
     LANGUAGES CXX
 )
 
@@ -161,6 +161,8 @@ add_library(Runa2Engine SHARED
     src/Core/Scene.h
     src/Core/SceneManager.cpp
     src/Core/SceneManager.h
+    src/Core/SceneSerializer.cpp
+    src/Core/SceneSerializer.h
 
     # Scenes
     src/Scenes/MenuScene.cpp
