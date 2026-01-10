@@ -3,7 +3,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 project(Runa2
-    VERSION 1.0.6
+    VERSION 1.0.7
     LANGUAGES CXX
 )
 
@@ -209,6 +209,14 @@ add_library(Runa2Engine SHARED
     src/Graphics/Camera.h
     src/Graphics/ImGui.cpp
     src/Graphics/ImGui.h
+
+    # Collision
+    src/Collision/CollisionMask.cpp
+    src/Collision/CollisionMask.h
+    src/Collision/CollisionMap.cpp
+    src/Collision/CollisionMap.h
+    src/Collision/CollisionLoader.cpp
+    src/Collision/CollisionLoader.h
 )
 
 # Define export macro for engine shared library

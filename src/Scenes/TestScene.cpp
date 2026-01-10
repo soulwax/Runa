@@ -15,6 +15,7 @@
 #include "../ECS/Components.h"
 #include "../ECS/RPGComponents.h"
 #include "../ECS/Systems.h"
+#include "../Collision/CollisionLoader.h"
 #include <cstdlib>
 #include <ctime>
 #include <cmath>
@@ -187,16 +188,32 @@ namespace Runa {
 
 		// Update AABB to match player size
 		if (auto* aabb = m_registry->getRegistry().try_get<ECS::AABB>(m_playerEntity)) {
-			aabb->width = 16.0f;
-			aabb->height = 16.0f;
+			aabb->width = 14.0f;   // Slightly smaller than sprite for better feel
+			aabb->height = 14.0f;
+			aabb->offsetX = 1.0f;  // Center the collision box
+			aabb->offsetY = 1.0f;
 		}
 
 		// Ensure Animation component exists with proper settings
 		auto& anim = m_registry->getRegistry().get<ECS::Animation>(m_playerEntity);
 		anim.frameRate = 10.0f;  // 10 frames per second (0.1s per frame)
 		anim.loop = true;
+		
+		// Add collision component to player
+		m_registry->getRegistry().emplace<ECS::Collider>(m_playerEntity);
+		auto& playerCollider = m_registry->getRegistry().get<ECS::Collider>(m_playerEntity);
+		playerCollider.type = ECS::Collider::Type::Solid;
+		playerCollider.blocksMovement = true;
+		
+		// Add CanInteract component so player can interact with objects
+		m_registry->getRegistry().emplace<ECS::CanInteract>(m_playerEntity);
+		auto& canInteract = m_registry->getRegistry().get<ECS::CanInteract>(m_playerEntity);
+		canInteract.range = 24.0f;  // Interaction range in world units
 
-		LOG_INFO("Player entity created at (0, 0) using ECS");
+		LOG_INFO("Player entity created at (0, 0) with collision and interaction");
+		
+		// Set up collision map for the fence tiles
+		setupCollisionMap();
 
 		m_lastFPSUpdate = std::chrono::steady_clock::now();
 		m_displayedFPS = 0;
@@ -286,6 +303,17 @@ namespace Runa {
 
 			// Update player animation based on movement direction
 			updatePlayerAnimation(registry);
+			
+			// Check tile collision BEFORE applying movement
+			if (m_collisionMap) {
+				ECS::Systems::updateMapCollision(registry, *m_collisionMap, deltaTime,
+					[this](entt::entity entity, const ECS::CollisionEvent& event) {
+						// Collision detected - log for debugging
+						if (entity == m_playerEntity) {
+							LOG_DEBUG("Player collision detected!");
+						}
+					});
+			}
 
 			// Update movement (applies velocity to position)
 			ECS::Systems::updateMovement(registry, deltaTime);
@@ -295,6 +323,14 @@ namespace Runa {
 
 			// Update camera to follow player
 			ECS::Systems::updateCameraFollow(registry, *m_camera, deltaTime);
+			
+			// Check for tile interactions (E key)
+			if (m_collisionMap) {
+				ECS::Systems::updateTileInteraction(registry, *m_collisionMap, getInput(), SDLK_E,
+					[this](entt::entity player, TileInteraction& interaction) {
+						handleInteraction(player, interaction);
+					});
+			}
 		}
 
 		// Update camera
@@ -690,9 +726,103 @@ namespace Runa {
 			} else {
 				actualDirection = "right";
 			}
-			LOG_INFO("Player facing '{}' (sprite: '{}', flipX: {}) at position ({}, {})", 
-			         actualDirection, newSpriteName, newFlipX, position->x, position->y);
-		}
+		LOG_INFO("Player facing '{}' (sprite: '{}', flipX: {}) at position ({}, {})", 
+		         actualDirection, newSpriteName, newFlipX, position->x, position->y);
 	}
+}
+
+void TestScene::setupCollisionMap() {
+	// Calculate world size based on meadow
+	// Meadow is 80x80 tiles, fences extend beyond, so we need a larger world
+	// Fences can be at negative coordinates, so we need to account for that
+	int worldSize = MEADOW_SIZE * TILE_SIZE * 3;  // Large enough to cover negative coords
+	int worldWidth = worldSize;
+	int worldHeight = worldSize;
+	
+	m_collisionMap = std::make_unique<CollisionMap>(worldWidth, worldHeight, TILE_SIZE);
+	
+	// Load fence tile definitions from YAML (supports existing format with has_collision, blocks_movement)
+	int defsLoaded = CollisionLoader::loadFromYAML("Resources/SpiteSheets/fences.yaml", 
+	                                               *m_collisionMap, m_fenceSheet.get());
+	LOG_INFO("Loaded {} fence tile definitions for collision", defsLoaded);
+	
+	// Create a generic solid tile definition for all fences
+	// All fences should block movement
+	TileDefinition solidFenceDef;
+	solidFenceDef.name = "solid_fence";
+	solidFenceDef.collision = CollisionType::Solid;
+	int solidFenceIndex = m_collisionMap->addTileDefinition(solidFenceDef);
+	
+	// Add collision for each placed fence tile - ALL fences are solid
+	int placedCount = 0;
+	for (const auto& fenceTile : m_fenceTiles) {
+		// Place every fence tile as solid
+		// Fence positions are in world coordinates (logical pixels)
+		m_collisionMap->placeTile(solidFenceIndex, fenceTile.x, fenceTile.y, TILE_SIZE, TILE_SIZE);
+		placedCount++;
+	}
+	
+	// Rebuild spatial grid after placing all tiles
+	m_collisionMap->rebuildSpatialGrid();
+	
+	LOG_INFO("Set up collision for {} fence tiles (all marked as solid)", placedCount);
+	
+	// Test collision at a known fence position
+	if (!m_fenceTiles.empty()) {
+		const auto& testFence = m_fenceTiles[0];
+		float testX = static_cast<float>(testFence.x + TILE_SIZE / 2);
+		float testY = static_cast<float>(testFence.y + TILE_SIZE / 2);
+		CollisionType testCol = m_collisionMap->getCollisionAt(testX, testY);
+		LOG_INFO("Test collision at fence tile ({}, {}): {}", 
+		         testFence.x, testFence.y, 
+		         testCol == CollisionType::Solid ? "SOLID" : "NONE");
+		
+		// Also test with AABB (like player would use)
+		CollisionType testColAABB = m_collisionMap->checkMovement(
+			static_cast<float>(testFence.x), static_cast<float>(testFence.y), 
+			static_cast<float>(TILE_SIZE), static_cast<float>(TILE_SIZE));
+		LOG_INFO("Test collision AABB at fence tile ({}, {}): {}", 
+		         testFence.x, testFence.y, 
+		         testColAABB == CollisionType::Solid ? "SOLID" : "NONE");
+	}
+}
+
+void TestScene::handleInteraction(entt::entity player, TileInteraction& interaction) {
+	switch (interaction.type) {
+		case InteractionType::Read:
+			LOG_INFO("Read interaction: {}", interaction.data);
+			// TODO: Display message on screen
+			break;
+			
+		case InteractionType::Container:
+			LOG_INFO("Container interaction: loot table '{}'", interaction.data);
+			// TODO: Open loot UI
+			break;
+			
+		case InteractionType::Teleport:
+			LOG_INFO("Teleport to scene '{}' at ({}, {})", 
+			         interaction.targetScene, interaction.targetX, interaction.targetY);
+			// TODO: Trigger scene transition
+			break;
+			
+		case InteractionType::Toggle:
+			LOG_INFO("Toggle interaction");
+			// TODO: Toggle state
+			break;
+			
+		case InteractionType::Pickup:
+			LOG_INFO("Pickup interaction: '{}'", interaction.data);
+			// TODO: Add to inventory
+			break;
+			
+		case InteractionType::Talk:
+			LOG_INFO("Talk interaction: NPC '{}'", interaction.data);
+			// TODO: Start dialogue
+			break;
+			
+		default:
+			break;
+	}
+}
 
 }

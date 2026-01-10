@@ -208,13 +208,7 @@ namespace Runa {
     };
 
 
-
-    struct RUNA_API Interactable {
-        std::string name;
-        std::string description;
-        float interactionRange = 48.0f;
-        std::function<void()> onInteract;
-    };
+    // Note: Interactable moved to Components.h with expanded functionality
 
     struct RUNA_API DamageNumber {
         float damage;

@@ -15,6 +15,7 @@
 #include "../Graphics/Camera.h"
 #include "../Graphics/Font.h"
 #include "../ECS/Registry.h"
+#include "../Collision/CollisionMap.h"
 #include <memory>
 #include <entt/entt.hpp>
 #include <vector>
@@ -45,6 +46,8 @@ namespace Runa {
 	private:
 		void generateMeadow();
 		void updatePlayerAnimation(entt::registry& registry);
+		void setupCollisionMap();
+		void handleInteraction(entt::entity player, TileInteraction& interaction);
 
 		std::unique_ptr<SpriteBatch> m_spriteBatch;
 		std::unique_ptr<Camera> m_camera;
@@ -61,6 +64,9 @@ namespace Runa {
 		// ECS registry
 		std::unique_ptr<ECS::EntityRegistry> m_registry;
 		entt::entity m_playerEntity = entt::null;
+		
+		// Collision system
+		std::unique_ptr<CollisionMap> m_collisionMap;
 
 		// Fence tiles (pre-generated)
 		struct FenceTile {
@@ -73,6 +79,10 @@ namespace Runa {
 		std::chrono::steady_clock::time_point m_lastFPSUpdate;
 		int m_displayedFPS = 0;
 		int m_frameCount = 0;
+		
+		// Meadow bounds
+		static constexpr int MEADOW_SIZE = 40;  // tiles
+		static constexpr int TILE_SIZE = 16;    // pixels
 	};
 
 }

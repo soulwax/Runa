@@ -8,6 +8,7 @@
 #include "../Graphics/Camera.h"
 #include "../Graphics/TileMap.h"
 #include "../Graphics/Texture.h"
+#include "../Collision/CollisionMap.h"
 #include "../Core/Log.h"
 #include <cmath>
 #include <algorithm>
@@ -332,20 +333,300 @@ void renderSprites(entt::registry& registry, SpriteBatch& batch, Camera& camera,
 void updateCameraFollow(entt::registry& registry, Camera& camera, float dt) {
     auto view = registry.view<Position, Size, CameraTarget, Active>();
 
-
     for (auto entity : view) {
         auto& pos = view.get<Position>(entity);
         auto& size = view.get<Size>(entity);
-        auto& target = view.get<CameraTarget>(entity);
 
-
-        float centerX = pos.x + size.width / 2.0f;
-        float centerY = pos.y + size.height / 2.0f;
-
+        float centerX = pos.x + size.width * 0.5f;
+        float centerY = pos.y + size.height * 0.5f;
 
         camera.setPosition(centerX, centerY);
         break;
     }
+}
+
+void updateMapCollision(entt::registry& registry, CollisionMap& collisionMap, float dt,
+                        std::function<void(entt::entity, const CollisionEvent&)> onCollision) {
+    auto view = registry.view<Position, Velocity, AABB, Collider, Active>();
+
+    for (auto entity : view) {
+        auto& pos = view.get<Position>(entity);
+        auto& vel = view.get<Velocity>(entity);
+        auto& aabb = view.get<AABB>(entity);
+        auto& collider = view.get<Collider>(entity);
+
+        if (!collider.enabled || !collider.blocksMovement) {
+            continue;
+        }
+
+        // Calculate entity's world AABB
+        float entityX = pos.x + aabb.offsetX;
+        float entityY = pos.y + aabb.offsetY;
+
+        // Check horizontal movement
+        if (vel.x != 0.0f) {
+            float testX = entityX + vel.x * dt;
+            CollisionType colType = collisionMap.checkMovement(testX, entityY, aabb.width, aabb.height);
+
+            // Block movement for Solid, Liquid, or Hazard collision types
+            if (colType == CollisionType::Solid || colType == CollisionType::Liquid || colType == CollisionType::Hazard) {
+                // Block horizontal movement
+                bool wasMovingLeft = vel.x < 0.0f;
+                bool wasMovingRight = vel.x > 0.0f;
+                vel.x = 0.0f;
+
+                if (onCollision) {
+                    CollisionEvent event;
+                    event.fromLeft = wasMovingLeft;
+                    event.fromRight = wasMovingRight;
+                    onCollision(entity, event);
+                }
+            }
+        }
+
+        // Check vertical movement
+        if (vel.y != 0.0f) {
+            float testY = entityY + vel.y * dt;
+            CollisionType colType = collisionMap.checkMovement(entityX, testY, aabb.width, aabb.height);
+
+            // Block movement for Solid, Liquid, or Hazard collision types
+            if (colType == CollisionType::Solid || colType == CollisionType::Liquid || colType == CollisionType::Hazard) {
+                // Block vertical movement
+                bool wasMovingUp = vel.y < 0.0f;
+                bool wasMovingDown = vel.y > 0.0f;
+                vel.y = 0.0f;
+
+                if (onCollision) {
+                    CollisionEvent event;
+                    event.fromTop = wasMovingUp;
+                    event.fromBottom = wasMovingDown;
+                    onCollision(entity, event);
+                }
+            }
+        }
+
+        // Also check current position (in case we're already overlapping)
+        CollisionType currentCol = collisionMap.checkMovement(entityX, entityY, aabb.width, aabb.height);
+        if (currentCol == CollisionType::Solid || currentCol == CollisionType::Liquid || currentCol == CollisionType::Hazard) {
+            // Push out of collision - simple resolution
+            // This handles the case where we're already inside a tile
+            if (vel.x == 0.0f && vel.y == 0.0f) {
+                // Try to push out in the direction we came from
+                // For now, just zero velocity (we're stuck)
+            }
+        }
+    }
+}
+
+void updateEntityToEntityCollision(entt::registry& registry,
+                                   std::function<void(entt::entity, entt::entity, const CollisionEvent&)> onCollision) {
+    auto view = registry.view<Position, AABB, Collider, Active>();
+
+    std::vector<entt::entity> entities(view.begin(), view.end());
+
+    for (size_t i = 0; i < entities.size(); ++i) {
+        auto entityA = entities[i];
+        auto& posA = view.get<Position>(entityA);
+        auto& aabbA = view.get<AABB>(entityA);
+        auto& colliderA = view.get<Collider>(entityA);
+
+        if (!colliderA.enabled) continue;
+
+        float ax = posA.x + aabbA.offsetX;
+        float ay = posA.y + aabbA.offsetY;
+
+        for (size_t j = i + 1; j < entities.size(); ++j) {
+            auto entityB = entities[j];
+            auto& posB = view.get<Position>(entityB);
+            auto& aabbB = view.get<AABB>(entityB);
+            auto& colliderB = view.get<Collider>(entityB);
+
+            if (!colliderB.enabled) continue;
+
+            float bx = posB.x + aabbB.offsetX;
+            float by = posB.y + aabbB.offsetY;
+
+            // AABB intersection test
+            bool overlaps = !(ax + aabbA.width <= bx ||
+                              ax >= bx + aabbB.width ||
+                              ay + aabbA.height <= by ||
+                              ay >= by + aabbB.height);
+
+            if (overlaps) {
+                // Calculate overlap
+                float overlapX = std::min(ax + aabbA.width, bx + aabbB.width) - std::max(ax, bx);
+                float overlapY = std::min(ay + aabbA.height, by + aabbB.height) - std::max(ay, by);
+
+                CollisionEvent event;
+                event.other = entityB;
+                event.overlapX = overlapX;
+                event.overlapY = overlapY;
+                event.fromLeft = ax < bx;
+                event.fromRight = ax > bx;
+                event.fromTop = ay < by;
+                event.fromBottom = ay > by;
+
+                if (onCollision) {
+                    onCollision(entityA, entityB, event);
+                }
+
+                // Resolve collision if both are solid
+                if (colliderA.blocksMovement && colliderB.blocksMovement) {
+                    // Push entities apart (simple resolution)
+                    if (overlapX < overlapY) {
+                        float pushX = overlapX * 0.5f;
+                        if (ax < bx) {
+                            posA.x -= pushX;
+                            posB.x += pushX;
+                        } else {
+                            posA.x += pushX;
+                            posB.x -= pushX;
+                        }
+                    } else {
+                        float pushY = overlapY * 0.5f;
+                        if (ay < by) {
+                            posA.y -= pushY;
+                            posB.y += pushY;
+                        } else {
+                            posA.y += pushY;
+                            posB.y -= pushY;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+void updateInteraction(entt::registry& registry, Input& input, int interactionKey,
+                       std::function<void(entt::entity, entt::entity, Interactable&)> onInteract) {
+    // Find entities that can interact (usually the player)
+    auto interactors = registry.view<Position, Size, CanInteract, Active>();
+    auto interactables = registry.view<Position, Size, Interactable, Active>();
+
+    for (auto interactor : interactors) {
+        auto& interactorPos = interactors.get<Position>(interactor);
+        auto& interactorSize = interactors.get<Size>(interactor);
+        auto& canInteract = interactors.get<CanInteract>(interactor);
+
+        // Center of interactor
+        float ix = interactorPos.x + interactorSize.width * 0.5f;
+        float iy = interactorPos.y + interactorSize.height * 0.5f;
+
+        // Check if interaction key is pressed
+        bool keyPressed = input.isKeyPressed(static_cast<SDL_Keycode>(interactionKey));
+
+        if (!keyPressed) continue;
+
+        // Find closest interactable in range
+        entt::entity closest = entt::null;
+        float closestDist = canInteract.range * canInteract.range;
+        Interactable* closestInteractable = nullptr;
+
+        for (auto target : interactables) {
+            if (target == interactor) continue;
+
+            auto& targetPos = interactables.get<Position>(target);
+            auto& targetSize = interactables.get<Size>(target);
+            auto& interactable = interactables.get<Interactable>(target);
+
+            if (interactable.consumed) continue;
+
+            // Center of target
+            float tx = targetPos.x + targetSize.width * 0.5f;
+            float ty = targetPos.y + targetSize.height * 0.5f;
+
+            float dx = tx - ix;
+            float dy = ty - iy;
+            float distSq = dx * dx + dy * dy;
+
+            if (distSq < closestDist && distSq <= interactable.interactionRange * interactable.interactionRange) {
+                closest = target;
+                closestDist = distSq;
+                closestInteractable = &interactable;
+            }
+        }
+
+        if (closest != entt::null && closestInteractable && onInteract) {
+            onInteract(interactor, closest, *closestInteractable);
+
+            if (closestInteractable->oneTime) {
+                closestInteractable->consumed = true;
+            }
+        }
+    }
+}
+
+void updateTileInteraction(entt::registry& registry, CollisionMap& collisionMap,
+                           Input& input, int interactionKey,
+                           std::function<void(entt::entity, TileInteraction&)> onInteract) {
+    auto view = registry.view<Position, Size, CanInteract, Active>();
+
+    bool keyPressed = input.isKeyPressed(static_cast<SDL_Keycode>(interactionKey));
+    if (!keyPressed) return;
+
+    for (auto entity : view) {
+        auto& pos = view.get<Position>(entity);
+        auto& size = view.get<Size>(entity);
+        auto& canInteract = view.get<CanInteract>(entity);
+
+        // Center of entity
+        float cx = pos.x + size.width * 0.5f;
+        float cy = pos.y + size.height * 0.5f;
+
+        // Get tile interactions in range
+        auto interactions = collisionMap.getInteractionsInRange(cx, cy, canInteract.range);
+
+        for (TileInteraction* interaction : interactions) {
+            if (interaction && !interaction->consumed && onInteract) {
+                onInteract(entity, *interaction);
+
+                if (interaction->oneTime) {
+                    interaction->consumed = true;
+                }
+                break;  // Only interact with one tile at a time
+            }
+        }
+    }
+}
+
+std::vector<entt::entity> getInteractablesInRange(entt::registry& registry,
+                                                   entt::entity source, float range) {
+    std::vector<entt::entity> result;
+
+    auto* sourcePos = registry.try_get<Position>(source);
+    auto* sourceSize = registry.try_get<Size>(source);
+
+    if (!sourcePos || !sourceSize) return result;
+
+    float sx = sourcePos->x + sourceSize->width * 0.5f;
+    float sy = sourcePos->y + sourceSize->height * 0.5f;
+    float rangeSq = range * range;
+
+    auto view = registry.view<Position, Size, Interactable, Active>();
+
+    for (auto target : view) {
+        if (target == source) continue;
+
+        auto& targetPos = view.get<Position>(target);
+        auto& targetSize = view.get<Size>(target);
+        auto& interactable = view.get<Interactable>(target);
+
+        if (interactable.consumed) continue;
+
+        float tx = targetPos.x + targetSize.width * 0.5f;
+        float ty = targetPos.y + targetSize.height * 0.5f;
+
+        float dx = tx - sx;
+        float dy = ty - sy;
+        float distSq = dx * dx + dy * dy;
+
+        if (distSq <= rangeSq) {
+            result.push_back(target);
+        }
+    }
+
+    return result;
 }
 
 }

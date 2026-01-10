@@ -5,6 +5,49 @@ All notable changes to the Runa2 game engine will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.0.7] - 2026-01-10
+
+### Added
+- **Collision System**: Full pixel-perfect collision detection for tiles and entities
+  - `CollisionMask` class for pixel-level collision bitmaps
+  - `CollisionMap` class for managing tile collision data with spatial grid
+  - `CollisionLoader` to load collision/interaction data from YAML sprite sheets
+  - Supports existing YAML format (`has_collision`, `blocks_movement`, `walkable`)
+  - Also supports new format (`collision: solid/none/liquid/platform/trigger/hazard`)
+  - Pixel-perfect collision using sprite alpha channel (optional)
+  - Spatial partitioning grid for efficient collision queries
+
+- **Interaction System**: Entity and tile interactions
+  - `Interactable` component for entities (read, container, teleport, toggle, pickup, talk)
+  - `CanInteract` component for entities that can trigger interactions
+  - `TileInteraction` struct for tile-based interactions from YAML
+  - Interaction range checking and callback system
+  - Support for one-time interactions (consumed after use)
+
+- **New ECS Components**:
+  - `Collider`: Collision settings (solid, trigger, kinematic)
+  - `Interactable`: Interaction type and data
+  - `CanInteract`: Marks entities that can interact with objects
+  - `CollisionEvent`: Collision callback data
+
+- **New ECS Systems**:
+  - `updateMapCollision()`: Check entity collision against tile map
+  - `updateEntityToEntityCollision()`: Entity-to-entity collision detection
+  - `updateInteraction()`: Entity-to-entity interaction handling
+  - `updateTileInteraction()`: Entity-to-tile interaction handling
+  - `getInteractablesInRange()`: Query interactables near an entity
+
+### Fixed
+- **Sprite Flip Teleportation**: Fixed sprite position jumping when flipping horizontally
+  - Negative scale flips around origin (top-left), not center
+  - Added position compensation in SpriteBatch when flipX/flipY is true
+  - Sprite visual center now stays stable when flipping direction
+- **Sprite Offset Calculation**: Removed incorrect zoom multiplication from sprite size
+  - Camera zoom only affects world-to-screen conversion, not sprite pixel size
+  - `spriteWidthPixels = frame.width * pixelScale` (not `* zoom`)
+
+---
+
 ## [1.0.6] - 2026-01-10
 
 ### Fixed
