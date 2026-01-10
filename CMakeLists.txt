@@ -147,6 +147,8 @@ add_library(Runa2Engine SHARED
     src/Core/InputBinding.h
     src/Core/InputManager.cpp
     src/Core/InputManager.h
+    src/Core/Keybindings.cpp
+    src/Core/Keybindings.h
     src/Core/GamepadManager.cpp
     src/Core/GamepadManager.h
     src/Core/Entity.cpp
@@ -167,6 +169,8 @@ add_library(Runa2Engine SHARED
     src/Scenes/GameScene.h
     src/Scenes/PauseScene.cpp
     src/Scenes/PauseScene.h
+    src/Scenes/TestScene.cpp
+    src/Scenes/TestScene.h
 
     # ECS
     src/ECS/Components.h
@@ -191,6 +195,8 @@ add_library(Runa2Engine SHARED
     src/Graphics/SpriteSheet.h
     src/Graphics/SpriteBatch.cpp
     src/Graphics/SpriteBatch.h
+    src/Graphics/PixelScale.cpp
+    src/Graphics/PixelScale.h
     src/Graphics/TileMap.cpp
     src/Graphics/TileMap.h
     src/Graphics/PostProcess.cpp
@@ -284,6 +290,9 @@ set_target_properties(Runa2Engine PROPERTIES
 # Alternatives: Sandbox/main_rpg.cpp for RPG demo, Sandbox/main_input_demo.cpp for input demo, Sandbox/main_scene_demo.cpp for scenes, Sandbox/main.cpp for ECS
 add_executable(Runa2
     Sandbox/main_game.cpp
+    Sandbox/Entity.cpp
+    Sandbox/Mob.cpp
+    Sandbox/Player.cpp
 )
 
 # Link game executable to engine shared library
