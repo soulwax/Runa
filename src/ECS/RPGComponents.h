@@ -1,3 +1,5 @@
+// File: src/ECS/RPGComponents.h
+
 /**
  * RPGComponents.h
  * Components specific to RPG gameplay

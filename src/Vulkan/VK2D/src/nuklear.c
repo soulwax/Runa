@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/src/nuklear.c
-
-/// \file nuklear.c
-/// \author cmburn
-/// \brief Holds implementation code for Nuklear
+// File: src/Vulkan/VK2D/src/nuklear.c
+// / \file nuklear.c
+// / \author cmburn
+// / \brief Holds implementation code for Nuklear
 
 #define NK_IMPLEMENTATION
 #define NK_SDL_VULKAN_IMPLEMENTATION

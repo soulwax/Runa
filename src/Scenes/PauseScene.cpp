@@ -1,3 +1,5 @@
+// File: src/Scenes/PauseScene.cpp
+
 /**
  * PauseScene.cpp
  * Implementation of the pause menu overlay scene.

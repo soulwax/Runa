@@ -1,5 +1,4 @@
-
-
+// File: src/ECS/Registry.cpp
 
 #include "../runapch.h"
 #include "Registry.h"

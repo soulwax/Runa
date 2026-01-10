@@ -1,3 +1,5 @@
+// File: src/Scenes/MenuScene.cpp
+
 /**
  * MenuScene.cpp
  * Implementation of the main menu scene.

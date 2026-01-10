@@ -1,6 +1,5 @@
-// File: src/Vulkan2D/VK2D/src/Shader.c
-
-/// \file Shader.c
+// File: src/Vulkan/VK2D/src/Shader.c
+// / \file Shader.c
 
 #include "VK2D/Shader.h"
 #include "VK2D/Buffer.h"

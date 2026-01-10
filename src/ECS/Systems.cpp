@@ -1,5 +1,4 @@
-
-
+// File: src/ECS/Systems.cpp
 
 #include "../runapch.h"
 #include "Systems.h"
@@ -306,25 +305,22 @@ void renderSprites(entt::registry& registry, SpriteBatch& batch, Camera& camera,
                 }
 
                 const SpriteFrame& frame = spriteData->frames[frameIndex];
-
-                // Calculate offset in screen pixels: screenX/Y are already in screen space (zoom applied)
-                // Sprite is rendered with scale 1.0f, which gets multiplied by s_pixelScale in SpriteBatch
-                // Rendered size is (frame.width * pixelScale) logical units
-                // To convert to screen pixels, multiply by zoom: (frame.width * pixelScale * zoom) screen pixels
                 float pixelScale = SpriteBatch::getPixelScale();
                 float zoom = camera.getZoom();
                 float spriteWidthPixels = frame.width * pixelScale * zoom;
                 float spriteHeightPixels = frame.height * pixelScale * zoom;
-                
+
                 // Calculate centered position
-                int drawX = screenX - static_cast<int>(spriteWidthPixels / 2.0f);
-                int drawY = screenY - static_cast<int>(spriteHeightPixels / 2.0f);
-                
-                // When flipping horizontally, the sprite flips around its origin (top-left),
-                // causing it to shift left. We need to compensate by shifting right by the sprite width.
-                if (sprite.flipX) {
-                    drawX += static_cast<int>(spriteWidthPixels);
-                }
+                // When flipping horizontally, negative scale flips around the origin (top-left).
+                // The sprite's visual center should remain at screenX regardless of flip state.
+                // Normal: sprite extends from drawX to drawX+width, center at drawX+width/2 = screenX
+                //   So: drawX = screenX - width/2
+                // Flipped: sprite extends from drawX-width to drawX, center at drawX-width/2 = screenX
+                //   So: drawX = screenX + width/2 = screenX - width/2 + width
+                // However, full width compensation may be too much - try half width as middle ground
+                float halfWidth = spriteWidthPixels / 2.0f;
+                int drawX = static_cast<int>(screenX - halfWidth + (sprite.flipX ? halfWidth : 0.0f));
+                int drawY = static_cast<int>(screenY - spriteHeightPixels / 2.0f);
 
 
                 batch.draw(sprite.spriteSheet->getTexture(), drawX, drawY, frame,
@@ -340,13 +336,15 @@ void renderSprites(entt::registry& registry, SpriteBatch& batch, Camera& camera,
             // The draw call passes (width / 3.0f) as scale, which gets multiplied by s_pixelScale (3.0f)
             // in SpriteBatch, resulting in rendered size of 'width' logical units
             // To convert to screen pixels, multiply by zoom: (width * zoom) screen pixels
+            // However, for consistency with sprite rendering path, we should use pixelScale * zoom
+            // to match the coordinate system conversion
+            float pixelScale = SpriteBatch::getPixelScale();
             float zoom = camera.getZoom();
-            int drawX = screenX - static_cast<int>((width / 2.0f) * zoom);
-            int drawY = screenY - static_cast<int>((height / 2.0f) * zoom);
+            float fallbackWidthPixels = width * pixelScale * zoom;
+            float fallbackHeightPixels = height * pixelScale * zoom;
+            int drawX = screenX - static_cast<int>(fallbackWidthPixels / 2.0f);
+            int drawY = screenY - static_cast<int>(fallbackHeightPixels / 2.0f);
 
-
-            // Use first overload with srcWidth/srcHeight, scale will be applied by s_pixelScale
-            // We pass width/3.0f so that after multiplying by s_pixelScale (3.0f), we get width logical units
             batch.draw(*whitePixelTexture, drawX, drawY, 0, 0, 1, 1,
                        sprite.tintR, sprite.tintG, sprite.tintB, sprite.tintA,
                        width / 3.0f, height / 3.0f);
@@ -372,10 +370,7 @@ void updateCameraFollow(entt::registry& registry, Camera& camera, float dt) {
         float centerY = pos.y + size.height / 2.0f;
 
 
-
         camera.setPosition(centerX, centerY);
-
-
         break;
     }
 }

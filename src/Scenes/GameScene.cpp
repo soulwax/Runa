@@ -1,3 +1,5 @@
+// File: src/Scenes/GameScene.cpp
+
 /**
  * GameScene.cpp
  * Implementation of the main gameplay scene.

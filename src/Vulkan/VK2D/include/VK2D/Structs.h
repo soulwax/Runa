@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/Structs.h
+// File: src/Vulkan/VK2D/include/VK2D/Structs.h
+// / \file Structs.h
+// / \brief Forward declares struct typedefs
 
-/// \file Structs.h
-
-/// \brief Forward declares struct typedefs
 #pragma once
 #include <stdbool.h>
 #include <vulkan/vulkan.h>

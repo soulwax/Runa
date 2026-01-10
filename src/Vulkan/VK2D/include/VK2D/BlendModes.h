@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/BlendModes.h
+// File: src/Vulkan/VK2D/include/VK2D/BlendModes.h
+// / \file BlendModes.h
+// / \brief VkPipelineColorBlendAttachmentState for the various blend modes
 
-/// \file BlendModes.h
-
-/// \brief VkPipelineColorBlendAttachmentState for the various blend modes
 #pragma once
 #include <vulkan/vulkan.h>
 

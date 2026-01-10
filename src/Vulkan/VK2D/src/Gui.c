@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/src/Gui.c
-
-/// \file Initializers.h
-/// \author cmburn
-/// \brief Logging callbacks
+// File: src/Vulkan/VK2D/src/Gui.c
+// / \file Initializers.h
+// / \author cmburn
+// / \brief Logging callbacks
 
 #include "VK2D/Gui.h"
 #include "VK2D/Logger.h"

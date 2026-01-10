@@ -1,3 +1,5 @@
+// File: src/Core/Keybindings.cpp
+
 /**
  * Keybindings.cpp
  * Implementation of keybindings loader.

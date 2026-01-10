@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/Camera.h
+// File: src/Vulkan/VK2D/include/VK2D/Camera.h
+// / \file Camera.h
+// / \brief User-level camera things
 
-/// \file Camera.h
-
-/// \brief User-level camera things
 #pragma once
 #include "VK2D/Structs.h"
 

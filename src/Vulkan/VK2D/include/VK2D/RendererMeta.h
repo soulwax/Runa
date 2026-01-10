@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/RendererMeta.h
+// File: src/Vulkan/VK2D/include/VK2D/RendererMeta.h
+// / \file RendererMeta.h
+// / \brief Declares functions only the internal renderer needs
 
-/// \file RendererMeta.h
-
-/// \brief Declares functions only the internal renderer needs
 #pragma once
 #include <VK2D/Renderer.h>
 

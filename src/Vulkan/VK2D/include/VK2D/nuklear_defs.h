@@ -1,7 +1,6 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/nuklear_defs.h
-
-/// \brief Specific include order for Nuklear files
-/// \author cmburm
+// File: src/Vulkan/VK2D/include/VK2D/nuklear_defs.h
+// / \brief Specific include order for Nuklear files
+// / \author cmburm
 
 #ifndef NUKLEAR_DEFS_H
 #define NUKLEAR_DEFS_H

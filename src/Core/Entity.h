@@ -1,4 +1,4 @@
-
+// File: src/Core/Entity.h
 
 #ifndef RUNA_CORE_ENTITY_H
 #define RUNA_CORE_ENTITY_H

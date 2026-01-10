@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/ShadowEnvironment.h
+// File: src/Vulkan/VK2D/include/VK2D/ShadowEnvironment.h
+// / \file ShadowEnvironment.h
+// / \brief Information needed to use hardware-accelerated shadows
 
-/// \file ShadowEnvironment.h
-
-/// \brief Information needed to use hardware-accelerated shadows
 #pragma once
 #include "VK2D/Structs.h"
 #include <SDL3/SDL.h>

@@ -1,5 +1,4 @@
-
-
+// File: src/Core/Log.cpp
 
 #include "../runapch.h"
 #include "Log.h"

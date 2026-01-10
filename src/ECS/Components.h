@@ -1,5 +1,4 @@
-
-
+// File: src/ECS/Components.h
 
 #ifndef RUNA_ECS_COMPONENTS_H
 #define RUNA_ECS_COMPONENTS_H

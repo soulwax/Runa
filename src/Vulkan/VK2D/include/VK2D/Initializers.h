@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/Initializers.h
+// File: src/Vulkan/VK2D/include/VK2D/Initializers.h
+// / \file Initializers.h
+// / \brief Initializes Vulkan structs
 
-/// \file Initializers.h
-
-/// \brief Initializes Vulkan structs
 #pragma once
 #include "VK2D/Structs.h"
 #include <vulkan/vulkan.h>

@@ -1,3 +1,4 @@
+// File: src/Graphics/PixelScale.cpp
 
 #include "PixelScale.h"
 

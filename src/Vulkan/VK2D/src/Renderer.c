@@ -1,6 +1,5 @@
-// File: src/Vulkan2D/VK2D/src/Renderer.c
-
-/// \file Renderer.c
+// File: src/Vulkan/VK2D/src/Renderer.c
+// / \file Renderer.c
 
 #include <SDL3/SDL_vulkan.h>
 #include <math.h>

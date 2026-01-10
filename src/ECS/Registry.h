@@ -1,5 +1,4 @@
-
-
+// File: src/ECS/Registry.h
 
 #ifndef RUNA_ECS_REGISTRY_H
 #define RUNA_ECS_REGISTRY_H

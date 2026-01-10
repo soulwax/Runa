@@ -1,3 +1,5 @@
+// File: src/Core/SceneSerializer.cpp
+
 /**
  * SceneSerializer.cpp
  * Implementation of scene serialization to/from YAML.

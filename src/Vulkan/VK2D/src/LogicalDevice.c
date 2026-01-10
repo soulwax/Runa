@@ -1,6 +1,5 @@
-// File: src/Vulkan2D/VK2D/src/LogicalDevice.c
-
-/// \file LogicalDevice.c
+// File: src/Vulkan/VK2D/src/LogicalDevice.c
+// / \file LogicalDevice.c
 
 #include "VK2D/LogicalDevice.h"
 #include "VK2D/Initializers.h"

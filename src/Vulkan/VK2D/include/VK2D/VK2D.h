@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/VK2D.h
+// File: src/Vulkan/VK2D/include/VK2D/VK2D.h
+// / \file VK2D.h
+// / \brief Includes all the relevant things you need
 
-/// \file VK2D.h
-
-/// \brief Includes all the relevant things you need
 #pragma once
 
 #include "VK2D/Camera.h"

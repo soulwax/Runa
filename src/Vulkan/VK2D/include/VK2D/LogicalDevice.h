@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/LogicalDevice.h
+// File: src/Vulkan/VK2D/include/VK2D/LogicalDevice.h
+// / \file LogicalDevice.h
+// / \brief Declares functionality as it pertains to VkDevice
 
-/// \file LogicalDevice.h
-
-/// \brief Declares functionality as it pertains to VkDevice
 #pragma once
 #include "VK2D/Constants.h"
 #include "VK2D/Structs.h"

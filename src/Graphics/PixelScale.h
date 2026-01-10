@@ -1,3 +1,4 @@
+// File: src/Graphics/PixelScale.h
 
 #ifndef RUNA_GRAPHICS_PIXEL_SCALE_H
 #define RUNA_GRAPHICS_PIXEL_SCALE_H

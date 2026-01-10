@@ -1,6 +1,5 @@
-// File: src/Vulkan2D/VK2D/src/DescriptorBuffer.c
-
-/// \file DescriptorBuffer.c
+// File: src/Vulkan/VK2D/src/DescriptorBuffer.c
+// / \file DescriptorBuffer.c
 
 #include "VK2D/DescriptorBuffer.h"
 #include "VK2D/Buffer.h"

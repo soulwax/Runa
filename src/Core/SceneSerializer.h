@@ -1,3 +1,5 @@
+// File: src/Core/SceneSerializer.h
+
 /**
  * SceneSerializer.h
  * Serializes and deserializes scene state to/from YAML files.

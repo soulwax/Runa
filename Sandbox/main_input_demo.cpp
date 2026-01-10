@@ -1,3 +1,5 @@
+// File: Sandbox/main_input_demo.cpp
+
 /**
  * main_input_demo.cpp
  * Comprehensive demonstration of the InputManager system featuring:

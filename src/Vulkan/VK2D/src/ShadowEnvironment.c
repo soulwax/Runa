@@ -1,6 +1,5 @@
-// File: src/Vulkan2D/VK2D/src/ShadowEnvironment.c
-
-/// \file ShadowEnvironment.c
+// File: src/Vulkan/VK2D/src/ShadowEnvironment.c
+// / \file ShadowEnvironment.c
 
 #include "VK2D/ShadowEnvironment.h"
 #include "VK2D/Buffer.h"

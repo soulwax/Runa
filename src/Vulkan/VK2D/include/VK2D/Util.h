@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/Util.h
+// File: src/Vulkan/VK2D/include/VK2D/Util.h
+// / \file Util.h
+// / \brief Utilities for in-engine use only
 
-/// \file Util.h
-
-/// \brief Utilities for in-engine use only
 #include "VK2D/Structs.h"
 #include <stdbool.h>
 #include <stdio.h>

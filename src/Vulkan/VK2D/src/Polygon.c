@@ -1,6 +1,5 @@
-// File: src/Vulkan2D/VK2D/src/Polygon.c
-
-/// \file Polygon.c
+// File: src/Vulkan/VK2D/src/Polygon.c
+// / \file Polygon.c
 
 #include "VK2D/Polygon.h"
 #include "VK2D/Buffer.h"

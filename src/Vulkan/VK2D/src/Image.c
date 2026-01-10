@@ -1,6 +1,5 @@
-// File: src/Vulkan2D/VK2D/src/Image.c
-
-/// \file Image.c
+// File: src/Vulkan/VK2D/src/Image.c
+// / \file Image.c
 
 #include "VK2D/Image.h"
 #include "VK2D/Buffer.h"

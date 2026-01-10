@@ -3,21 +3,20 @@ Runa2
 ├───.editorconfig
 ├───.gitignore
 ├───.gitmodules
-├───ARCHITECTURE.md
 ├───build_config.log
 ├───build_output.log
+├───build_output.txt
 ├───CHANGELOG.md
 ├───CLAUDE.md
 ├───CMakeLists.txt
+├───CMakeLists.txt.backup
 ├───compile_commands.json
 ├───compile_shaders.bat
 ├───compile_shaders.sh
 ├───grass_test_output.log
 ├───LICENSE.md
 ├───README.md
-├───RENDERING_STATUS.md
 ├───REPOSITORY_ANALYSIS.md
-├───test_output.log
 ├───test_run.log
 ├───tree.txt
 ├───vk2derror.txt
@@ -37,12 +36,14 @@ Runa2
 │       ├───review.md
 │       ├───security-scan.md
 │       └───test-setup.md
-├───docs/
-│   └───README.md
 ├───logs/
 │   └───runa2.log
 ├───Resources/
 │   ├───game.yaml
+│   ├───input_bindings.json
+│   ├───input_bindings_backup.json
+│   ├───input_bindings_test.json
+│   ├───keybindings.yaml
 │   ├───Fonts/
 │   │   ├───Renogare.otf
 │   │   └───Renogare.ttf
@@ -61,6 +62,8 @@ Runa2
 │   │               ├───walls.yaml
 │   │               ├───wooden_door.png
 │   │               └───wooden_door_b.png
+│   ├───saves/
+│   │   └───README.md
 │   ├───shaders/
 │   │   ├───basic.frag
 │   │   ├───basic.vert
@@ -192,6 +195,8 @@ Runa2
 │       ├───dirt-grass.yaml
 │       ├───fences.png
 │       ├───fences.yaml
+│       ├───flowers.png
+│       ├───flowers.yaml
 │       ├───grass.png
 │       ├───grass.yaml
 │       ├───objects.png
@@ -209,6 +214,8 @@ Runa2
 │       ├───water6.png
 │       ├───characters/
 │       │   ├───player.png
+│       │   ├───player.yaml
+│       │   ├───player_dummy.png
 │       │   ├───skeleton.png
 │       │   ├───skeleton_swordless.png
 │       │   ├───slime.png
@@ -231,9 +238,20 @@ Runa2
 │           ├───rock_in_water_05.png
 │           ├───rock_in_water_06.png
 │           └───rock_in_water_frames.yaml
-├───src/
-│   ├───grass_test.cpp
+├───Sandbox/
+│   ├───Entity.cpp
+│   ├───Entity.h
 │   ├───main.cpp
+│   ├───main_game.cpp
+│   ├───main_input_demo.cpp
+│   ├───main_rpg.cpp
+│   ├───main_scene_demo.cpp
+│   ├───Mob.cpp
+│   ├───Mob.h
+│   ├───Player.cpp
+│   ├───Player.h
+│   └───README.md
+├───src/
 │   ├───RunaAPI.h
 │   ├───runapch.cpp
 │   ├───runapch.h
@@ -245,8 +263,16 @@ Runa2
 │   │   ├───Collision.h
 │   │   ├───Entity.cpp
 │   │   ├───Entity.h
+│   │   ├───GamepadManager.cpp
+│   │   ├───GamepadManager.h
 │   │   ├───Input.cpp
 │   │   ├───Input.h
+│   │   ├───InputAction.h
+│   │   ├───InputBinding.h
+│   │   ├───InputManager.cpp
+│   │   ├───InputManager.h
+│   │   ├───Keybindings.cpp
+│   │   ├───Keybindings.h
 │   │   ├───Log.cpp
 │   │   ├───Log.h
 │   │   ├───Log.o
@@ -255,11 +281,20 @@ Runa2
 │   │   ├───ResourceManager.cpp
 │   │   ├───ResourceManager.h
 │   │   ├───ResourceManager.o
+│   │   ├───Scene.cpp
+│   │   ├───Scene.h
+│   │   ├───SceneManager.cpp
+│   │   ├───SceneManager.h
+│   │   ├───SceneSerializer.cpp
+│   │   ├───SceneSerializer.h
 │   │   └───output/
 │   ├───ECS/
 │   │   ├───Components.h
 │   │   ├───Registry.cpp
 │   │   ├───Registry.h
+│   │   ├───RPGComponents.h
+│   │   ├───RPGSystems.cpp
+│   │   ├───RPGSystems.h
 │   │   ├───Systems.cpp
 │   │   └───Systems.h
 │   ├───Graphics/
@@ -267,12 +302,18 @@ Runa2
 │   │   ├───Camera.h
 │   │   ├───Font.cpp
 │   │   ├───Font.h
+│   │   ├───ImGui.cpp
+│   │   ├───ImGui.h
+│   │   ├───PixelScale.cpp
+│   │   ├───PixelScale.h
 │   │   ├───PostProcess.cpp
 │   │   ├───PostProcess.h
 │   │   ├───Renderer.cpp
 │   │   ├───Renderer.h
 │   │   ├───Shader.cpp
 │   │   ├───Shader.h
+│   │   ├───SimpleShapes.cpp
+│   │   ├───SimpleShapes.h
 │   │   ├───SpriteBatch.cpp
 │   │   ├───SpriteBatch.h
 │   │   ├───SpriteSheet.cpp
@@ -283,7 +324,16 @@ Runa2
 │   │   ├───TileMap.h
 │   │   ├───Window.cpp
 │   │   └───Window.h
-│   └───Vulkan2D/
+│   ├───Scenes/
+│   │   ├───GameScene.cpp
+│   │   ├───GameScene.h
+│   │   ├───MenuScene.cpp
+│   │   ├───MenuScene.h
+│   │   ├───PauseScene.cpp
+│   │   ├───PauseScene.h
+│   │   ├───TestScene.cpp
+│   │   └───TestScene.h
+│   └───Vulkan/
 │       ├───CMakeLists.txt
 │       ├───extern/
 │       │   └───VulkanMemoryAllocator/

@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/Validation.h
+// File: src/Vulkan/VK2D/include/VK2D/Validation.h
+// / \file Validation.h
+// / \brief Some tools for managing errors
 
-/// \file Validation.h
-
-/// \brief Some tools for managing errors
 #pragma once
 #include "VK2D/Structs.h"
 #include <stdbool.h>

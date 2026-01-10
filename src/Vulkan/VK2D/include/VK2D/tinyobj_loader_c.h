@@ -1,4 +1,4 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/tinyobj_loader_c.h
+// File: src/Vulkan/VK2D/include/VK2D/tinyobj_loader_c.h
 
 /*
    The MIT License (MIT)

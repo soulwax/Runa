@@ -1,3 +1,5 @@
+// File: src/Core/InputBinding.h
+
 /**
  * InputBinding.h
  * Defines how inputs are bound to actions.

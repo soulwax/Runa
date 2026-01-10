@@ -1,6 +1,5 @@
-// File: src/Vulkan2D/VK2D/src/Initializers.c
-
-/// \file Initializers.c
+// File: src/Vulkan/VK2D/src/Initializers.c
+// / \file Initializers.c
 
 #include "VK2D/Initializers.h"
 #include "VK2D/Structs.h"

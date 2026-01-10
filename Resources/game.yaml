@@ -1,9 +1,8 @@
 # File: Resources/game.yaml
-
 # Game Configuration File for Runa2 Engine
 # All settings can be loaded via ResourceManager or custom config loader
-
 # Window Settings
+
 window:
   title: "Runa2 Game"
   width: 1280

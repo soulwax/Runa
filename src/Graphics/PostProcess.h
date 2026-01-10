@@ -1,6 +1,4 @@
-
-
-
+// File: src/Graphics/PostProcess.h
 
 #ifndef RUNA_GRAPHICS_POSTPROCESS_H
 #define RUNA_GRAPHICS_POSTPROCESS_H

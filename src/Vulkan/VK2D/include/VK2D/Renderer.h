@@ -1,13 +1,12 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/Renderer.h
+// File: src/Vulkan/VK2D/include/VK2D/Renderer.h
+// / \file Renderer.h
+// / \brief The main renderer that handles all rendering
+// /
+// / Below is a brief technical breakdown of the renderer.
+// /
+// / The first thing VK2D does is initialize the swapchain and its corresponding
+// / resources. Of note, there are
 
-/// \file Renderer.h
-
-/// \brief The main renderer that handles all rendering
-///
-/// Below is a brief technical breakdown of the renderer.
-///
-/// The first thing VK2D does is initialize the swapchain and its corresponding
-/// resources. Of note, there are
 ///
 ///  + Three maximum frames in flight (not a direct resource but relevant to
 ///  everything)

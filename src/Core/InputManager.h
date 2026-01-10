@@ -1,3 +1,5 @@
+// File: src/Core/InputManager.h
+
 /**
  * InputManager.h
  * Comprehensive input management system with action mapping,

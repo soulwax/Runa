@@ -1,13 +1,11 @@
-// File: src/Vulkan2D/extern/VulkanMemoryAllocator/src/VulkanSample.cpp
-
-//
+// File: src/Vulkan/extern/VulkanMemoryAllocator/src/VulkanSample.cpp
 // Copyright (c) 2017-2025 Advanced Micro Devices, Inc. All rights reserved.
-//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
+
 // furnished to do so, subject to the following conditions:
 //
 // The above copyright notice and this permission notice shall be included in

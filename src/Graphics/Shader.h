@@ -1,6 +1,4 @@
-
-
-
+// File: src/Graphics/Shader.h
 
 #ifndef RUNA_GRAPHICS_SHADER_H
 #define RUNA_GRAPHICS_SHADER_H

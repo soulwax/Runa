@@ -1,7 +1,6 @@
-// File: src/Vulkan2D/VK2D/src/Logger.c
-
-/// \file Logger.c
-/// \author cmburn
+// File: src/Vulkan/VK2D/src/Logger.c
+// / \file Logger.c
+// / \author cmburn
 
 #include <assert.h>
 #include <stdarg.h>

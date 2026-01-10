@@ -1,3 +1,5 @@
+// File: src/Core/Scene.cpp
+
 /**
  * Scene.cpp
  * Implementation of the Scene base class.

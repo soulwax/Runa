@@ -1,6 +1,5 @@
-// File: src/Vulkan2D/VK2D/src/Texture.c
-
-/// \file Texture.c
+// File: src/Vulkan/VK2D/src/Texture.c
+// / \file Texture.c
 
 #include "VK2D/Texture.h"
 #include "VK2D/Buffer.h"

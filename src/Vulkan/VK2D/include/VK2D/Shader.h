@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/Shader.h
+// File: src/Vulkan/VK2D/include/VK2D/Shader.h
+// / \file Shader.h
+// / \brief Makes shaders possible in VK2D
 
-/// \file Shader.h
-
-/// \brief Makes shaders possible in VK2D
 #pragma once
 #include "VK2D/Constants.h"
 #include "VK2D/Structs.h"

@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/Texture.h
+// File: src/Vulkan/VK2D/include/VK2D/Texture.h
+// / \file Texture.h
+// / \brief Makes managing textures samplers and off-screen rendering simpler
 
-/// \file Texture.h
-
-/// \brief Makes managing textures samplers and off-screen rendering simpler
 #pragma once
 #include "VK2D/Structs.h"
 #include <vulkan/vulkan.h>

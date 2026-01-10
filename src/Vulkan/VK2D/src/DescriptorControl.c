@@ -1,6 +1,5 @@
-// File: src/Vulkan2D/VK2D/src/DescriptorControl.c
-
-/// \file DescriptorControl.c
+// File: src/Vulkan/VK2D/src/DescriptorControl.c
+// / \file DescriptorControl.c
 
 #include "VK2D/DescriptorControl.h"
 #include "VK2D/Buffer.h"

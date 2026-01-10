@@ -1,3 +1,5 @@
+// File: src/Core/Keybindings.h
+
 /**
  * Keybindings.h
  * Utility class for loading and accessing keybindings from a metadata file.

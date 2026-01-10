@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/Logger.h
-
-/// \file Initializers.h
-/// \author cmburn
-/// \brief Logging callbacks
+// File: src/Vulkan/VK2D/include/VK2D/Logger.h
+// / \file Initializers.h
+// / \author cmburn
+// / \brief Logging callbacks
 
 #pragma once
 

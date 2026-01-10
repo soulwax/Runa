@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/Pipeline.h
+// File: src/Vulkan/VK2D/include/VK2D/Pipeline.h
+// / \file Pipeline.h
+// / \brief Simple abstraction over VkPipeline objects
 
-/// \file Pipeline.h
-
-/// \brief Simple abstraction over VkPipeline objects
 #pragma once
 #include "VK2D/Structs.h"
 

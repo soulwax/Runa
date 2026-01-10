@@ -1,4 +1,4 @@
-
+// File: src/Core/ResourceManager.h
 
 #ifndef RUNA_CORE_RESOURCEMANAGER_H
 #define RUNA_CORE_RESOURCEMANAGER_H

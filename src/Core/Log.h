@@ -1,5 +1,4 @@
-
-
+// File: src/Core/Log.h
 
 #ifndef RUNA_CORE_LOG_H
 #define RUNA_CORE_LOG_H

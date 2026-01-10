@@ -1,6 +1,5 @@
-// File: src/Vulkan2D/VK2D/src/Constants.c
-
-/// \file Constants.c
+// File: src/Vulkan/VK2D/src/Constants.c
+// / \file Constants.c
 
 #include "VK2D/Structs.h"
 #include <math.h>

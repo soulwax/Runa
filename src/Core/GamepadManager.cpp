@@ -1,3 +1,5 @@
+// File: src/Core/GamepadManager.cpp
+
 /**
  * GamepadManager.cpp
  * Implementation of gamepad/controller support.

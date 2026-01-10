@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/PhysicalDevice.h
+// File: src/Vulkan/VK2D/include/VK2D/PhysicalDevice.h
+// / \file PhysicalDevice.h
+// / \brief Tools for managing VkPhysicalDevice
 
-/// \file PhysicalDevice.h
-
-/// \brief Tools for managing VkPhysicalDevice
 #pragma once
 #include "VK2D/Structs.h"
 #include <vulkan/vulkan.h>

@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/Opaque.h
+// File: src/Vulkan/VK2D/include/VK2D/Opaque.h
+// / \file Opaque.h
+// / \brief Defines opaque headers for source files that need them
 
-/// \file Opaque.h
-
-/// \brief Defines opaque headers for source files that need them
 #pragma once
 #include "Constants.h"
 #include "VK2D/Camera.h"

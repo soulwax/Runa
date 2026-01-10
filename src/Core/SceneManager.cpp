@@ -1,3 +1,5 @@
+// File: src/Core/SceneManager.cpp
+
 /**
  * SceneManager.cpp
  * Implementation of the SceneManager class.

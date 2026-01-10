@@ -1,3 +1,5 @@
+// File: src/Core/SceneManager.h
+
 /**
  * SceneManager.h
  * Manages a stack of scenes with transitions and lifecycle management.

@@ -1,6 +1,5 @@
-// File: src/Vulkan2D/VK2D/src/VulkanInterface.c
-
-/// \file VulkanInterface.c
+// File: src/Vulkan/VK2D/src/VulkanInterface.c
+// / \file VulkanInterface.c
 
 #include "VK2D/VulkanInterface.h"
 #include "VK2D/DescriptorBuffer.h"

@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/DescriptorControl.h
+// File: src/Vulkan/VK2D/include/VK2D/DescriptorControl.h
+// / \file DescriptorControl.h
+// / \brief Makes dynamic descriptor control simpler
 
-/// \file DescriptorControl.h
-
-/// \brief Makes dynamic descriptor control simpler
 #pragma once
 #include "VK2D/Structs.h"
 

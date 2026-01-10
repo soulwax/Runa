@@ -1,6 +1,5 @@
-// File: src/Vulkan2D/VK2D/src/RendererMeta.c
-
-/// \file RendererMeta.c
+// File: src/Vulkan/VK2D/src/RendererMeta.c
+// / \file RendererMeta.c
 
 #include <SDL3/SDL_vulkan.h>
 #include <vulkan/vulkan.h>

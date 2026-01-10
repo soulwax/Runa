@@ -1,3 +1,5 @@
+// File: src/Core/InputManager.cpp
+
 /**
  * InputManager.cpp
  * Implementation of the comprehensive input management system.

@@ -1,4 +1,4 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/uthash.h
+// File: src/Vulkan/VK2D/include/VK2D/uthash.h
 
 /*
 Copyright (c) 2003-2025, Troy D. Hanson  https://troydhanson.github.io/uthash/

@@ -1,6 +1,5 @@
-// File: src/Vulkan2D/VK2D/src/Pipeline.c
-
-/// \file Pipeline.c
+// File: src/Vulkan/VK2D/src/Pipeline.c
+// / \file Pipeline.c
 
 #include "VK2D/Pipeline.h"
 #include "VK2D/BlendModes.h"

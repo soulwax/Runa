@@ -1,3 +1,5 @@
+// File: src/Core/Scene.h
+
 /**
  * Scene.h
  * Base class for all game scenes (states) in the engine.

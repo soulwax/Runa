@@ -1,10 +1,9 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/Math.h
-
-/// \file Math.h
-/// \brief Defines some math things, only include once (Not really)
-///
-/// Paolo Mazzon added the C++ include guards and comments, otherwise this
-/// is as it was originally
+// File: src/Vulkan/VK2D/include/VK2D/Math.h
+// / \file Math.h
+// / \brief Defines some math things, only include once (Not really)
+// /
+// / Paolo Mazzon added the C++ include guards and comments, otherwise this
+// / is as it was originally
 
 /* This code was originall written by Ali Emre Gülcü under the MIT license
  * (specifically the math in this file, it was originally in a differnt file).

@@ -1,4 +1,4 @@
-REM File: src/Vulkan2D/extern/VulkanMemoryAllocator/src/Shaders/CompileShaders.bat
+REM File: src/Vulkan/extern/VulkanMemoryAllocator/src/Shaders/CompileShaders.bat
 
 %VULKAN_SDK%/Bin32/glslangValidator.exe -V -o ../../bin/Shader.vert.spv Shader.vert
 %VULKAN_SDK%/Bin32/glslangValidator.exe -V -o ../../bin/Shader.frag.spv Shader.frag

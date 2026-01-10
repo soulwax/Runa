@@ -1,6 +1,5 @@
-// File: src/Vulkan2D/VK2D/src/PhysicalDevice.c
-
-/// \file PhysicalDevice.c
+// File: src/Vulkan/VK2D/src/PhysicalDevice.c
+// / \file PhysicalDevice.c
 
 #include "VK2D/PhysicalDevice.h"
 #include "VK2D/Constants.h"

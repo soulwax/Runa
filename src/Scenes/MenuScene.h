@@ -1,3 +1,5 @@
+// File: src/Scenes/MenuScene.h
+
 /**
  * MenuScene.h
  * Main menu scene - demonstrates scene transitions.

@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/Buffer.h
+// File: src/Vulkan/VK2D/include/VK2D/Buffer.h
+// / \file Buffer.h
+// / \brief Abstraction of VkBuffer to make handling them a little simpler
 
-/// \file Buffer.h
-
-/// \brief Abstraction of VkBuffer to make handling them a little simpler
 #pragma once
 #include "VK2D/Structs.h"
 #include <vk_mem_alloc.h>

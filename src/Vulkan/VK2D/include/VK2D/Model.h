@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/Model.h
+// File: src/Vulkan/VK2D/include/VK2D/Model.h
+// / \file Model.h
+// / \brief Declares things related to loading and managing models
 
-/// \file Model.h
-
-/// \brief Declares things related to loading and managing models
 #pragma once
 
 #ifdef __cplusplus

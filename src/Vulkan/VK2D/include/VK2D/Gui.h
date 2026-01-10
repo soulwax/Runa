@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/Gui.h
-
-/// \file Gui.h
-/// \author cmburn
-/// \brief GUI code for Vulkan2D
+// File: src/Vulkan/VK2D/include/VK2D/Gui.h
+// / \file Gui.h
+// / \author cmburn
+// / \brief GUI code for Vulkan2D
 
 #pragma once
 

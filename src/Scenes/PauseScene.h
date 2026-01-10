@@ -1,3 +1,5 @@
+// File: src/Scenes/PauseScene.h
+
 /**
  * PauseScene.h
  * Pause menu overlay scene - demonstrates scene stacking.

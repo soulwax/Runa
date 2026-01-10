@@ -1,3 +1,5 @@
+// File: src/Core/InputAction.h
+
 /**
  * InputAction.h
  * Defines input actions and action types for the input manager.

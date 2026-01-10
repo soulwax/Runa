@@ -1,6 +1,5 @@
-// File: src/Vulkan2D/VK2D/src/Validation.c
-
-/// \file Validation.c
+// File: src/Vulkan/VK2D/src/Validation.c
+// / \file Validation.c
 
 #include <assert.h>
 #include <inttypes.h>

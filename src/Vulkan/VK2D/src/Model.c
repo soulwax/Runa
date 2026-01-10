@@ -1,6 +1,5 @@
-// File: src/Vulkan2D/VK2D/src/Model.c
-
-/// \file Model.c
+// File: src/Vulkan/VK2D/src/Model.c
+// / \file Model.c
 
 #define TINYOBJ_LOADER_C_IMPLEMENTATION
 #include "VK2D/tinyobj_loader_c.h"

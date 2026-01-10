@@ -1,4 +1,4 @@
-
+// File: src/Core/ResourceManager.cpp
 
 #include "../runapch.h"
 #include "ResourceManager.h"

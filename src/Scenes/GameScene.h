@@ -1,3 +1,5 @@
+// File: src/Scenes/GameScene.h
+
 /**
  * GameScene.h
  * Main gameplay scene with ECS-based player movement.

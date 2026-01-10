@@ -1,3 +1,5 @@
+// File: src/Scenes/TestScene.cpp
+
 /**
  * TestScene.cpp
  * Test scene with meadow, fences, flowers, and player.
@@ -602,6 +604,7 @@ namespace Runa {
 		// Get player components
 		auto* velocity = registry.try_get<ECS::Velocity>(m_playerEntity);
 		auto* sprite = registry.try_get<ECS::Sprite>(m_playerEntity);
+		auto* position = registry.try_get<ECS::Position>(m_playerEntity);
 		
 		if (!velocity || !sprite || !sprite->spriteSheet) {
 			return;
@@ -612,6 +615,7 @@ namespace Runa {
 		bool isMoving = speed > 0.1f;  // Threshold to avoid jitter
 
 		std::string newSpriteName;
+		bool newFlipX = sprite->flipX;
 
 		if (isMoving) {
 			// Determine primary direction (prioritize vertical over horizontal for diagonal movement)
@@ -619,16 +623,16 @@ namespace Runa {
 				// Vertical movement
 				if (velocity->y > 0) {
 					newSpriteName = "player_walk_down";
-					sprite->flipX = false;  // No flip for down
+					newFlipX = false;  // No flip for down
 				} else {
 					newSpriteName = "player_walk_up";
-					sprite->flipX = false;  // No flip for up
+					newFlipX = false;  // No flip for up
 				}
 			} else {
 				// Horizontal movement - use right-facing sprite for both directions
 				// Flip horizontally when moving left
 				newSpriteName = "player_walk_right";
-				sprite->flipX = (velocity->x < 0);  // Flip when moving left
+				newFlipX = (velocity->x < 0);  // Flip when moving left
 			}
 		} else {
 			// Not moving - use idle animation based on last direction
@@ -636,23 +640,26 @@ namespace Runa {
 			if (sprite->spriteName.find("walk_down") != std::string::npos || 
 			    sprite->spriteName.find("idle_down") != std::string::npos) {
 				newSpriteName = "player_idle_down";
-				sprite->flipX = false;  // No flip for down
+				newFlipX = false;  // No flip for down
 			} else if (sprite->spriteName.find("walk_up") != std::string::npos ||
 			           sprite->spriteName.find("idle_up") != std::string::npos) {
 				newSpriteName = "player_idle_up";
-				sprite->flipX = false;  // No flip for up
+				newFlipX = false;  // No flip for up
 			} else {
 				// For horizontal directions, use right-facing idle and maintain flip state
 				newSpriteName = "player_idle_right";
 				// Maintain the flip state from the last movement direction
 				// If the sprite name contains "left" or flipX was true, keep it flipped
 				if (sprite->spriteName.find("left") != std::string::npos || sprite->flipX) {
-					sprite->flipX = true;   // Keep flipped if was facing left
+					newFlipX = true;   // Keep flipped if was facing left
 				} else {
-					sprite->flipX = false;  // No flip if was facing right
+					newFlipX = false;  // No flip if was facing right
 				}
 			}
 		}
+
+		// Check if direction changed (sprite name or flip state)
+		bool directionChanged = (sprite->spriteName != newSpriteName) || (sprite->flipX != newFlipX);
 
 		// Only update sprite if it changed
 		if (sprite->spriteName != newSpriteName) {
@@ -663,6 +670,17 @@ namespace Runa {
 				anim->animationTime = 0.0f;
 				anim->currentFrame = 0;
 			}
+		}
+
+		// Update flip state
+		if (sprite->flipX != newFlipX) {
+			sprite->flipX = newFlipX;
+		}
+
+		// Log position when direction changes
+		if (directionChanged && position) {
+			LOG_INFO("Player direction changed to '{}' (flipX: {}) at position ({}, {})", 
+			         newSpriteName, newFlipX, position->x, position->y);
 		}
 	}
 

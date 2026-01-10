@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/Constants.h
+// File: src/Vulkan/VK2D/include/VK2D/Constants.h
+// / \file Constants.h
+// / \brief Defines some constants
 
-/// \file Constants.h
-
-/// \brief Defines some constants
 #pragma once
 #include "VK2D/Structs.h"
 #include <stdbool.h>

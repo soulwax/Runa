@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/Polygon.h
+// File: src/Vulkan/VK2D/include/VK2D/Polygon.h
+// / \file Polygon.h
+// / \brief Abstraction of VK2DBuffer for shapes
 
-/// \file Polygon.h
-
-/// \brief Abstraction of VK2DBuffer for shapes
 #pragma once
 #include "VK2D/Structs.h"
 

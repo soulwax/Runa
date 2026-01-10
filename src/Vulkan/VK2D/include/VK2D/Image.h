@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/Image.h
+// File: src/Vulkan/VK2D/include/VK2D/Image.h
+// / \file Image.h
+// / \brief Abstraction of VkImage to make managing them easier
 
-/// \file Image.h
-
-/// \brief Abstraction of VkImage to make managing them easier
 #pragma once
 #include "VK2D/Structs.h"
 #include <SDL3/SDL.h>

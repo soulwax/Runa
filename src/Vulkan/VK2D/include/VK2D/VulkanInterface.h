@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/VulkanInterface.h
+// File: src/Vulkan/VK2D/include/VK2D/VulkanInterface.h
+// / \file VulkanInterface.h
+// / \brief Tools to allow the user to mess with vulkan themselves
 
-/// \file VulkanInterface.h
-
-/// \brief Tools to allow the user to mess with vulkan themselves
 #pragma once
 #include "VK2D/Structs.h"
 #define VMA_VULKAN_VERSION 1002000

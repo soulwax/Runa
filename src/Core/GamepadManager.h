@@ -1,3 +1,5 @@
+// File: src/Core/GamepadManager.h
+
 /**
  * GamepadManager.h
  * Manages gamepad/controller input with SDL3.

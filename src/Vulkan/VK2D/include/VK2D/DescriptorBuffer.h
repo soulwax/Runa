@@ -1,8 +1,7 @@
-// File: src/Vulkan2D/VK2D/include/VK2D/DescriptorBuffer.h
+// File: src/Vulkan/VK2D/include/VK2D/DescriptorBuffer.h
+// / \file DescriptorBuffer.h
+// / \brief Tool to automate memory for uniform buffers and such
 
-/// \file DescriptorBuffer.h
-
-/// \brief Tool to automate memory for uniform buffers and such
 #pragma once
 
 #ifdef __cplusplus
