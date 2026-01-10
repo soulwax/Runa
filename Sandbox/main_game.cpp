@@ -18,7 +18,7 @@
 
 class Game : public Runa::Application {
 public:
-    Game() : Application("Runa2 Game", 1280, 720) {}
+    Game() : Application("Runa2 Game", 2560, 1440) {}
 
 protected:
     void onInit() override {
@@ -84,8 +84,9 @@ protected:
 
     void generateMeadow() {
         const int tileSize = 16;
-        const int meadowWidth = 80;
-        const int meadowHeight = 45;
+        // 2K resolution: 2560x1440 = 160x90 tiles
+        const int meadowWidth = 160;
+        const int meadowHeight = 90;
 
 
         m_baseMeadowTiles.clear();

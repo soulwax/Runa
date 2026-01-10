@@ -1,0 +1,60 @@
+# File: Resources/SpiteSheets/characters/player.yaml
+
+meta:
+  tile_size: 48
+  frames: variant
+  frame_rate: 0
+  loop: false
+
+  variant: "player"
+
+  file:
+  - player.png
+
+tiles:
+- id: 0
+  start_x: 0
+  start_y: 0
+  end_frame: 0
+  direction: "down"
+  frame_rate: 0
+  loop: false
+  frame_list:
+  - { x: 0, y: 0, width: 48, height: 48 }
+  - { x: 48, y: 0, width: 48, height: 48 }
+  - { x: 96, y: 0, width: 48, height: 48 }
+  - { x: 144, y: 0, width: 48, height: 48 }
+  - { x: 192, y: 0, width: 48, height: 48 }
+  - { x: 240, y: 0, width: 48, height: 48 }
+
+- id: 1
+  start_x: 0
+  start_y: 0
+  end_frame: 0
+  direction: "left"
+  flip: when_right
+  frame_rate: 0
+  loop: false
+  frame_list:
+  - { x: 0, y: 0, width: 48, height: 48 }
+  - { x: 48, y: 0, width: 48, height: 48 }
+  - { x: 96, y: 0, width: 48, height: 48 }
+  - { x: 144, y: 0, width: 48, height: 48 }
+  - { x: 192, y: 0, width: 48, height: 48 }
+  - { x: 240, y: 0, width: 48, height: 48 }
+
+
+- id: 2
+  start_x: 0
+  start_y: 0
+  end_frame: 0
+  direction: "up"
+  frame_rate: 0
+  loop: false
+  frame_list:
+  - { x: 0, y: 0, width: 48, height: 48 }
+  - { x: 48, y: 0, width: 48, height: 48 }
+  - { x: 96, y: 0, width: 48, height: 48 }
+  - { x: 144, y: 0, width: 48, height: 48 }
+  - { x: 192, y: 0, width: 48, height: 48 }
+  - { x: 240, y: 0, width: 48, height: 48 }

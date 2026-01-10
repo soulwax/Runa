@@ -91,11 +91,7 @@ void Application::mainLoop() {
   float accumulatedTime = 0.0f;
   int frameCount = 0;
 
-
-  constexpr auto targetFrameTime = std::chrono::duration<float>(1.0f / 60.0f);
-
   while (m_running && !m_window->shouldClose()) {
-    auto frameStart = Clock::now();
 
 
     auto currentTime = Clock::now();
@@ -135,14 +131,6 @@ void Application::mainLoop() {
       onRender();
     }
     m_renderer->endFrame();
-
-
-    auto frameEnd = Clock::now();
-    auto frameDuration = frameEnd - frameStart;
-    if (frameDuration < targetFrameTime) {
-      auto sleepTime = targetFrameTime - frameDuration;
-      std::this_thread::sleep_for(sleepTime);
-    }
   }
 }
 
