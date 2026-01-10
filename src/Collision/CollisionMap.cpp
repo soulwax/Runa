@@ -195,35 +195,96 @@ bool CollisionMap::checkPixelCollision(float entityX, float entityY,
 }
 
 CollisionType CollisionMap::checkMovement(float x, float y, float width, float height) const {
-    std::vector<const PlacedTile*> tiles = getTilesInRegion(x, y, width, height);
-    
+    // RADICAL APPROACH: Check ALL tiles directly (brute force)
+    // This eliminates any spatial grid bugs
     CollisionType result = CollisionType::None;
     
-    for (const PlacedTile* tile : tiles) {
-        // Check AABB overlap
-        bool overlaps = !(x + width <= tile->worldX || 
-                          x >= tile->worldX + tile->width ||
-                          y + height <= tile->worldY || 
-                          y >= tile->worldY + tile->height);
+    // Calculate entity AABB bounds
+    float entityLeft = x;
+    float entityRight = x + width;
+    float entityTop = y;
+    float entityBottom = y + height;
+    
+    static int checkCount = 0;
+    bool shouldLog = (checkCount++ < 20);
+    
+    if (shouldLog) {
+        LOG_INFO("checkMovement: Entity AABB({}, {} {}x{}) checking {} tiles", 
+                 x, y, width, height, m_placedTiles.size());
+    }
+    
+    // Check every single tile
+    for (const PlacedTile& tile : m_placedTiles) {
+        // Simple AABB overlap check
+        float tileLeft = static_cast<float>(tile.worldX);
+        float tileRight = static_cast<float>(tile.worldX + tile.width);
+        float tileTop = static_cast<float>(tile.worldY);
+        float tileBottom = static_cast<float>(tile.worldY + tile.height);
+        
+        // Check if AABBs overlap
+        bool overlaps = !(entityRight <= tileLeft || 
+                          entityLeft >= tileRight ||
+                          entityBottom <= tileTop || 
+                          entityTop >= tileBottom);
         
         if (overlaps) {
-            const TileDefinition& def = m_tileDefinitions[tile->tileDefIndex];
+            const TileDefinition& def = m_tileDefinitions[tile.tileDefIndex];
+            
+            if (shouldLog) {
+                LOG_INFO("  AABB overlap with tile at ({}, {} {}x{})", 
+                         tile.worldX, tile.worldY, tile.width, tile.height);
+            }
             
             // For pixel-perfect, check the overlapping region
             if (def.pixelMask && def.pixelMask->isValid()) {
                 // Calculate overlap region in tile-local coordinates
-                int overlapX = std::max(0, static_cast<int>(x) - tile->worldX);
-                int overlapY = std::max(0, static_cast<int>(y) - tile->worldY);
-                int overlapW = std::min(tile->width, static_cast<int>(x + width) - tile->worldX) - overlapX;
-                int overlapH = std::min(tile->height, static_cast<int>(y + height) - tile->worldY) - overlapY;
+                float overlapLeft = std::max(entityLeft, tileLeft) - tileLeft;
+                float overlapTop = std::max(entityTop, tileTop) - tileTop;
+                float overlapRight = std::min(entityRight, tileRight) - tileLeft;
+                float overlapBottom = std::min(entityBottom, tileBottom) - tileTop;
                 
-                if (def.pixelMask->collidesWithAABB(overlapX, overlapY, overlapW, overlapH)) {
-                    if (def.collision > result) {
-                        result = def.collision;
+                int overlapX = static_cast<int>(overlapLeft);
+                int overlapY = static_cast<int>(overlapTop);
+                int overlapW = static_cast<int>(overlapRight) - overlapX;
+                int overlapH = static_cast<int>(overlapBottom) - overlapY;
+                
+                if (shouldLog) {
+                    LOG_INFO("    Pixel check: overlap region ({}, {} {}x{}) in tile-local coords", 
+                             overlapX, overlapY, overlapW, overlapH);
+                }
+                
+                // Only check if overlap region is valid
+                if (overlapW > 0 && overlapH > 0 && 
+                    overlapX >= 0 && overlapY >= 0 &&
+                    overlapX + overlapW <= tile.width &&
+                    overlapY + overlapH <= tile.height) {
+                    
+                    bool pixelCollision = def.pixelMask->collidesWithAABB(overlapX, overlapY, overlapW, overlapH);
+                    
+                    if (shouldLog) {
+                        LOG_INFO("    Pixel collision result: {}", pixelCollision ? "COLLISION" : "NO COLLISION");
+                    }
+                    
+                    if (pixelCollision) {
+                        if (def.collision > result) {
+                            result = def.collision;
+                        }
+                        if (shouldLog) {
+                            LOG_INFO("  *** COLLISION DETECTED! Type: {}", 
+                                     result == CollisionType::Solid ? "SOLID" : "OTHER");
+                        }
+                    }
+                } else {
+                    if (shouldLog) {
+                        LOG_WARN("    Invalid overlap region: ({}, {} {}x{}) for tile {}x{}", 
+                                 overlapX, overlapY, overlapW, overlapH, tile.width, tile.height);
                     }
                 }
             } else {
                 // No pixel mask - use tile collision type directly
+                if (shouldLog) {
+                    LOG_INFO("    No pixel mask, using solid collision");
+                }
                 if (def.collision > result) {
                     result = def.collision;
                 }
@@ -291,6 +352,12 @@ std::vector<const PlacedTile*> CollisionMap::getTilesInRegion(float x, float y,
     // Get all grid cells that overlap with the region
     std::vector<int> cells = getGridCellsForRegion(x, y, width, height);
     
+    static int debugQueryCount = 0;
+    if (debugQueryCount++ < 10) {
+        LOG_DEBUG("getTilesInRegion: Query region ({}, {} {}x{}) -> {} grid cells", 
+                 x, y, width, height, cells.size());
+    }
+    
     // Collect unique tile indices
     std::vector<bool> seen(m_placedTiles.size(), false);
     
@@ -299,7 +366,12 @@ std::vector<const PlacedTile*> CollisionMap::getTilesInRegion(float x, float y,
             for (int tileIndex : m_spatialGrid[cellIndex]) {
                 if (!seen[tileIndex]) {
                     seen[tileIndex] = true;
-                    result.push_back(&m_placedTiles[tileIndex]);
+                    const PlacedTile& tile = m_placedTiles[tileIndex];
+                    if (debugQueryCount <= 10) {
+                        LOG_DEBUG("  Found tile {} at ({}, {} {}x{})", 
+                                 tileIndex, tile.worldX, tile.worldY, tile.width, tile.height);
+                    }
+                    result.push_back(&tile);
                 }
             }
         }

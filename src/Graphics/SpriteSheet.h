@@ -68,7 +68,9 @@ namespace Runa
 
         const Sprite *getSprite(const std::string &name) const;
         const Texture &getTexture() const { return *m_texture; }
-
+        
+        // Get the texture path (for pixel-perfect collision mask generation)
+        const std::string& getTexturePath() const { return m_texturePath; }
 
         std::vector<std::string> getSpriteNames() const;
 
@@ -77,6 +79,7 @@ namespace Runa
 
     private:
         std::unique_ptr<Texture> m_texture;
+        std::string m_texturePath;  // Store path for pixel-perfect collision
         std::unordered_map<std::string, Sprite> m_sprites;
     };
 

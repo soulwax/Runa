@@ -3,6 +3,8 @@
 #include <yaml-cpp/yaml.h>
 #include <fstream>
 #include <algorithm>
+#include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
 
 namespace Runa {
 
@@ -187,13 +189,83 @@ std::shared_ptr<CollisionMask> CollisionLoader::createMaskFromSprite(
         return std::make_shared<CollisionMask>(CollisionMask::solid(width, height));
     }
     
-    // Try to get pixel data from the texture
-    // Note: This requires the texture to support pixel reading
-    // For now, we'll just create a solid mask as a fallback
-    // TODO: Implement texture pixel reading when needed
+    // Load the image file directly with SDL_image to extract pixel data
+    // (VK2D textures are GPU resources and can't be read back easily)
+    std::string imagePath = spriteSheet->getTexturePath();
     
-    LOG_DEBUG("CollisionLoader: Creating solid mask for sprite at ({}, {})", atlasX, atlasY);
-    return std::make_shared<CollisionMask>(CollisionMask::solid(width, height));
+    SDL_Surface* imageSurface = IMG_Load(imagePath.c_str());
+    if (!imageSurface) {
+        LOG_WARN("CollisionLoader: Failed to load image '{}' for pixel mask: {}", 
+                 imagePath, SDL_GetError());
+        return std::make_shared<CollisionMask>(CollisionMask::solid(width, height));
+    }
+    
+    // Convert to RGBA format (SDL3 surfaces may be in various formats)
+    SDL_Surface* rgbaSurface = SDL_ConvertSurface(imageSurface, SDL_PIXELFORMAT_RGBA32);
+    SDL_DestroySurface(imageSurface);
+    if (!rgbaSurface) {
+        LOG_WARN("CollisionLoader: Failed to convert image to RGBA format: {}", SDL_GetError());
+        return std::make_shared<CollisionMask>(CollisionMask::solid(width, height));
+    }
+    imageSurface = rgbaSurface;
+    
+    // Validate sprite region bounds
+    if (atlasX + width > imageSurface->w || atlasY + height > imageSurface->h) {
+        LOG_WARN("CollisionLoader: Sprite region ({}, {}, {}x{}) exceeds image bounds ({}x{})",
+                 atlasX, atlasY, width, height, imageSurface->w, imageSurface->h);
+        SDL_DestroySurface(imageSurface);
+        return std::make_shared<CollisionMask>(CollisionMask::solid(width, height));
+    }
+    
+    // Extract the sprite region
+    // Create a new surface for just this sprite
+    SDL_Surface* spriteSurface = SDL_CreateSurface(width, height, SDL_PIXELFORMAT_RGBA32);
+    if (!spriteSurface) {
+        LOG_WARN("CollisionLoader: Failed to create sprite surface");
+        SDL_DestroySurface(imageSurface);
+        return std::make_shared<CollisionMask>(CollisionMask::solid(width, height));
+    }
+    
+    // Copy the sprite region from the image
+    SDL_Rect srcRect = {atlasX, atlasY, width, height};
+    SDL_Rect dstRect = {0, 0, width, height};
+    if (SDL_BlitSurface(imageSurface, &srcRect, spriteSurface, &dstRect) != 0) {
+        LOG_WARN("CollisionLoader: Failed to extract sprite region: {}", SDL_GetError());
+        SDL_DestroySurface(spriteSurface);
+        SDL_DestroySurface(imageSurface);
+        return std::make_shared<CollisionMask>(CollisionMask::solid(width, height));
+    }
+    
+    // Create collision mask from alpha channel
+    const uint8_t* pixels = static_cast<const uint8_t*>(spriteSurface->pixels);
+    int stride = spriteSurface->pitch;  // Bytes per row
+    
+    auto mask = std::make_shared<CollisionMask>(
+        CollisionMask::fromAlphaChannel(pixels, width, height, stride, alphaThreshold));
+    
+    // Count solid vs transparent pixels for debugging
+    int solidPixels = 0;
+    int transparentPixels = 0;
+    for (int y = 0; y < height; ++y) {
+        for (int x = 0; x < width; ++x) {
+            const uint8_t* pixel = pixels + (y * stride) + (x * 4);
+            uint8_t alpha = pixel[3];
+            if (alpha >= alphaThreshold) {
+                solidPixels++;
+            } else {
+                transparentPixels++;
+            }
+        }
+    }
+    
+    // Clean up
+    SDL_DestroySurface(spriteSurface);
+    SDL_DestroySurface(imageSurface);
+    
+    LOG_INFO("CollisionLoader: Created pixel-perfect mask for sprite at ({}, {}) size {}x{} - {} solid, {} transparent", 
+              atlasX, atlasY, width, height, solidPixels, transparentPixels);
+    
+    return mask;
 }
 
 } // namespace Runa

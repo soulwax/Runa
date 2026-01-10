@@ -359,17 +359,58 @@ void updateMapCollision(entt::registry& registry, CollisionMap& collisionMap, fl
             continue;
         }
 
-        // Calculate entity's world AABB
+        // Calculate entity's world AABB (position has already been updated by updateMovement)
         float entityX = pos.x + aabb.offsetX;
         float entityY = pos.y + aabb.offsetY;
 
+        // Calculate where the entity was BEFORE movement (to check swept region)
+        float prevX = entityX - vel.x * dt;
+        float prevY = entityY - vel.y * dt;
+
         // Check horizontal movement
         if (vel.x != 0.0f) {
-            float testX = entityX + vel.x * dt;
-            CollisionType colType = collisionMap.checkMovement(testX, entityY, aabb.width, aabb.height);
+            // Check swept region from previous position to current position
+            float sweptMinX = std::min(prevX, entityX);
+            float sweptMaxX = std::max(prevX + aabb.width, entityX + aabb.width);
+            float sweptWidth = sweptMaxX - sweptMinX;
+
+            CollisionType colType = collisionMap.checkMovement(sweptMinX, entityY, sweptWidth, aabb.height);
 
             // Block movement for Solid, Liquid, or Hazard collision types
             if (colType == CollisionType::Solid || colType == CollisionType::Liquid || colType == CollisionType::Hazard) {
+                // Find the exact collision point by binary search
+                // We know there's a collision between entityX and testX
+                // Find the closest safe position to the collision
+                float safeX = entityX;
+                const int steps = 20;  // More steps for better precision
+
+                if (vel.x > 0.0f) {
+                    // Moving right - search from prevX towards entityX
+                    // Find the rightmost position that's still safe
+                    float step = (entityX - prevX) / static_cast<float>(steps);
+                    for (int i = steps; i >= 0; --i) {
+                        float checkX = prevX + step * static_cast<float>(i);
+                        if (collisionMap.checkMovement(checkX, entityY, aabb.width, aabb.height) == CollisionType::None) {
+                            safeX = checkX;
+                            break;
+                        }
+                    }
+                } else {
+                    // Moving left - search from prevX towards entityX (entityX < prevX)
+                    // Find the leftmost position that's still safe
+                    float step = (prevX - entityX) / static_cast<float>(steps);
+                    for (int i = steps; i >= 0; --i) {
+                        float checkX = prevX - step * static_cast<float>(i);
+                        if (collisionMap.checkMovement(checkX, entityY, aabb.width, aabb.height) == CollisionType::None) {
+                            safeX = checkX;
+                            break;
+                        }
+                    }
+                }
+
+                // Adjust position to safe position (accounting for AABB offset)
+                pos.x = safeX - aabb.offsetX;
+
                 // Block horizontal movement
                 bool wasMovingLeft = vel.x < 0.0f;
                 bool wasMovingRight = vel.x > 0.0f;
@@ -386,11 +427,44 @@ void updateMapCollision(entt::registry& registry, CollisionMap& collisionMap, fl
 
         // Check vertical movement
         if (vel.y != 0.0f) {
-            float testY = entityY + vel.y * dt;
-            CollisionType colType = collisionMap.checkMovement(entityX, testY, aabb.width, aabb.height);
+            // Check swept region from previous position to current position
+            float sweptMinY = std::min(prevY, entityY);
+            float sweptMaxY = std::max(prevY + aabb.height, entityY + aabb.height);
+            float sweptHeight = sweptMaxY - sweptMinY;
+
+            CollisionType colType = collisionMap.checkMovement(entityX, sweptMinY, aabb.width, sweptHeight);
 
             // Block movement for Solid, Liquid, or Hazard collision types
             if (colType == CollisionType::Solid || colType == CollisionType::Liquid || colType == CollisionType::Hazard) {
+                // Find the exact collision point by binary search
+                float safeY = entityY;
+                const int steps = 20;  // More steps for better precision
+
+                if (vel.y > 0.0f) {
+                    // Moving down - search from prevY towards entityY
+                    float step = (entityY - prevY) / static_cast<float>(steps);
+                    for (int i = steps; i >= 0; --i) {
+                        float checkY = prevY + step * static_cast<float>(i);
+                        if (collisionMap.checkMovement(entityX, checkY, aabb.width, aabb.height) == CollisionType::None) {
+                            safeY = checkY;
+                            break;
+                        }
+                    }
+                } else {
+                    // Moving up - search from prevY towards entityY (entityY < prevY)
+                    float step = (prevY - entityY) / static_cast<float>(steps);
+                    for (int i = steps; i >= 0; --i) {
+                        float checkY = prevY - step * static_cast<float>(i);
+                        if (collisionMap.checkMovement(entityX, checkY, aabb.width, aabb.height) == CollisionType::None) {
+                            safeY = checkY;
+                            break;
+                        }
+                    }
+                }
+
+                // Adjust position to safe position (accounting for AABB offset)
+                pos.y = safeY - aabb.offsetY;
+
                 // Block vertical movement
                 bool wasMovingUp = vel.y < 0.0f;
                 bool wasMovingDown = vel.y > 0.0f;

@@ -7,7 +7,8 @@
 
 namespace Runa {
 
-SpriteSheet::SpriteSheet(Renderer& renderer, const std::string& texturePath) {
+SpriteSheet::SpriteSheet(Renderer& renderer, const std::string& texturePath) 
+    : m_texturePath(texturePath) {
     m_texture = std::make_unique<Texture>(renderer, texturePath);
     if (!m_texture->isValid()) {
         throw std::runtime_error("Failed to load spritesheet texture: " + texturePath);

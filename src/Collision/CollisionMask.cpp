@@ -100,6 +100,15 @@ bool CollisionMask::collidesWithAABB(int aabbX, int aabbY, int aabbWidth, int aa
     int endX = std::min(m_width, aabbX + aabbWidth);
     int endY = std::min(m_height, aabbY + aabbHeight);
     
+    // Validate bounds
+    if (startX >= endX || startY >= endY) {
+        return false;  // No overlap
+    }
+    
+    if (startX < 0 || startY < 0 || endX > m_width || endY > m_height) {
+        return false;  // Out of bounds
+    }
+    
     // Check each pixel in the overlap region
     for (int y = startY; y < endY; ++y) {
         for (int x = startX; x < endX; ++x) {

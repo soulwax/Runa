@@ -21,6 +21,8 @@
 #include <cmath>
 #include <SDL3/SDL.h>
 #include <filesystem>
+#include <set>
+#include <unordered_map>
 
 namespace Runa {
 
@@ -304,7 +306,10 @@ namespace Runa {
 			// Update player animation based on movement direction
 			updatePlayerAnimation(registry);
 			
-			// Check tile collision BEFORE applying movement
+			// Apply movement first
+			ECS::Systems::updateMovement(registry, deltaTime);
+			
+			// Then check for collisions and clamp position back if needed
 			if (m_collisionMap) {
 				ECS::Systems::updateMapCollision(registry, *m_collisionMap, deltaTime,
 					[this](entt::entity entity, const ECS::CollisionEvent& event) {
@@ -314,9 +319,6 @@ namespace Runa {
 						}
 					});
 			}
-
-			// Update movement (applies velocity to position)
-			ECS::Systems::updateMovement(registry, deltaTime);
 
 			// Update animations (advances frame based on time)
 			ECS::Systems::updateAnimation(registry, deltaTime);
@@ -746,44 +748,108 @@ void TestScene::setupCollisionMap() {
 	                                               *m_collisionMap, m_fenceSheet.get());
 	LOG_INFO("Loaded {} fence tile definitions for collision", defsLoaded);
 	
-	// Create a generic solid tile definition for all fences
-	// All fences should block movement
-	TileDefinition solidFenceDef;
-	solidFenceDef.name = "solid_fence";
-	solidFenceDef.collision = CollisionType::Solid;
-	int solidFenceIndex = m_collisionMap->addTileDefinition(solidFenceDef);
+	// Create pixel-perfect collision masks for fence sprites
+	// Get the sprite frame to extract pixel data
+	std::unordered_map<std::string, std::shared_ptr<CollisionMask>> fenceMasks;
 	
-	// Add collision for each placed fence tile - ALL fences are solid
+	// Pre-generate masks for each unique fence sprite
+	std::set<std::string> uniqueSprites;
+	for (const auto& fenceTile : m_fenceTiles) {
+		uniqueSprites.insert(fenceTile.spriteName);
+	}
+	
+	for (const std::string& spriteName : uniqueSprites) {
+		const auto* sprite = m_fenceSheet->getSprite(spriteName);
+		if (sprite && !sprite->frames.empty()) {
+			const auto& frame = sprite->frames[0];
+			// Create pixel-perfect mask from sprite alpha channel
+			auto mask = CollisionLoader::createMaskFromSprite(
+				m_fenceSheet.get(), frame.x, frame.y, frame.width, frame.height, 128);
+			fenceMasks[spriteName] = mask;
+			if (mask && mask->isValid()) {
+				LOG_INFO("Created pixel-perfect mask for fence sprite '{}' ({}x{})", 
+				         spriteName, mask->getWidth(), mask->getHeight());
+			} else {
+				LOG_WARN("Failed to create pixel-perfect mask for fence sprite '{}'", spriteName);
+			}
+		}
+	}
+	
+	// Create tile definitions with pixel-perfect masks
+	std::unordered_map<std::string, int> spriteToDefIndex;
+	
+	for (const std::string& spriteName : uniqueSprites) {
+		TileDefinition fenceDef;
+		fenceDef.name = "fence_" + spriteName;
+		fenceDef.collision = CollisionType::Solid;
+		
+		// Assign pixel-perfect mask if available
+		auto it = fenceMasks.find(spriteName);
+		if (it != fenceMasks.end() && it->second && it->second->isValid()) {
+			fenceDef.pixelMask = it->second;
+			LOG_DEBUG("Assigned pixel-perfect mask to tile definition '{}'", fenceDef.name);
+		} else {
+			LOG_WARN("No valid pixel mask for sprite '{}', using solid collision", spriteName);
+		}
+		
+		int defIndex = m_collisionMap->addTileDefinition(fenceDef);
+		spriteToDefIndex[spriteName] = defIndex;
+	}
+	
+	// Add collision for each placed fence tile with pixel-perfect masks
 	int placedCount = 0;
 	for (const auto& fenceTile : m_fenceTiles) {
-		// Place every fence tile as solid
-		// Fence positions are in world coordinates (logical pixels)
-		m_collisionMap->placeTile(solidFenceIndex, fenceTile.x, fenceTile.y, TILE_SIZE, TILE_SIZE);
-		placedCount++;
+		auto it = spriteToDefIndex.find(fenceTile.spriteName);
+		if (it != spriteToDefIndex.end()) {
+			m_collisionMap->placeTile(it->second, fenceTile.x, fenceTile.y, TILE_SIZE, TILE_SIZE);
+			placedCount++;
+		} else {
+			// Fallback: create generic solid if sprite not found
+			static int genericSolidIndex = -1;
+			if (genericSolidIndex < 0) {
+				TileDefinition genericDef;
+				genericDef.name = "generic_solid";
+				genericDef.collision = CollisionType::Solid;
+				genericSolidIndex = m_collisionMap->addTileDefinition(genericDef);
+			}
+			m_collisionMap->placeTile(genericSolidIndex, fenceTile.x, fenceTile.y, TILE_SIZE, TILE_SIZE);
+			placedCount++;
+		}
 	}
 	
 	// Rebuild spatial grid after placing all tiles
 	m_collisionMap->rebuildSpatialGrid();
 	
-	LOG_INFO("Set up collision for {} fence tiles (all marked as solid)", placedCount);
+	LOG_INFO("Set up pixel-perfect collision for {} fence tiles ({} unique sprites)", 
+	         placedCount, uniqueSprites.size());
 	
-	// Test collision at a known fence position
+	// Test collision at various positions around a fence tile
 	if (!m_fenceTiles.empty()) {
 		const auto& testFence = m_fenceTiles[0];
-		float testX = static_cast<float>(testFence.x + TILE_SIZE / 2);
-		float testY = static_cast<float>(testFence.y + TILE_SIZE / 2);
-		CollisionType testCol = m_collisionMap->getCollisionAt(testX, testY);
-		LOG_INFO("Test collision at fence tile ({}, {}): {}", 
+		
+		// Test from center
+		float centerX = static_cast<float>(testFence.x + TILE_SIZE / 2);
+		float centerY = static_cast<float>(testFence.y + TILE_SIZE / 2);
+		CollisionType testCol = m_collisionMap->getCollisionAt(centerX, centerY);
+		LOG_INFO("Test collision CENTER at fence ({}, {}): {}", 
 		         testFence.x, testFence.y, 
 		         testCol == CollisionType::Solid ? "SOLID" : "NONE");
 		
-		// Also test with AABB (like player would use)
-		CollisionType testColAABB = m_collisionMap->checkMovement(
-			static_cast<float>(testFence.x), static_cast<float>(testFence.y), 
-			static_cast<float>(TILE_SIZE), static_cast<float>(TILE_SIZE));
-		LOG_INFO("Test collision AABB at fence tile ({}, {}): {}", 
+		// Test from left (approaching from left)
+		float leftX = static_cast<float>(testFence.x - 8);
+		float leftY = centerY;
+		CollisionType testColLeft = m_collisionMap->checkMovement(leftX, leftY, 14.0f, 14.0f);
+		LOG_INFO("Test collision FROM LEFT at fence ({}, {}): {}", 
 		         testFence.x, testFence.y, 
-		         testColAABB == CollisionType::Solid ? "SOLID" : "NONE");
+		         testColLeft == CollisionType::Solid ? "SOLID" : "NONE");
+		
+		// Test from right (approaching from right)
+		float rightX = static_cast<float>(testFence.x + TILE_SIZE + 8);
+		float rightY = centerY;
+		CollisionType testColRight = m_collisionMap->checkMovement(rightX, rightY, 14.0f, 14.0f);
+		LOG_INFO("Test collision FROM RIGHT at fence ({}, {}): {}", 
+		         testFence.x, testFence.y, 
+		         testColRight == CollisionType::Solid ? "SOLID" : "NONE");
 	}
 }
 
